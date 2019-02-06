@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'jus-_(ji)f170w*g4z019qm(lk-#$=7^0sh-!*yt_+wp-y$s9='
+SECRET_KEY = '-b&u3kuv%8pvk*9wk6t&-w%%1+joh-1m(nrqjr5$a!bar+w)hr'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -31,13 +31,13 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'main.apps.MainConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'main.apps.MainConfig'
 ]
 
 MIDDLEWARE = [
@@ -75,12 +75,12 @@ WSGI_APPLICATION = 'eventify.wsgi.application'
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {
-    'default' : {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mydatabase',
+    'default': {
+        'ENGINE': 'django.db.backends.mysql', 
+        'NAME': 'eventify_DB',
         'USER': 'mydatabaseuser',
-        'PASSWORD': 'mypassword123',
-        'HOST': '127.0.0.1',
+        'PASSWORD': 'godPASSWORD123!',
+        'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
         'PORT': '3306',
     }
 }
