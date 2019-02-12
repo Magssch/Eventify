@@ -13,10 +13,10 @@ class User(models.Model):
 
 class Event(models.Model):
     name = models.CharField(max_length=30)
-    organizer = models.ForeignKey(User, models.SET_NULL)
+    organizer = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     date = models.DateTimeField()
     location = models.CharField(max_length=30)
-    price = models.DecimalField()
+    price = models.IntegerField()
     
 
 class Attendee(models.Model):
