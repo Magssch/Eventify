@@ -10,6 +10,9 @@ class User(models.Model):
     accept_notifications = models.BooleanField()
     accept_newsletter = models.BooleanField()
 
+    def __str__(self):
+        return self.first_name + " " + self.last_name
+
 
 class Event(models.Model):
     name = models.CharField(max_length=30)
@@ -17,6 +20,10 @@ class Event(models.Model):
     date = models.DateTimeField()
     location = models.CharField(max_length=30)
     price = models.IntegerField()
+
+    def __str__(self):
+        return self.name
+
     
 
 class Attendee(models.Model):
