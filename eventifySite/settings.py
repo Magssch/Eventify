@@ -78,7 +78,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'eventifydatabase',
         'USER': 'myDatabaseUser',
-        'PASSWORD': 'produktutvikling32',
+        'PASSWORD': 'programvareutvikling32',
         'HOST': 'localhost',
         'PORT': '3306',
     }
