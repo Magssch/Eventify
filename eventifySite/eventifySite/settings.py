@@ -79,8 +79,8 @@ DATABASES = {
         'NAME': 'eventifySite',
         'USER': 'myDatabaseUser',
         'PASSWORD': 'produktutvikling32',
-        'HOST': 'localhost'
-        'PORT': '3306'
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
