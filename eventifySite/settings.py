@@ -80,12 +80,12 @@ WSGI_APPLICATION = 'eventifySite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'eventify-db',
         'USER': 'myDatabaseUser',
         'PASSWORD': 'programvareutvikling32',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
