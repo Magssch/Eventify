@@ -11,7 +11,7 @@
     <!-- CSS -->
     <link rel="stylesheet" type="text/css"  href="{% static 'main/materialize.css' %}">
     <!-- JS -->
-    <script src="{% static "main/materialize.js" %}"></script>
+    <script src="{% static 'main/materialize.js' %}"></script>
 
 </head>
 
@@ -24,26 +24,6 @@
             {% endblock %}
 
         {% include "main/footer.html" %}
-
-
-      <div class="row">
-      	{% for event in events %}
-	    <div class="col s12 m6">
-	      <div class="card green hoverable">
-	        <div class="card-content green">
-	          <span class="card-title">{{event.name}}</span>
-	          <p>{{event.price}}</p>
-	          <p>{{event.date}}</p>
-	          <p>{{event.location}}</p>
-	          <p style="font-size:70%">Hosted by: {{event.organizer}}</p>
-	        </div>
-	      </div>
-	    </div>
-	    {% endfor %}
-	  </div>
-
-
-
 
 
     </body>
