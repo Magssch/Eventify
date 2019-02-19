@@ -1,10 +1,21 @@
+<!DOCTYPE html>
 
+<html lang="en">
 
-{% for event in events %}
-	<p>{{event.name}}</p>
-	<p>{{event.date}}</p>
-	<p>{{event.location}}</p>
-	<p>{{event.price}}</p>
-	<p>{{event.organizer}}</p>
-	<br><br>
-{% endfor %}
+<head>
+    <meta charset="UTF-8">
+    <title>Eventify - {{ title }}</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css"  href="{% static 'main/style.css' %}">
+
+</head>
+
+    <body>
+        {% include "main/header.html" %}
+
+        HOME
+
+        {% include "main/footer.html" %}
+    </body>
+
+</html>
