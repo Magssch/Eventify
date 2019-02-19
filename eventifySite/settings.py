@@ -81,12 +81,12 @@ WSGI_APPLICATION = 'eventifySite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'mysql.connector.django',
-        'NAME': 'heroku_bb12170b39f3686',
-        'USER': 'b0faa90cd7ca15',
-        'PASSWORD': '623eb9bd',
-        'HOST': 'us-cdbr-iron-east-03.cleardb.net',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'dfv451no5et81a',
+        'USER': 'zmakmsouunmztu',
+        'PASSWORD': '382dedef990cdc4e9d915127f44e6e1ba091ad673b8c490dc17f7d5465684be1',
+        'HOST': 'ec2-23-21-128-35.compute-1.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
