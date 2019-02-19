@@ -4,7 +4,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Eventify - {{ title }}</title>
+    <title>Eventify - {% block title %}
+            {% endblock %}</title>
     {% load static %}
     <link rel="stylesheet" type="text/css"  href="{% static 'main/style.css' %}">
 
