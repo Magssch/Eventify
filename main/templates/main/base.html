@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Eventify - {% block title %}
+            {% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css"  href="{% static 'main/style.css' %}">
+
+</head>
+
+    <body>
+        {% include "main/header.html" %}
+
+            {% block content %}
+            {% endblock %}
+
+        {% include "main/footer.html" %}
+    </body>
+
+</html>
