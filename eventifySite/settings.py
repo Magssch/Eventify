@@ -82,9 +82,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'eventify-db',
-        'USER': 'myDatabaseUser',
-        'PASSWORD': 'programvareutvikling32',
-        'HOST': 'localhost',
+        'USER': 'b0faa90cd7ca15',
+        'PASSWORD': '623eb9bd',
+        'HOST': 'us-cdbr-iron-east-03.cleardb.net',
         'PORT': '3306',
     }
 }
