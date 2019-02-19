@@ -41,6 +41,10 @@
     padding: 0 30px 20px;
 }
 
+.pad {
+    padding-bottom:200px;
+}
+
 @media screen and (max-width: 550px) {
     .title {
         padding: 12px 20px;
