@@ -20,6 +20,7 @@ class Event(models.Model):
     date = models.DateTimeField()
     location = models.CharField(max_length=30)
     price = models.IntegerField()
+    description = models.TextField()
 
     def __str__(self):
         return self.name
