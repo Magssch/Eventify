@@ -78,16 +78,7 @@ WSGI_APPLICATION = 'eventifySite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': '',
-        'NAME': 'eventify-db',
-        'USER': 'b0faa90cd7ca15',
-        'PASSWORD': '623eb9bd',
-        'HOST': 'us-cdbr-iron-east-03.cleardb.net',
-        'PORT': '3306',
-    }
-}
+
 
 
 # Password validation
