@@ -17,10 +17,8 @@ def homepage(request):
 
 
 def create_event(request):
-	if request.user.is_authenticated:
-		if not request.user.is_staff:
-			redirect('/')
-	else:
+	user = User.objects.get(pk=1)
+	if not user.get('is_staff'):
 		redirect('/')
 
 	if request.method=='POST':
