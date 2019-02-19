@@ -79,7 +79,16 @@ WSGI_APPLICATION = 'eventifySite.wsgi.application'
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 
-
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'eventify-db',
+        'USER': 'b0faa90cd7ca15',
+        'PASSWORD': '623eb9bd',
+        'HOST': 'us-cdbr-iron-east-03.cleardb.net',
+        'PORT': '3306',
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -132,6 +141,6 @@ STATICFILES_DIRS = (
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 import dj_database_url 
-DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 
 django_heroku.settings(locals())
