@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'eventifySite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'eventify-db',
+        'NAME': 'pu_eventify',
         'USER': 'b0faa90cd7ca15',
         'PASSWORD': '623eb9bd',
         'HOST': 'us-cdbr-iron-east-03.cleardb.net',
