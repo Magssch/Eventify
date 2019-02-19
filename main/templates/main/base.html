@@ -4,7 +4,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Eventify - {{ title }}</title>
+    <title>Eventify - {% block title %}
+            {% endblock %}</title>
     {% load static %}
 
     <!-- CSS -->
@@ -19,7 +20,8 @@
 
         {% include "main/header.html" %}
 
-        HOME
+            {% block content %}
+            {% endblock %}
 
         {% include "main/footer.html" %}
 
