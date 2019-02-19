@@ -81,12 +81,12 @@ WSGI_APPLICATION = 'eventifySite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dfv451no5et81a',
-        'USER': 'zmakmsouunmztu',
-        'PASSWORD': '382dedef990cdc4e9d915127f44e6e1ba091ad673b8c490dc17f7d5465684be1',
-        'HOST': 'ec2-23-21-128-35.compute-1.amazonaws.com',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'a4isjxb47l8g5ew1',
+        'USER': 'qbo5ycol1113v6k2',
+        'PASSWORD': 'ps8kgo04m5z5uwbz',
+        'HOST': 'pfw0ltdr46khxib3.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+        'PORT': '3306',
     }
 }
 
