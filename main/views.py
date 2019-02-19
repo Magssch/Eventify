@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic
 from .forms import RegistrationForm
+from django.contrib.auth.models import User
 
 # Create your views here.
 
@@ -16,6 +17,12 @@ def homepage(request):
 
 
 def create_event(request):
+	if request.user.is_authenticated:
+		if not request.user.is_staff:
+			redirect('/')
+	else:
+		redirect('/')
+
 	if request.method=='POST':
 		form = EventForm(request=request, data=request.POST)
 		if form.is_valid():
