@@ -6,7 +6,11 @@
     <meta charset="UTF-8">
     <title>Eventify - {{ title }}</title>
     {% load static %}
-    <link rel="stylesheet" type="text/css"  href="{% static 'main/style.css' %}">
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css"  href="{% static 'main/materialize.css' %}">
+    <!-- JS -->
+    <script src="{% static "main/materialize.js" %}"></script>
 
 </head>
 
@@ -16,6 +20,29 @@
         HOME
 
         {% include "main/footer.html" %}
+
+
+      <div class="row">
+      	{% for event in events %}
+	    <div class="col s12 m6">
+	      <div class="card hovering">
+	        <div class="card green hovering">
+	          <span class="card-title">{{event.name}}</span>
+	          <p>{{event.price}}</p>
+	        </div>
+	        <div class="card-action">
+	          <a href="#">This is a link</a>
+	          <a href="#">This is a link</a>
+	        </div>
+	      </div>
+	    </div>
+	    {% endfor %}
+	  </div>
+
+
+
+
+
     </body>
 
 </html>
