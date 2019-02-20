@@ -3,18 +3,17 @@ from django import forms
 from django.contrib.auth.models import User
 
 
-class EditProfileForm(UserChangeForm):
+class EditProfileForm(forms.ModelForm):
     class Meta:
         model = User
         fields = {
             'email',
             'first_name',
-            'last_name',
-            'password'
+            'last_name'
         }
 
+
     field_order = [
-        'username',
         'first_name',
         'last_name',
         'email'
