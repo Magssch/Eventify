@@ -16,6 +16,7 @@
                 <h3>Fornavn: {{user.first_name}}</h3>
                 <h3>Etternavn: {{user.last_name}}</h3>
                 <h3>Epost: {{user.email}}</h3>
+                <a href="{% url 'edit_profile' %}">Oppdater profil</a>
             </div>
         </div>
     {% else %}
