@@ -22,6 +22,9 @@ class EditProfileForm(forms.ModelForm):
     ]
 
 class RegistrationForm(UserCreationForm):
+
+    check = forms.BooleanField(required = True, label="Jeg aksepterer betingelsene for bruk av Eventify")
+
     class Meta:
         model = User
         fields = {
@@ -30,7 +33,7 @@ class RegistrationForm(UserCreationForm):
             'last_name',
             'email',
             'password1',
-            'password2',
+            'password2'
         }
 
         widgets = {
@@ -39,7 +42,7 @@ class RegistrationForm(UserCreationForm):
             'last_name':forms.TextInput(attrs={'class':'form-control', 'required':'required'}),
             'email':forms.EmailInput(attrs={'class':'form-control', 'required':'required'}),
             'password1':forms.PasswordInput(attrs={'class':'form-control'}),
-            'password2':forms.PasswordInput(attrs={'class':'form-control'}),
+            'password2':forms.PasswordInput(attrs={'class':'form-control'})
         }
 
     field_order = [
