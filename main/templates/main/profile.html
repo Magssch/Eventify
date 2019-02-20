@@ -1,0 +1,27 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    {% if user.is_authenticated %}
+        {{user.username}}
+    {% else %}
+        Ikke innlogget
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <div style="width: 100%; display: flex;">
+            <div style="margin:auto; padding: 10px;">
+                <h3>Brukernavn: {{user.username}}</h3>
+                <h3>Fornavn: {{user.first_name}}</h3>
+                <h3>Etternavn: {{user.last_name}}</h3>
+                <h3>Epost: {{user.email}}</h3>
+            </div>
+        </div>
+    {% else %}
+      <p>Du er ikke logget inn</p>
+        <br/>
+      <a href="{% url 'login' %}">Logg inn</a>
+      <a href="{% url 'signup' %}">Registrer deg</a>
+    {% endif %}
+{% endblock %}

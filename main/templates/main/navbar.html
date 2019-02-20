@@ -1,7 +1,7 @@
   <div class="navbar-fixed">
     <nav>
       <div class="nav-wrapper green">
-        <a href="{% url 'home' %}" class="brand-logo">Eventify</a>
+        <a href="{% url 'home' %}" style="margin-left: 20px" class="brand-logo">Eventify</a>
         <ul class="right hide-on-med-and-down">
           <li><a >Arrangementer</a></li>
           <li><a href="sass.html">Informasjon</a></li>
@@ -15,9 +15,10 @@
           </a></li>
 
           {% if user.is_authenticated %}
-           <li><a href="">Min konto: {{ user.username }}</a></li>
+           <li><a href="{% url 'profile' %}">Min konto: {{ user.username }}</a></li>
           {% else %}
-          <li><a href="">Registrer/Logg inn</a></li>
+          <li><a href="{% url 'login' %}">Logg inn</a></li>
+          <li><a href="{% url 'signup' %}">Registrer deg</a></li>
           {% endif %}
 
         </ul>

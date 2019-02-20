@@ -17,3 +17,8 @@ class SignUp(generic.CreateView):
     form_class = RegistrationForm
     success_url = reverse_lazy('login')
     template_name = 'registration/signup.html'
+
+def profile(request):
+	return render(request = request,
+                  template_name ="main/profile.html",
+                  context = {"events":Event.objects.all})
