@@ -39,6 +39,11 @@ def profile(request):
                   template_name ="main/profile.html",
                   context = {"events":Event.objects.all})
 
+def terms(request):
+	return render(request = request,
+                  template_name ="main/terms.html",
+                  context = {"events":Event.objects.all})
+
 def edit_profile(request):
     if request.method == 'POST':
         form = EditProfileForm(request.POST, instance=request.user)
