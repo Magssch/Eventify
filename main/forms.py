@@ -1,6 +1,8 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django import forms
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
+from .models import Event
 
 
 class EditProfileForm(forms.ModelForm):
@@ -57,3 +59,8 @@ class RegistrationForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+class EventForm(forms.ModelForm):
+	class Meta:
+		model = Event
+		fields = ['name', 'date', 'location', 'price', 'description']
