@@ -1,0 +1,19 @@
+{% extends 'main/base.html' %}
+
+
+{% block head %}
+<title>Endre profil</title>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+    <p>Endring av passord kommer i en senere versjon. Beklager ulempene dette måtte medføre.</p>
+    <br>
+</div>
+
+{% endblock %}
