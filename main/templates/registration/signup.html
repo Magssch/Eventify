@@ -3,10 +3,14 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
-  <h2>Sign up</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Sign up</button>
-  </form>
+
+    <div class="container" style="padding-bottom: 30px">
+      <h2>Registrer deg</h2>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+          <a href="{% url 'terms' %}" target="_blank">Betingelser for bruk av siden og retningslinjer for personvern</a><br/><br/>
+        <button type="submit">Sign up</button>
+      </form>
+    </div>
 {% endblock %}

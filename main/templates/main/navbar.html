@@ -1,7 +1,7 @@
   <div class="navbar-fixed">
     <nav>
       <div class="nav-wrapper green">
-        <a href="#!" class="brand-logo">Eventify</a>
+        <a href="{% url 'home' %}" style="margin-left: 20px" class="brand-logo">Eventify</a>
         <ul class="right hide-on-med-and-down">
           <li><a >Arrangementer</a></li>
           <li><a href="sass.html">Informasjon</a></li>
@@ -14,7 +14,14 @@
           </div>
           </a></li>
 
-          <li><a href="">Registrer/Logg inn</a></li>
+          {% if user.is_authenticated %}
+              <li><b><a href="{% url 'profile' %}">{{ user.username }}</a></b></li>
+          <li><a href="{% url 'logout' %}">Logg ut</a></li>
+          {% else %}
+          <li><a href="{% url 'login' %}">Logg inn</a></li>
+          <li><a href="{% url 'signup' %}">Registrer deg</a></li>
+          {% endif %}
+
         </ul>
       </div>
     </nav>
