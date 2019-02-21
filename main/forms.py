@@ -64,6 +64,29 @@ class RegistrationForm(UserCreationForm):
         return user
 
 class EventForm(forms.ModelForm):
-	class Meta:
-		model = Event
-		fields = ['name', 'date', 'location', 'price', 'description']
+    name        = forms.CharField(label='Name of the event:',
+                    widget=forms.TextInput(attrs={"placeholder": "enter event name"})
+                    )
+    location    = forms.CharField(label='Location:', widget=forms.TextInput(attrs={"placeholder": "location"}))
+    price       = forms.IntegerField(label='Price of the event:', initial=250)
+    description = forms.CharField(
+                                    label       = 'Description of the event, not required',
+                                    required    = False,
+                                    widget      = forms.Textarea()
+                                )
+    date        = forms.DateField(
+                                    widget     = forms.DateInput()
+                                )
+    image       = forms.ImageField(required=False)
+
+    class Meta:
+        model = Event
+        fields = [
+            'name',
+            'location',
+            'price',
+            'description',
+            'date',
+            'image',
+            # 'organizer',
+        ]

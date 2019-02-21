@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class User(models.Model):
     first_name = models.CharField(max_length=30)
@@ -15,12 +16,13 @@ class User(models.Model):
 
 
 class Event(models.Model):
-    name = models.CharField(max_length=30)
-    organizer = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
-    date = models.DateTimeField()
-    location = models.CharField(max_length=30)
-    price = models.IntegerField()
+    name        = models.CharField(max_length=30)
+    organizer   = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    date        = models.DateTimeField()
+    location    = models.CharField(max_length=30)
+    price       = models.IntegerField()
     description = models.TextField()
+    image       = models.ImageField(blank=True, null=True)
 
     def __str__(self):
         return self.name
