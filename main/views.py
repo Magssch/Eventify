@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 from .forms import RegistrationForm
 from django.contrib.auth.models import User
+from django.contrib.admin.views.decorators import staff_member_required
 
 # Create your views here.
 
@@ -15,12 +16,8 @@ def homepage(request):
                   context = {"events":Event.objects.all})
 
 
-
+@staff_member_required
 def create_event(request):
-	user = User.objects.get(pk=1)
-	if not user.get('is_staff'):
-		redirect('/')
-
 	if request.method=='POST':
 		form = EventForm(request=request, data=request.POST)
 		if form.is_valid():
