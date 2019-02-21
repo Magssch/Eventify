@@ -1,11 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from .models import Event
 from .forms import EventForm
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic
+from django.contrib.auth.models import User
+from django.contrib.admin.views.decorators import staff_member_required
 from .forms import RegistrationForm, EditProfileForm
-from django.shortcuts import redirect, reverse
 
 # Create your views here.
 
@@ -15,7 +16,7 @@ def homepage(request):
                   context = {"events":Event.objects.all})
 
 
-
+@staff_member_required
 def create_event(request):
 	if request.method=='POST':
 		form = EventForm(request=request, data=request.POST)
