@@ -82,6 +82,15 @@ WSGI_APPLICATION = 'eventifySite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'eventify-db',
+        'USER': 'myDatabaseUser',
+        'PASSWORD': 'programvareutvikling32',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+    },
+
+     'heroku': {
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'a4isjxb47l8g5ew1',
         'USER': 'qbo5ycol1113v6k2',
         'PASSWORD': 'ps8kgo04m5z5uwbz',
@@ -141,8 +150,8 @@ STATICFILES_DIRS = (
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 import dj_database_url 
-DATABASES['default'] = dj_database_url.config(conn_max_age=600)
+DATABASES['heroku'] = dj_database_url.config(conn_max_age=600)
 
 django_heroku.settings(locals())
 
-del DATABASES['default']['OPTIONS']['sslmode']
+#del DATABASES['heroku']['OPTIONS']['sslmode']
