@@ -82,10 +82,10 @@ WSGI_APPLICATION = 'eventifySite.wsgi.application'
 DATABASES = {
      'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'a4isjxb47l8g5ew1',
-        'USER': 'qbo5ycol1113v6k2',
-        'PASSWORD': 'ps8kgo04m5z5uwbz',
-        'HOST': 'pfw0ltdr46khxib3.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+        'NAME': 'eventify-db',
+        'USER': 'myDatabaseUser',
+        'PASSWORD': 'programvareutvikling32',
+        'HOST': '127.0.0.1',
         'PORT': '3306',
     }
 }
@@ -135,14 +135,4 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-# Simplified static file serving.
-# https://warehouse.python.org/project/whitenoise/
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-import dj_database_url 
-DATABASES['default'] = dj_database_url.config(conn_max_age=600)
-
-django_heroku.settings(locals())
-
-del DATABASES['default']['OPTIONS']['sslmode']
