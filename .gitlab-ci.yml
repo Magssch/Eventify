@@ -1,0 +1,5 @@
+test_on_heroku:
+  type: deploy
+  script:
+    - dpl --provider=heroku --app=eventify-site --api-key=$HEROKU_API_KEY
+    - heroku run gunicorn eventifySite.wsgi --exit-code --app=eventify-site
