@@ -16,6 +16,10 @@
 
           {% if user.is_authenticated %}
               <li><b><a href="{% url 'profile' %}">{{ user.username }}</a></b></li>
+              {% if user.is_superuser %}
+              <li><b><a href="{% url 'admin:index' %}">Adminpanel</a></b></li>
+              {% endif %}
+
           <li><a href="{% url 'logout' %}">Logg ut</a></li>
           {% else %}
           <li><a href="{% url 'login' %}">Logg inn</a></li>

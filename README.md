@@ -10,6 +10,8 @@ Run the following:
 
 `pip install django-bootstrap4`
 
+`pip install Pillow`
+
 ## Technologies
 
 Built using Django 2.1.7, Materialize CSS, Bootstrap 4 (django-bootstrap4)
