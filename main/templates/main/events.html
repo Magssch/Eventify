@@ -2,6 +2,7 @@
 
 
 {% block title %}
+    {% if user.is_authenticated %}
         Events
 {% endblock %}
 
@@ -24,10 +25,12 @@
           <div class="card green hoverable">
             <div class="card-content green">
               <span class="card-title">{{event.name}}</span>
-              <img class="materialboxed" style="width: 100%; height: 220px" src="{{event.image}}">
+
+              <img src="{{event.image.url}}" alt="NO PICTURE" width="480" height="400">
+            
               <p>{{event.location}}</p>
               <p>{{event.price}}kr</p>
-              <a style="float: right;" class="waves-effect waves-light btn">Les mer</a>
+              <a href="{{event.get_absolute_url}}" style="float: right;" class="btn waves-effect waves-light">Les mer</a>
               <p>{{event.date}}</p>
               <p style="font-size:70%">Hosted by: {{event.organizer}}</p>
             </div>
