@@ -1,4 +1,4 @@
 test_on_heroku:
   type: deploy
   script:
-    - git push -f heroku herokucd:master
+    - git push heroku herokucd:master -f
