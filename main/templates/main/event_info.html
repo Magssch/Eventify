@@ -4,9 +4,35 @@
 {% block content %}
 
 <div class="container">
-	<br><br>
-	<h1>{{object.name}}</h1>
-	<br><br>
-</div>
+ <div class="row">
+    <div class="col s12 m12">
+      <div class="card">
+        <div class="card-image">
+          <img style="height:220px" src={{object.image}}> <!-- legge til bilde fra objektet-->
+          <span class="card-title">{{object.name}}</span>
+        </div>
+        <div class="card-content">
+          <p>{{object.description}}</p>
+            <br>
+            <br>
+
+            <p>Sted: {{object.location}}</p>
+            <p>Pris: {{object.price}}kr</p>
+            <p>Arrangeres av: {{object.organizer}}</p>
+            
+            <p>Deltagere</p>
+
+            <!-- dobbel if setning, om man har meldt seg på, har man da betalt?-->
+        </div>
+        <div class="card-action">
+            <!-- må ha en if setning. Om man er med i arrangementet så "meld deg av" og om man ikke er påmeldt
+            så "meld deg på"-->
+          <a style="color:green"; href="#">Meld deg på</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
 {% endblock %}
 
