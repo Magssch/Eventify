@@ -75,9 +75,9 @@ def events(request):
     events = paginator.get_page(page)
     return render(request, 'main/events.html', {'events': events})
 
-def event_info(request,my_id):
-    obj = get_object_or_404(Event,id=my_id)
+def event_info(request, my_id):
+    obj = get_object_or_404(Event, id=my_id)
     context = {"object":obj}
-    return render(request,"main/event_info.html",context)
+    return render(request, "main/event_info.html", context)
 
 

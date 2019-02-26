@@ -14,6 +14,6 @@ urlpatterns = [
     path('profile/', views.profile, name="profile"),
     path('profile/edit/', views.edit_profile, name='edit_profile'),
     path('terms', views.terms, name='terms'),
-    #path('events/', views.events, name="events"),
-    #path('events/<int:my_id>/', views.event_info, name="event_info"),
+    path('events/', views.events, name="events"),
+    path('events/<int:my_id>/', views.event_info, name="event_info"),
 ]
