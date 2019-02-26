@@ -2,10 +2,7 @@
 
 
 {% block title %}
-
-    {% if user.is_authenticated %}
         Events
-    {% endif %}
 {% endblock %}
 
 
@@ -13,6 +10,10 @@
     <div class="container">
         <br/>
         <div style="display: flex; justify-content: center; ">
+
+            {% if user.is_staff %}
+                <a style="margin: auto" href="?organizer=True" class="waves-effect waves-light btn">Events I organize</a>
+            {% endif %}
             <a style="margin: auto" href="?" class="waves-effect waves-light btn">Upcoming events</a>
             <a style="margin: auto" href="?view_past=True" class="waves-effect waves-light btn">All events</a>
         </div>
