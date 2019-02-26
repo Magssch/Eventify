@@ -19,6 +19,10 @@
         <ul class="right hide-on-med-and-down">
           <li><a href="{% url 'events' %}">Arrangementer</a></li>
 
+          {% if user.is_staff %}
+            <li><a href="/create_event">Create Event</a></li>
+          {% endif %}
+
           <li><a>
           <div class="input-field">
               <input id="search" type="search" required>
