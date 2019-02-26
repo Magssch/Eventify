@@ -12,11 +12,12 @@
 
 
 {% block content %}
+    {% load static from staticfiles %}
 <body>
   <div class="slider">
       <ul class="slides">
         <li>
-          <img src="./static/main/css/concert.jpg"> <!-- random image -->
+          <img src="{% static 'main/css/concert.png' %}" /> <!-- random image -->
           <div class="caption center-align">
             <h3></h3>
             <h5 class="light grey-text text-lighten-3"></h5>
@@ -41,14 +42,14 @@
           <div class="caption center-align">
             <h3>Register an account!</h3>
             <h5 class="light grey-text text-lighten-3">Sign up today and start Eventifying!</h5>
-            <br></br><a class="waves-effect waves-light btn-small" href = "{% url 'signup' %}">Register</a>
+            <br/><a class="waves-effect waves-light btn-small" href = "{% url 'signup' %}">Register</a>
           </div>
         </li>
       </ul>
   </div>
 
   <div class="row">
-    <br></br>
+    <br/>
     <div class = "col s3"></div>
       <div class="center-align col s2">
           <ul><li><a href="sass.html"><i class="large material-icons black-text">flash_on</i></a></li></ul>
@@ -67,7 +68,7 @@
     </div>
     <div class="col s3"></div>
     </div>
-  <br></br>
+  <br/>
 
 </body>
 

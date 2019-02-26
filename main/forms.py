@@ -23,7 +23,7 @@ class EditProfileForm(forms.ModelForm):
 
 class RegistrationForm(UserCreationForm):
 
-    check = forms.BooleanField(required = True, label="Jeg aksepterer betingelsene for bruk av Eventify")
+    check = forms.BooleanField(required = True, label="I accept the Eventify terms of use and privacy policy")
 
     class Meta:
         model = User

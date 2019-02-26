@@ -3,6 +3,5 @@ from .models import User, Event, Attendee
 
 # Register your models here.
 
-admin.site.register(User)
 admin.site.register(Event)
 admin.site.register(Attendee)

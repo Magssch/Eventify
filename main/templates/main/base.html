@@ -8,7 +8,7 @@
     {% load static %}
 
     <!-- bootstrap CSS -->
-    <link rel="stylesheet" href="{% static 'main/css/bootstrap.min.css' %}">
+    {% load bootstrap4 %}
     <!-- Gijgo CSS -->
     <link rel="stylesheet" href="{% static 'main/css/gijgo.min.css' %}">
 
@@ -16,9 +16,12 @@
     <link rel="stylesheet" type="text/css"  href="{% static 'main/css/materialize.css' %}">
     <!-- JS -->
     <script src="{% static 'main/js/materialize.js' %}"></script>
-    <script type="text/javascript" src="{% static 'main/css/script.js' %}"></script>
-    <script type="text/javascript" src="{% static 'main/css' %}"></script>
+    <script src="{% static 'main/js/jquery.js' %}" charset="utf-8"></script>
+    <script src="{% static 'main/js/gijgo.min.js' %}" charset="utf-8"></script>
 
+    <script src="{% static 'main/js/script.js' %}"></script>
+
+    <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 </head>
@@ -31,9 +34,6 @@
 
     {% include "main/footer.html" %}
 
-
-<script src="{% static 'main/js/jquery.js' %}" charset="utf-8"></script>
-<script src="{% static 'main/js/gijgo.min.js' %}" charset="utf-8"></script>
 <script type="text/javascript">
     $("#id_date").datepicker( {
         footer: true,
