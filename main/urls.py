@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.urls import path, include
 from . import views
 from django.views.generic.base import TemplateView
+from django.conf import settings
+from django.conf.urls.static import static
 
 # To reference the app, e.g. in django.shortcuts.redirect('main:homepage')
 
@@ -16,4 +18,4 @@ urlpatterns = [
     path('terms', views.terms, name='terms'),
     path('events/', views.events, name="events"),
     path('events/<int:my_id>/', views.event_info, name="event_info"),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

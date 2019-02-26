@@ -9,6 +9,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from .forms import RegistrationForm, EditProfileForm
 from django.core.paginator import Paginator
 from django.utils import timezone
+from django.core.files.storage import FileSystemStorage
 
 
 # Create your views here.
@@ -23,8 +24,8 @@ def homepage(request):
 def create_event(request):
   if not request.user.is_staff:
     return redirect('/')
-
-  form = EventForm(request.POST or None)
+  
+  form = EventForm(request.POST or None, request.FILES or None)
   if form.is_valid():
     form.save()
     return redirect('/')

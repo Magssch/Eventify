@@ -77,7 +77,7 @@ class EventForm(forms.ModelForm):
     date        = forms.DateField(
                                     widget     = forms.DateInput()
                                 )
-    image       = forms.ImageField(required=False)
+    image       = forms.FileField()
 
     class Meta:
         model = Event
