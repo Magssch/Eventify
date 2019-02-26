@@ -1,5 +1,4 @@
 test_on_heroku:
   type: deploy
   script:
-    - git remote add heroku https://heroku:ba4dbd77-2506-4e98-8518-fe545addcfc9@git.heroku.com/eventify-site.git
-    - git push -f heroku master
+    - git push -f heroku herokucd:master
