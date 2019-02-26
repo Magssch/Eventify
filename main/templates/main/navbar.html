@@ -11,17 +11,19 @@
         <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 
         <ul class="right hide-on-med-and-down">
-            <li><a class="dropdown-trigger" href="{% url 'events' %}" data-target="dropdown1">Events<i class="material-icons right">arrow_drop_down</i></a></li>
-        
+            <!-- TODO: FIX DROPDOWN FOR EVENTS -->
+            <!--<li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Events<i class="material-icons right">arrow_drop_down</i></a></li>-->
+            <li><a href="{% url 'events' %}">Events</a></li>
+
               {% if user.is_staff %}
-                <li><a href="/create_event">Create Event</a></li>
+                <li><a href="{% url 'create_event' %}">Create Event</a></li>
               {% endif %}
 
               {% if user.is_authenticated %}
-                <li><b><a href="{% url 'profile' %}">{{ user.username }}</a></b></li>
                 {% if user.is_superuser %}
                 <li><a href="{% url 'admin:index' %}">Admin page</a></li>
                 {% endif %}
+                <li><b><a href="{% url 'profile' %}">{{ user.username }}</a></b></li>
                 <li><a href="{% url 'logout' %}">Logout</a></li>
               {% else %}
                 <li><a href="{% url 'login' %}">Login</a></li>

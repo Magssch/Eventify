@@ -65,10 +65,15 @@ def edit_profile(request):
 def events(request):
     now = timezone.now()
     view_past = request.GET.get('view_past', False) == 'True'
-    if view_past:
+    organizer = request.GET.get('organizer', False)
+
+    if organizer != False:
+        events_list = Event.objects.filter(organizer = request.user)
+    elif view_past:
         events_list = Event.objects.all()
     else:
         events_list = Event.objects.filter(date__gte=now).order_by('date')
+
     paginator = Paginator(events_list, 4)  # Show 25 contacts per page
     page = request.GET.get('page')
     events = paginator.get_page(page)
