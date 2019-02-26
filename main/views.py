@@ -7,6 +7,8 @@ from django.views import generic
 from django.contrib.auth.models import User
 from django.contrib.admin.views.decorators import staff_member_required
 from .forms import RegistrationForm, EditProfileForm
+from django.core.paginator import Paginator
+from django.utils import timezone
 
 # Create your views here.
 
@@ -61,7 +63,14 @@ def edit_profile(request):
         return render(request, 'registration/edit_profile.html', args)
 
 def events(request):
-	return render(request = request,
-                  template_name = "main/events.html",
-                  context = {"events":Event.objects.all})
+    now = timezone.now()
+    view_past = request.GET.get('view_past', False) == 'True'
+    if view_past:
+        events_list = Event.objects.all()
+    else:
+        events_list = Event.objects.filter(date__gte=now).order_by('date')
+    paginator = Paginator(events_list, 4)  # Show 25 contacts per page
+    page = request.GET.get('page')
+    events = paginator.get_page(page)
+    return render(request, 'main/events.html', {'events': events})
 

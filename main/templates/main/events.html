@@ -10,13 +10,14 @@
 
 
 {% block content %}
+    <div class="container">
       <div class="row">
         {% for event in events %}
         <div class="col s12 m6">
           <div class="card green hoverable">
             <div class="card-content green">
               <span class="card-title">{{event.name}}</span>
-              <img class="materialboxed" style="width: 100%; height: 220px" src="images/sample-1.jpg">
+              <img class="materialboxed" style="width: 100%; height: 220px" src="{{event.image}}">
               <p>{{event.location}}</p>
               <p>{{event.price}}kr</p>
               <a style="float: right;" class="waves-effect waves-light btn">Les mer</a>
@@ -27,4 +28,27 @@
         </div>
         {% endfor %}
       </div>
+
+        <ul class="pagination" style="text-align: center">
+                {% if events.has_previous %}
+                   <li class="waves-effect"><a href="?page=1"><i class="material-icons">first_page</i></a></li>
+                   <li class="waves-effect"><a href="?page={{ events.previous_page_number }}"><i class="material-icons">chevron_left</i></a></li>
+                {% else %}
+                   <li class="disabled"><a href="#!"><i class="material-icons">first_page</i></a></li>
+                   <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+                {% endif %}
+
+                <li style="line-height: 28px">
+                    Page {{ events.number }} of {{ events.paginator.num_pages }}
+                </li>
+
+                {% if events.has_next %}
+                   <li class="waves-effect"><a href="?page={{ events.next_page_number }}"><i class="material-icons">chevron_right</i></a></li>
+                   <li class="waves-effect"><a href="?page={{ events.paginator.num_pages }}"><i class="material-icons">last_page</i></a></li>
+                {% else %}
+                   <li class="disabled"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+                   <li class="disabled"><a href="#!"><i class="material-icons">last_page</i></a></li>
+                {% endif %}
+        </ul>
+    </div>
 {% endblock %}
