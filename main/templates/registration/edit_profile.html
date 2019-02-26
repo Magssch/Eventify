@@ -2,7 +2,7 @@
 
 
 {% block head %}
-<title>Endre profil</title>
+<title>Edit profile</title>
 {% endblock %}
 
 {% block content %}
@@ -10,9 +10,9 @@
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Submit</button>
+        <button class="btn teal lighten-2" type = "submit">Submit</button>
     </form>
-    <p>Endring av passord kommer i en senere versjon. Beklager ulempene dette måtte medføre.</p>
+    <p>Changing passwords coming soon.</p>
     <br>
 </div>
 
