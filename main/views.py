@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from .models import Event
 from .forms import EventForm
 from django.contrib.auth.forms import UserCreationForm
@@ -9,6 +9,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from .forms import RegistrationForm, EditProfileForm
 from django.core.paginator import Paginator
 from django.utils import timezone
+
 
 # Create your views here.
 
@@ -73,4 +74,10 @@ def events(request):
     page = request.GET.get('page')
     events = paginator.get_page(page)
     return render(request, 'main/events.html', {'events': events})
+
+def event_info(request,my_id):
+    obj = get_object_or_404(Event,id=my_id)
+    context = {"object":obj}
+    return render(request,"main/event_info.html",context)
+
 
