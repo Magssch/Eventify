@@ -10,7 +10,7 @@
         {% csrf_token %}
         {{ form.as_p }}
           <a href="{% url 'terms' %}" target="_blank">Betingelser for bruk av siden og retningslinjer for personvern</a><br/><br/>
-        <button type="submit">Sign up</button>
+        <button class="btn teal lighten-2" type = "submit">register</button>
       </form>
     </div>
 {% endblock %}
