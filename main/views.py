@@ -72,5 +72,5 @@ def events(request):
     paginator = Paginator(events_list, 4)  # Show 25 contacts per page
     page = request.GET.get('page')
     events = paginator.get_page(page)
-    return render(request, 'main/events.html', {'events': events})
+    return render(request, 'main/events.html', {'events': events, 'view_past': view_past})
 
