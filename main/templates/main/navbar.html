@@ -10,7 +10,7 @@
         <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 
         <ul class="right hide-on-med-and-down">
-            <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Events<i class="material-icons right">arrow_drop_down</i></a></li>
+            <li><a class="dropdown-trigger" href="{% url 'events' %}" data-target="dropdown1">Events<i class="material-icons right">arrow_drop_down</i></a></li>
 
               {% if user.is_authenticated %}
                 <li><b><a href="{% url 'profile' %}">{{ user.username }}</a></b></li>

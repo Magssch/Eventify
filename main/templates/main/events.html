@@ -11,6 +11,12 @@
 
 {% block content %}
     <div class="container">
+        <br/>
+        <div style="display: flex; justify-content: center; ">
+            <a style="margin: auto" href="?" class="waves-effect waves-light btn">Kommende arrangement</a>
+            <a style="margin: auto" href="?view_past=True" class="waves-effect waves-light btn">Alle arrangement</a>
+        </div>
+        <br/>
       <div class="row">
         {% for event in events %}
         <div class="col s12 m6">
