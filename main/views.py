@@ -59,3 +59,9 @@ def edit_profile(request):
         form = EditProfileForm(instance=request.user)
         args = {'form': form}
         return render(request, 'registration/edit_profile.html', args)
+
+def events(request):
+	return render(request = request,
+                  template_name = "main/events.html",
+                  context = {"events":Event.objects.all})
+
