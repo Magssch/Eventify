@@ -16,6 +16,11 @@ urlpatterns = [
     path('profile/', views.profile, name="profile"),
     path('profile/edit/', views.edit_profile, name='edit_profile'),
     path('terms', views.terms, name='terms'),
+
+
     path('events/', views.events, name="events"),
     path('events/<int:my_id>/', views.event_info, name="event_info"),
+    # path('events/<int:id>/update/', views.event_update.as_view(), name="event_update"),
+    path('events/<int:my_id>/update/', views.event_update, name="event_update"),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

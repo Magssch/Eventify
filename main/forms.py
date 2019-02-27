@@ -1,7 +1,8 @@
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django import forms
-from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+
 from .models import Event
 
 
@@ -75,7 +76,7 @@ class EventForm(forms.ModelForm):
                                     widget      = forms.Textarea()
                                 )
     date        = forms.DateField(
-                                    widget     = forms.DateInput()
+                                    widget      = forms.DateInput()
                                 )
     image       = forms.FileField()
 
@@ -88,5 +89,4 @@ class EventForm(forms.ModelForm):
             'description',
             'date',
             'image',
-            # 'organizer',
         ]
