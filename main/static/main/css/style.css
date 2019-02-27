@@ -1,3 +1,7 @@
 nav ul li:hover {
-   background-color: rgb(30, 215, 96);
+   background-color: rgb(77, 182, 172);
+}
+
+nav ul li:slider {
+   background-color: rgb(77, 182, 172);
 }
