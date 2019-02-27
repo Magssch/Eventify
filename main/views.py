@@ -63,7 +63,9 @@ def create_event(request):
   
 	form = EventForm(request.POST or None, request.FILES or None)
 	if form.is_valid():
-		form.save()
+		event = form.save(commit=False)
+		event.organizer = request.user
+		event.save()
 		messages.success(request, f"New event made: {form.cleaned_data.get('name')}")
 		obj_name = form.cleaned_data.get('name')
 		obj = get_object_or_404(Event, name=obj_name)
