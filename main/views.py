@@ -105,6 +105,9 @@ def event_update(request, my_id=None):
 	if not request.user.is_staff:
 		messages.info(request, f"You must be logged into a staff account to update events.")
 		return redirect('../')
+	if not obj.organizer==request.user:
+		messages.error(request, f"You must be the organizer of this event to update it.")
+		return redirect('../')
 
 	form = EventForm(request.POST or None, request.FILES or None, instance=obj)
 	if form.is_valid():

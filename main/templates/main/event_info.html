@@ -30,7 +30,9 @@
           <a href="#" align="right" class="btn teal lighten-2">Meld deg på</a>
           <a href="../" style="float: right" class="btn teal lighten-2">Go Back</a>
           {% if user.is_staff %}
-            <a href="update/" style="margin-left: 400px;" class="btn teal lighten-2">Update Event</a>
+            {% if user == object.organizer %}
+              <a href="update/" style="margin-left: 400px;" class="btn teal lighten-2">Update Event</a>
+            {% endif %}
           {% endif %}
         </div>
       </div>
