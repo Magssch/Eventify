@@ -16,7 +16,7 @@ class User(models.Model):
         return self.first_name + " " + self.last_name
 
 class Event(models.Model):
-    name        = models.CharField(max_length=30)
+    name        = models.CharField(unique=True, max_length=30)
     organizer   = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     date        = models.DateField()
     location    = models.CharField(max_length=30)
