@@ -76,7 +76,7 @@ class EventForm(forms.ModelForm):
                                     widget      = forms.Textarea()
                                 )
     date        = forms.DateField(
-                                    widget     = forms.DateInput()
+                                    widget      = forms.DateInput()
                                 )
     image       = forms.FileField()
 
@@ -89,5 +89,4 @@ class EventForm(forms.ModelForm):
             'description',
             'date',
             'image',
-            # 'organizer',
         ]
