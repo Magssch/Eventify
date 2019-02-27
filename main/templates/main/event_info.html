@@ -27,10 +27,10 @@
         <div class="card-action">
             <!-- må ha en if setning. Om man er med i arrangementet så "meld deg av" og om man ikke er påmeldt
             så "meld deg på"-->
-          <a href="#" align="right" style="background-color:green; color:white" class="btn btn-outline-info">Meld deg på</a>
-          <a href="../" style="float: right; background-color:green; color:white" class="btn btn-outline-info">Go Back</a>
+          <a href="#" align="right" class="btn teal lighten-2">Meld deg på</a>
+          <a href="../" style="float: right" class="btn teal lighten-2">Go Back</a>
           {% if user.is_staff %}
-            <a href="update/" style="margin-left: 400px; background-color:green; color:white" class="btn btn-outline-info">Update Event</a>
+            <a href="update/" style="margin-left: 400px;" class="btn teal lighten-2">Update Event</a>
           {% endif %}
         </div>
       </div>

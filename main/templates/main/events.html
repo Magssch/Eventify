@@ -23,16 +23,18 @@
       <div class="row">
         {% for event in events %}
         <div class="col s12 m6">
-          <div class="card green hoverable">
-            <div class="card-content green">
-              <span class="card-title"><h3>{{event.name}}</h3></span>
-
-              <img src="{{event.image.url}}" alt="NO PICTURE" width="480" height="400">
-            
+          <div class="card">
+            <div class="card-image">
+              <img src="{{event.image.url}}" alt="NO PICTURE"  height="270">
+              <span class="card-title">{{event.name}}</span>
+            </div>
+            <div class="content" style="margin-left: 10px">
               <p>{{event.location}}</p>
               <p>{{event.price}}kr</p>
-              <a href="{{event.get_absolute_url}}" style="float: right;" class="btn waves-effect waves-light">Les mer</a>
               <p>{{event.date}}</p>
+            </div>
+            <div> 
+              <a href="{{event.get_absolute_url}}" style="margin-left: 300px" class="btn waves-effect waves-light">Les mer</a>
               <p style="font-size:70%">Hosted by: {{event.organizer}}</p>
             </div>
           </div>
@@ -63,3 +65,4 @@
         </ul>
     </div>
 {% endblock %}
+
