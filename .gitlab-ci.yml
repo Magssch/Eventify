@@ -1,0 +1,10 @@
+before_script:
+  - git config user.email "krisfjen@stud.ntnu.no"
+  - git config user.name "Kristian Flatheim Jensen"
+
+test_on_heroku:
+  type: deploy
+  script:
+    - git push --force https://heroku:$HEROKU_API_KEY@git.heroku.com/eventify-site.git HEAD:master
+  only:
+    - master

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Eventify - {% block title %}
+            {% endblock %}</title>
+    {% load static %}
+
+    <!-- bootstrap CSS -->
+    {% load bootstrap4 %}
+    <!-- Gijgo CSS -->
+    <link rel="stylesheet" href="{% static 'main/css/gijgo.min.css' %}">
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css"  href="{% static 'main/css/materialize.css' %}">
+    <!-- JS -->
+    <script src="{% static 'main/js/materialize.js' %}"></script>
+    <script src="{% static 'main/js/jquery.js' %}" charset="utf-8"></script>
+    <script src="{% static 'main/js/gijgo.min.js' %}" charset="utf-8"></script>
+
+    <script src="{% static 'main/js/script.js' %}"></script>
+
+    <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+</head>
+
+<body>
+    {% include "main/navbar.html" %}
+
+        {% block content %}
+        {% endblock %}
+
+    {% include "main/footer.html" %}
+
+<script type="text/javascript">
+    $("#id_date").datepicker( {
+        footer: true,
+        modal: true
+        // uiLibrary: 'bootstrap4',
+        // iconsLibrary: 'materialicons',
+        }
+    );
+</script>
+
+</body>
+</html>

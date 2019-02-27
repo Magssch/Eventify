@@ -1,0 +1,19 @@
+<!-- Should extend something... -->
+
+{% extends 'main/base.html' %}
+
+{% block title %}
+        Create event
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+	<form method="POST" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{form.as_p}}
+		<button style="background-color:green; color:white" class="btn btn-outline-info" type="Submit">Create</button>
+	</form>
+</div>
+
+{% endblock %}

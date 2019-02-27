@@ -1,0 +1,16 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Sign up{% endblock %}
+
+{% block content %}
+
+    <div class="container" style="padding-bottom: 30px">
+      <h2>Sign up</h2>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+          <a href="{% url 'terms' %}" target="_blank">Terms of service and privacy policy for Eventify.</a><br/><br/>
+        <button class="btn teal lighten-2" type = "submit">Submit</button>
+      </form>
+    </div>
+{% endblock %}

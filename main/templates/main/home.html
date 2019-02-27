@@ -1,0 +1,74 @@
+{% extends 'main/base.html' %}
+
+
+{% block title %}
+
+    {% if user.is_authenticated %}
+        {{ user.username }}
+    {% else %}
+        Hjem
+    {% endif %}
+{% endblock %}
+
+
+{% block content %}
+    {% load static from staticfiles %}
+<body>
+  <div class="slider">
+      <ul class="slides">
+        <li>
+          <img src="{% static 'main/css/concert.png' %}" /> <!-- random image -->
+          <div class="caption center-align">
+            <h3></h3>
+            <h5 class="light grey-text text-lighten-3"></h5>
+          </div>
+        </li>
+        <li>
+          <img src="https://pi.tedcdn.com/r/pb-assets.tedcdn.com/system/baubles/files/000/000/554/original/TEDx_talks_1.jpg?width=1400"> <!-- random image -->
+          <div class="caption left-align">
+            <h3>Host your own talks</h3>
+            <h5 class="light grey-text text-lighten-3">With Eventify you can host your own events!</h5>
+          </div>
+        </li>
+        <li>
+          <img src="https://cdn-images-1.medium.com/max/1400/1*w36dbnPUnt9sqZGZ2mg3lQ.png"> <!-- random image -->
+          <div class="caption right-align">
+            <h3>Attend events</h3>
+            <h5 class="light grey-text text-lighten-3">Browse through our wide portfolio of events and find one that suits you!</h5>
+          </div>
+        </li>
+        <li>
+          <img src="https://userscontent2.emaze.com/images/5b94cd5c-c550-4629-b8cf-156dbc7e488c/bbb71aa2-d532-47c6-aad9-70892038189c.png"> <!-- random image -->
+          <div class="caption center-align">
+            <h3>Register an account!</h3>
+            <h5 class="light grey-text text-lighten-3">Sign up today and start Eventifying!</h5>
+            <br/><a class="waves-effect waves-light btn-small" href = "{% url 'signup' %}">Register</a>
+          </div>
+        </li>
+      </ul>
+  </div>
+
+  <div class="row">
+    <br/>
+    <div class = "col s3"></div>
+      <div class="center-align col s2">
+          <ul><li><a href="sass.html"><i class="large material-icons black-text">flash_on</i></a></li></ul>
+          <h4>Notification</h4>
+          <h7>Get notifications about any nearby events, the latest info on attending events or subscribe to our weekly newsletter! </h7>
+      </div>
+        <div class="center-align col s2">
+          <ul><li><a href="sass.html"><i class="large material-icons black-text">account_circle</i></a></li></ul>
+          <h4>User</h4>
+          <h7>It is free to register an account at Eventify. You get your own profile with an overview over all your attending events</h7>
+        </div>
+        <div class="center-align col s2">
+          <ul><li><a href="sass.html"><i class="large material-icons black-text">add_circle</i></a></li></ul>
+          <h4>Add Events</h4>
+          <h7>With Eventify the coolest events are only one click away. Add events instantly and manage your Event-portfolio easily.</h7>
+    </div>
+    <div class="col s3"></div>
+  <br/>
+</body>
+
+
+{% endblock %}

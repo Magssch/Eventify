@@ -1,0 +1,65 @@
+{% extends 'main/base.html' %}
+
+
+{% block title %}
+    {% if user.is_authenticated %}
+        Events
+    {% endif %}
+{% endblock %}
+
+
+{% block content %}
+    <div class="container">
+        <br/>
+        <div style="display: flex; justify-content: center; ">
+
+            {% if user.is_staff %}
+                <a style="margin: auto" href="?organizer=True" class="waves-effect waves-light btn">Events I organize</a>
+            {% endif %}
+            <a style="margin: auto" href="?" class="waves-effect waves-light btn">Upcoming events</a>
+            <a style="margin: auto" href="?view_past=True" class="waves-effect waves-light btn">All events</a>
+        </div>
+        <br/>
+      <div class="row">
+        {% for event in events %}
+        <div class="col s12 m6">
+          <div class="card green hoverable">
+            <div class="card-content green">
+              <span class="card-title">{{event.name}}</span>
+
+              <img src="{{event.image.url}}" alt="NO PICTURE" width="480" height="400">
+            
+              <p>{{event.location}}</p>
+              <p>{{event.price}}kr</p>
+              <a href="{{event.get_absolute_url}}" style="float: right;" class="btn waves-effect waves-light">Les mer</a>
+              <p>{{event.date}}</p>
+              <p style="font-size:70%">Hosted by: {{event.organizer}}</p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+        <ul class="pagination" style="text-align: center">
+                {% if events.has_previous %}
+                   <li class="waves-effect"><a href="?{% if view_past %}view_past=True&{% endif %}page=1"><i class="material-icons">first_page</i></a></li>
+                   <li class="waves-effect"><a href="?{% if view_past %}view_past=True&{% endif %}page={{ events.previous_page_number }}"><i class="material-icons">chevron_left</i></a></li>
+                {% else %}
+                   <li class="disabled"><a href="#!"><i class="material-icons">first_page</i></a></li>
+                   <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+                {% endif %}
+
+                <li style="line-height: 28px">
+                    Page {{ events.number }} of {{ events.paginator.num_pages }}
+                </li>
+
+                {% if events.has_next %}
+                   <li class="waves-effect"><a href="?{% if view_past %}view_past=True&{% endif %}page={{ events.next_page_number }}"><i class="material-icons">chevron_right</i></a></li>
+                   <li class="waves-effect"><a href="?{% if view_past %}view_past=True&{% endif %}page={{ events.paginator.num_pages }}"><i class="material-icons">last_page</i></a></li>
+                {% else %}
+                   <li class="disabled"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+                   <li class="disabled"><a href="#!"><i class="material-icons">last_page</i></a></li>
+                {% endif %}
+        </ul>
+    </div>
+{% endblock %}

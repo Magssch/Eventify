@@ -1,0 +1,29 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    {% if user.is_authenticated %}
+        {{user.username}}
+    {% else %}
+        Not logged in.
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <div style="width: 100%; display: flex;">
+            <div style="margin:auto; padding: 10px;">
+                <h4>Username: {{user.username}}</h4>
+                <h4>First name: {{user.first_name}}</h4>
+                <h4>Last name: {{user.last_name}}</h4>
+                <h4>E-mail: {{user.email}}</h4>
+                <br/>
+                <a href="{% url 'edit_profile' %}">Update profile</a>
+            </div>
+        </div>
+    {% else %}
+      <p>You are not logged in.</p>
+        <br/>
+      <a href="{% url 'login' %}">Login</a>
+      <a href="{% url 'signup' %}">Sign up</a>
+    {% endif %}
+{% endblock %}
