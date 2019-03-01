@@ -1,6 +1,6 @@
 ## How to install
 
-Install MySQL database from Oracle
+Install SQL database of choice
 
 Run the following:
 
@@ -12,6 +12,18 @@ Run the following:
 
 `pip install Pillow`
 
-## Technologies
 
-Built using Django 2.1.7, Materialize CSS, Bootstrap 4 (django-bootstrap4)
+## Technology Stack
+
+### Backend and Frontend
+Django 2.1.7
+
+### CSS Framework
+Materialize CSS
+Bootstrap 4 (django-bootstrap4)
+
+### Continuous Integration
+GitLab CI
+
+### Continuous Deployment
+Heroku
