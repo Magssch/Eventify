@@ -6,8 +6,12 @@ from django.http import HttpRequest
 from main.forms import EditProfileForm
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.contrib.messages.middleware import MessageMiddleware
+from django.core.files.uploadedfile import SimpleUploadedFile
+import tempfile
+import unittest
 
 from main.views import * 
+from main.forms import EventForm
 
 
 class HomeViewTestCaseNotAUser(TestCase):
@@ -87,11 +91,14 @@ class HomeViewTestCasualUser(TestCase):
         self.assertTemplateUsed(response, 'registration/edit_profile.html')       
 
     def test_user_edit_profile_post(self):
-        request = self.factory.get('/edit_profile')
-        request.user = self.user
-        request.method = 'POST'
-        response = edit_profile(request)
+        #request = self.factory.get('/edit_profile')
+        #request.user = self.user
+        #request.method = 'POST'
+        #response = edit_profile(request)
+        response = self.client.post(reverse('edit_profile'), follow=False)
         self.assertEqual(response.status_code, 302)
+
+
 
 class HomeViewTestStaffUser(TestCase):
 
@@ -101,10 +108,11 @@ class HomeViewTestStaffUser(TestCase):
         self.password = 'valid_password1'
         self.client = Client()
         self.url = reverse('homepage')
-        self.user = User.objects.create_user(self.username, 'email@test.com', self.password, is_staff=False)
+        self.user = User.objects.create_user(self.username, 'email@test.com', self.password, is_staff=True)
         self.login = self.client.login(username=self.username, password=self.password)
         self.user.is_staff = True
         self.user.save()
+
 
     def setup_request(self, request):
         request.user = self.user
@@ -117,4 +125,35 @@ class HomeViewTestStaffUser(TestCase):
         request.user = self.user
         response = create_event(request)
         self.assertEqual(response.status_code, 200)
+
+    @unittest.skip("WIP")
+    def test_staff_create_event(self):
+        #request = self.factory.get('/edit_profile')
+        #request.user = self.user
+        #request.method = 'POST'
+        #response = edit_profile(request)
+        #with open('testbilde.jpg') as bilde:
+            #response = self.client.post('/create_event/', data={'name':'polsefest',
+            #'location':'Trd',
+            #'price':'1',
+            #'description':'spis sa mye polse du kan',
+            #'date':timezone.now(),
+            #'image': bilde,
+            #'FILES': bilde})
+            #self.assertEqual(response.status_code, 302)
+            #Need to work on this one. Trouble getting valid form
+
+        
+
+        form = EventForm(data={'name':'polsefest',
+        'location':'Trd',
+        'price':'1',
+        'description':'spis sa mye polse du kan',
+        'date':timezone.now(),
+        'image': 'testbilde.jpg'})
+        self.assertTrue(form.is_valid())
+        print(form.errors)
+        response = self.client.post(reverse('event_info', args={1}))
+        self.assertEqual(response.status_code, 200)
+
     
