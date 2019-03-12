@@ -16,22 +16,25 @@
             <br>
             <br>
 
-            <p>Sted: {{object.location}}</p>
-            <p>Pris: {{object.price}}kr</p>
-            <p>Arrangeres av: {{object.organizer}}</p>
+            <p>Location: {{object.location}}</p>
+            <p>Price: {{object.price}}kr</p>
+            <p>Organized by: {{object.organizer}}</p>
+
             
-            <p>Deltagere</p>
+            <p>Number of attendees: {{ attendees.count }}</p>
 
             <!-- dobbel if setning, om man har meldt seg på, har man da betalt?-->
         </div>
-        <div class="card-action">
+        <div class="card-action" style="position: relative">
             <!-- må ha en if setning. Om man er med i arrangementet så "meld deg av" og om man ikke er påmeldt
             så "meld deg på"-->
-          <a href="#" align="right" class="btn teal lighten-2">Meld deg på</a>
-          <a href="../" style="float: right" class="btn teal lighten-2">Go Back</a>
+          <a href="#" style="position: relative; left: 0%" class="btn teal lighten-2">Meld deg på</a>
+          <a href="../" style="position: absolute; left: 90%" class="btn teal lighten-2">Go Back</a>
           {% if user.is_staff %}
             {% if user == object.organizer %}
-              <a href="update/" style="margin-left: 400px;" class="btn teal lighten-2">Update Event</a>
+              <a href="update/" style="position: absolute; left: 25%;" class="btn teal lighten-2">Update event</a>
+              <a href="attendees/" style="position: absolute; left: 50%;" class="btn teal lighten-2">Attendees</a>
+              <a href="delete/" style="position: absolute; left: 70%;" class="btn teal lighten-2">Delete event</a>
             {% endif %}
           {% endif %}
         </div>
