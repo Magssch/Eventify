@@ -76,8 +76,15 @@ class EventForm(forms.ModelForm):
                                     widget      = forms.Textarea()
                                 )
     date        = forms.DateField(
-                                    widget      = forms.DateInput()
+                                    widget      = forms.DateInput(format=('%d-%m-%Y'),
+                                             attrs={'id':'date1',
+                                            'placeholder':'Select a date'})
                                 )
+    registration_starts = forms.DateField(
+                                    widget      = forms.DateInput(format=('%d-%m-%Y'),
+                                             attrs={'id':'date2',
+                                            'placeholder':'Select a date'})
+    )
     image       = forms.FileField()
 
     class Meta:
@@ -88,5 +95,7 @@ class EventForm(forms.ModelForm):
             'price',
             'description',
             'date',
+            'registration_starts',
             'image',
         ]
+        widgets = {}

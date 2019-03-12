@@ -36,7 +36,14 @@
     {% include "main/footer.html" %}
 
 <script type="text/javascript">
-    $("#id_date").datepicker( {
+    $("#date1").datepicker( {
+        footer: true,
+        modal: true
+        // uiLibrary: 'bootstrap4',
+        // iconsLibrary: 'materialicons',
+        }
+    );
+    $("#date2").datepicker( {
         footer: true,
         modal: true
         // uiLibrary: 'bootstrap4',

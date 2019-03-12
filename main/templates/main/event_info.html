@@ -27,7 +27,9 @@
         <div class="card-action">
             <!-- må ha en if setning. Om man er med i arrangementet så "meld deg av" og om man ikke er påmeldt
             så "meld deg på"-->
-          <a href="#" align="right" class="btn teal lighten-2">Meld deg på</a>
+            {% if object.registration_open %}
+                <a href="#" align="right" class="btn teal lighten-2">Meld deg på</a>
+            {% endif %}
           <a href="../" style="float: right" class="btn teal lighten-2">Go Back</a>
           {% if user.is_staff %}
             {% if user == object.organizer %}
