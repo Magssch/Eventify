@@ -37,7 +37,16 @@
 
   <ul class="sidenav" id="mobile-demo">
       {% if user.is_authenticated %}
-        <li><b><a href="{% url 'profile' %}">{{ user.username }}</a></b></li>
+          <li><a href="{% url 'profile' %}" style="font-weight: bolder">{{ user.username }}</a></li>
+      {% endif %}
+
+      <li><a href="{% url 'events' %}">Events</a></li>
+
+      {% if user.is_staff %} <!--enables admin and organizers to create events-->
+        <li><a href="{% url 'create_event' %}">Create Event</a></li>
+      {% endif %}
+
+      {% if user.is_authenticated %}
         {% if user.is_superuser %}
         <li><a href="{% url 'admin:index' %}">Admin page</a></li>
         {% endif %}
