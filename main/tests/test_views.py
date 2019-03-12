@@ -364,6 +364,9 @@ class HomeViewTestEventRelated(TestCase):
         request.user = self.staff
         response=event_delete(request, self.event_id)
         self.assertEqual(response.status_code, 200)
+        request.method = 'POST'
+        response=event_delete(request, self.event_id)
+        self.assertEqual(response.status_code, 302)
 
     def test_user_cannot_delete_event(self):
         ## Setting up request
@@ -386,4 +389,27 @@ class HomeViewTestEventRelated(TestCase):
         request.user = self.staff2
         response=event_delete(request, self.event_id)
         self.assertEqual(response.status_code, 302)
+
+    def test_event_attendees_works_correctly(self):
+        ## Setting up request
+        request = self.factory.get('/event_delete')
+        from django.contrib.messages.storage.fallback import FallbackStorage
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+
+        #User
+        request.user = self.user
+        response=event_attendees(request, self.event_id)
+        self.assertEqual(response.status_code, 302)
+
+        #Staff but not organizer
+        request.user = self.staff2
+        response=event_attendees(request, self.event_id)
+        self.assertEqual(response.status_code, 302)
+
+        #Organizer of event
+        request.user = self.staff
+        response=event_attendees(request, self.event_id)
+        self.assertEqual(response.status_code, 200)
 

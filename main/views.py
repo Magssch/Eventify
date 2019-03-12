@@ -160,7 +160,7 @@ def event_attendees(request, my_id):
 	if not (request.user.is_staff):
 		messages.error(request, "You do not have the privilege to see this page.")
 		return redirect('../')
-	if not (obj.organizer==request.user):
+	if not (event.organizer==request.user):
 		messages.error(request, "You must be the organizer of this event to look at this page")
 		return redirect('../')
 
