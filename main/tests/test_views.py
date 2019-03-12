@@ -167,15 +167,63 @@ class HomeViewTestStaffUser(TestCase):
         request.POST['date'] = timezone.now()
         request.FILES['image'] = image_file
         form = EventForm(request.POST or None, request.FILES or None) 
-        print(form.errors)
         self.assertTrue(form.is_valid())
         response = create_event(request)
-        self.assertEqual(response.status_code, 302)    
+        self.assertEqual(response.status_code, 302) 
 
-    @unittest.skip("WIP")
+
+    #@unittest.skip("WIP")
     def test_staff_can_update_event(self):
-        request = self.factory.get('/event_update')
+        ## Creating image
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        image = create_image(None, 'testbilde.jpg')
+        image_file = SimpleUploadedFile('testbilde.jpg', image.getvalue())
+
+        ## Setting up request
+        request = self.factory.get('/create_event')
+        from django.contrib.messages.storage.fallback import FallbackStorage
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
         request.user = self.user
-        response = event_update(request)
-        self.assertEqual(response.status_code, Http404)
+        request.POST._mutable = True
+        request.POST['name']= 'Test'
+        request.POST['location'] = 'Trondheim'
+        request.POST['price'] = '1'
+        request.POST['description'] = 'Desc'
+        request.POST['date'] = timezone.now()
+        request.FILES['image'] = image_file
+        form = EventForm(request.POST or None, request.FILES or None) 
+        self.assertTrue(form.is_valid())
+        response = create_event(request)
+        self.assertEqual(response.status_code, 302) 
+         
+        #Getting the event 
+        events_list = Event.objects.all()
+        paginator = Paginator(events_list, 4)
+        page = request.GET.get('page')
+        events = paginator.get_page(page)
+        my_event = events.__getitem__(0)
+        id = my_event.__getattribute__('id')
+
+        request = self.factory.get('event_update')
+        from django.contrib.messages.storage.fallback import FallbackStorage
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        request.user = self.user
+        response = event_update(request, id)
+        self.assertEqual(response.status_code, 200)
+
+        request.POST._mutable = True
+        request.POST['name']= 'Test'
+        request.POST['location'] = 'Trondheim'
+        request.POST['price'] = '1'
+        request.POST['description'] = 'Desc'
+        request.POST['date'] = timezone.now()
+        request.FILES['image'] = image_file
+        response = event_update(request, id)
+        self.assertEqual(response.status_code, 302)
+
+
     
