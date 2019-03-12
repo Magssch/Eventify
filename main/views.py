@@ -66,7 +66,7 @@ def create_event(request):
 		event = form.save(commit=False)
 		event.organizer = request.user
 		event.save()
-		messages.success(request, f"New event made: {form.cleaned_data.get('name')}")
+		messages.success(request, f"New event created: {form.cleaned_data.get('name')}")
 		obj_name = form.cleaned_data.get('name')
 		obj = get_object_or_404(Event, name=obj_name)
 		return redirect(obj)
@@ -103,10 +103,10 @@ def event_update(request, my_id=None):
 	obj = get_object_or_404(Event, id=my_id)
 
 	if not request.user.is_staff:
-		messages.info(request, f"You must be logged into a staff account to update events.")
+		messages.info(request, "You must be logged into a staff account to update events.")
 		return redirect('../')
 	if not obj.organizer==request.user:
-		messages.error(request, f"You must be the organizer of this event to update it.")
+		messages.error(request, "You must be the organizer of this event to update it.")
 		return redirect('../')
 
 	form = EventForm(request.POST or None, request.FILES or None, instance=obj)
@@ -123,3 +123,23 @@ def event_update(request, my_id=None):
 	}
 	return render(request, "main/event_update.html", context)
 
+# An option to delete existing event.
+# Has to be admin or the staff user that created the event.
+def event_delete(request, my_id):
+	obj = get_object_or_404(Event, id=my_id)
+
+	if not (request.user.is_staff or request.user.is_superuser):
+		messages.info(request, "You must be logged into a staff account to update events.")
+		return redirect('../')
+	if not (obj.organizer==request.user or request.user.is_superuser):
+		messages.info(request, "You must be the organizer of this event to update it.")
+		return redirect('../')
+
+	if request.method =="POST":
+		# Confirming delete
+		obj.delete()
+		return redirect('../../')
+	context = {
+		"object": obj
+	}
+	return render(request, "main/event_delete.html", context)
