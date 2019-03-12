@@ -64,6 +64,7 @@ class RegistrationForm(UserCreationForm):
             user.save()
         return user
 
+
 class EventForm(forms.ModelForm):
     name        = forms.CharField(label='Name of the event:',
                     widget=forms.TextInput(attrs={"placeholder": "enter event name"})
