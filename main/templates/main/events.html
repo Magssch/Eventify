@@ -16,6 +16,11 @@
             {% if user.is_staff %}
                 <a style="margin: auto" href="?organizer=True" class="waves-effect waves-light btn">Events I organize</a>
             {% endif %}
+
+            {% if user.is_authenticated %}
+                <a style="margin: auto" href="?my_events=True" class="waves-effect waves-light btn">My Events</a>
+            {% endif %}
+
             <a style="margin: auto" href="?" class="waves-effect waves-light btn">Upcoming events</a>
             <a style="margin: auto" href="?view_past=True" class="waves-effect waves-light btn">All events</a>
         </div>
@@ -35,7 +40,7 @@
             </div>
             <div> 
               <a href="{{event.get_absolute_url}}" style="margin-left: 300px" class="btn waves-effect waves-light">Les mer</a>
-              <p style="font-size:70%">Hosted by: {{event.organizer}}</p>
+              <p style="font-size:70%; margin-left: 5px;">Hosted by: {{event.organizer}}</p>
             </div>
           </div>
         </div>

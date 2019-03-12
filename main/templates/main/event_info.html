@@ -5,51 +5,52 @@
 
 <div class="container">
  <div class="row">
-    <div class="col s12 m12">
-      <div class="card">
-        <div class="card-image">
-          <img style="height:220px" src={{object.image.url}}> <!-- legge til bilde fra objektet-->
-          <span class="card-title">{{object.name}}</span>
-        </div>
-        <div class="card-content">
-          <p>{{object.description}}</p>
-            <br>
-            <br>
+		<div class="col s12 m12">
+			<div class="card">
+				<div class="card-image">
+						<div style="height:400px; background: url({{object.image.url}}) no-repeat center;"></div> <!-- legge til bilde fra objektet-->
+					<span class="card-title">{{object.name}}</span>
+				</div>
+				<div class="card-content">
+					<p>{{object.description}}</p>
+						<br>
+						<br>
 
-            <p>Location: {{object.location}}</p>
-            <p>Price: {{object.price}}kr</p>
-            <p>Organized by: {{object.organizer}}</p>
+						<p>Location: {{object.location}}</p>
+						<p>Price: {{object.price}}kr</p>
+						<p>Organized by: {{object.organizer}}</p>
 
-            
-            <p>Number of attendees: {{ attendees.count }} / {{object.capacity}} </p>
+						
+						<p>Number of attendees: {{ attendees.count }} / {{object.capacity}} </p>
 
-            <!-- dobbel if setning, om man har meldt seg på, har man da betalt?-->
-        </div>
-        <div class="card-action" style="position: relative">
-            <!-- må ha en if setning. Om man er med i arrangementet så "meld deg av" og om man ikke er påmeldt
-            så "meld deg på"-->
-          <form action='.' method="POST">
-            {% csrf_token %}
-
-            {% if am_I_attending == False %}
-              <input type="submit" value="Attend" style="position: relative; left: 0%" class="btn teal lighten-2"/>
-            {% else %}
-              <input type="submit" value="Unattend" style="position: relative; left: 0%" class="btn teal lighten-2"/>
-            {% endif %}
-          </form>
-          <a href="../" style="position: absolute; left: 90%" class="btn teal lighten-2">Go Back</a>
-          {% if user.is_staff %}
-            {% if user == object.organizer %}
-              <a href="update/" style="position: absolute; left: 25%;" class="btn teal lighten-2">Update event</a>
-              <a href="attendees/" style="position: absolute; left: 50%;" class="btn teal lighten-2">Attendees</a>
-              <a href="delete/" style="position: absolute; left: 70%;" class="btn teal lighten-2">Delete event</a>
-            {% endif %}
-          {% endif %}
-        </div>
-      </div>
-    </div>
-  </div>
-  </div>
+						<!-- dobbel if setning, om man har meldt seg på, har man da betalt?-->
+				</div>
+				<div class="card-action" style="position: relative">
+						<!-- må ha en if setning. Om man er med i arrangementet så "meld deg av" og om man ikke er påmeldt
+						så "meld deg på"-->
+					{% if object.registration_open %}
+						<form action='.' method="POST">
+							{% csrf_token %}
+							{% if am_I_attending == False %}
+								<input type="submit" value="Attend" style="position: relative; left: 0%" class="btn teal lighten-2"/>
+							{% else %}
+								<input type="submit" value="Unattend" style="position: relative; left: 0%" class="btn teal lighten-2"/>
+							{% endif %}
+						</form>
+					{% endif %}
+					<a href="../" style="position: absolute; left: 90%" class="btn teal lighten-2">Go Back</a>
+					{% if user.is_staff %}
+						{% if user == object.organizer %}
+							<a href="update/" style="position: absolute; left: 25%;" class="btn teal lighten-2">Update event</a>
+							<a href="attendees/" style="position: absolute; left: 50%;" class="btn teal lighten-2">Attendees</a>
+							<a href="delete/" style="position: absolute; left: 70%;" class="btn teal lighten-2">Delete event</a>
+						{% endif %}
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
 
 {% endblock %}
 
