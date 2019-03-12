@@ -117,4 +117,3 @@ class HomeViewTestStaffUser(TestCase):
         request.user = self.user
         response = create_event(request)
         self.assertEqual(response.status_code, 200)
-    

@@ -22,5 +22,6 @@ urlpatterns = [
     path('events/<int:my_id>/', views.event_info, name="event_info"),
     # path('events/<int:id>/update/', views.event_update.as_view(), name="event_update"),
     path('events/<int:my_id>/update/', views.event_update, name="event_update"),
+    path('events/<int:my_id>/delete/', views.event_delete, name="event_delete"),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
