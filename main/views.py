@@ -21,6 +21,7 @@ from .models import Event
 from .forms import RegistrationForm, EditProfileForm, EventForm
 
 
+
 # Create your views here.
 
 def homepage(request):
