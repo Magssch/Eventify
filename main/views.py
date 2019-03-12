@@ -83,9 +83,12 @@ def events(request):
 	now = timezone.now()
 	view_past = request.GET.get('view_past', False) == 'True'
 	organizer = request.GET.get('organizer', False)
+	my_events = request.GET.get('my_events', False)
 
 	if organizer != False:
 		events_list = Event.objects.filter(organizer = request.user)
+	elif my_events != False:
+		events_list = Event.objects.filter(attendee__user = request.user)
 	elif view_past:
 		events_list = Event.objects.all()
 	else:
