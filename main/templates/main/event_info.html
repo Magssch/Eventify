@@ -37,6 +37,9 @@
               <input type="submit" value="Unattend" style="position: relative; left: 0%" class="btn teal lighten-2"/>
             {% endif %}
           </form>
+            {% if object.registration_open %}
+                <a href="#" style="position: relative; left: 0%" class="btn teal lighten-2">Attend this event</a>
+            {% endif %}
           <a href="../" style="position: absolute; left: 90%" class="btn teal lighten-2">Go Back</a>
           {% if user.is_staff %}
             {% if user == object.organizer %}
