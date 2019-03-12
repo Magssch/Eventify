@@ -1,0 +1,8 @@
+[run]
+branch = True
+omit = */python3.7/*
+        *.virtualenvs/*
+        */test*.py
+        */migrations/*
+        */urls.py
+        */manage.py
