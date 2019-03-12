@@ -225,5 +225,22 @@ class HomeViewTestStaffUser(TestCase):
         response = event_update(request, id)
         self.assertEqual(response.status_code, 302)
 
+        #Checks that non-staff gets redirected (cannot update event)
+        self.user.is_staff = False
+        self.user.save()
+        response = event_update(request, id)
+        self.assertEqual(response.status_code, 302)
+
+        #Checks that non-staff gets redirected (cannot update event)
+        self.username = 'myuser2'
+        self.password = 'valid_password2'
+        self.user = User.objects.create_user(self.username, 'email@test2.com', self.password, is_staff=True)
+        self.user.is_staff = True
+        self.login = self.client.login(username=self.username, password=self.password)
+        self.user.save()
+        request.user = self.user
+        response = event_update(request, id)
+        self.assertEqual(response.status_code, 302)
+
 
     
