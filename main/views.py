@@ -1,6 +1,6 @@
 # Django imports
 # django.db
-# from django.db.models import count
+from django.db import IntegrityError
 # djano.utils
 from django.utils import timezone
 # django shortcuts
@@ -107,9 +107,33 @@ def events(request):
 def event_info(request, my_id):
 	event = get_object_or_404(Event, id=my_id)
 	attendees = Attendee.objects.filter(event=event)
+	am_I_attending = Attendee.objects.filter(event=event, user=request.user).exists()
+	print("Attending: {}".format(am_I_attending) )
+
+	if request.method=="POST":
+		try:
+			if attendees.count() < event.capacity and am_I_attending==False:
+				attendee = Attendee.objects.create(user=request.user, event=event)
+				attendee.save()
+				messages.success(request, f"Successfully signed up for {event.name}")
+				return redirect('event_info', my_id)
+			elif attendees.count() < event.capacity and am_I_attending==True:
+				attendee = Attendee.objects.filter(event=event, user=request.user)
+				attendee.delete()
+				messages.success(request, f"Successfully unattended {event.name}")
+				return redirect('event_info', my_id)
+			else:
+				messages.error(request, "Sorry, you were too late. The event is full")
+				return redirect('event_info', my_id)
+
+		except IntegrityError as e:
+			messages.error(request, "You have already signed up for this event")
+			return redirect('event_info', my_id)
+
 	context = {
 		"object":event,
-		"attendees":attendees
+		"attendees":attendees,
+		"am_I_attending": am_I_attending
 	}
 	return render(request, "main/event_info.html", context)
 
@@ -164,7 +188,7 @@ def event_attendees(request, my_id):
 	if not (request.user.is_staff):
 		messages.error(request, "You do not have the privilege to see this page.")
 		return redirect('../')
-	if not (obj.organizer==request.user):
+	if not (event.organizer==request.user):
 		messages.error(request, "You must be the organizer of this event to look at this page")
 		return redirect('../')
 
@@ -174,6 +198,3 @@ def event_attendees(request, my_id):
 		"attendees": attendees
 	}
 	return render(request, "main/event_attendees.html", context)
-
-
-
