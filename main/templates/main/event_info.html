@@ -21,14 +21,22 @@
             <p>Organized by: {{object.organizer}}</p>
 
             
-            <p>Number of attendees: {{ attendees.count }}</p>
+            <p>Number of attendees: {{ attendees.count }} / {{object.capacity}} </p>
 
             <!-- dobbel if setning, om man har meldt seg på, har man da betalt?-->
         </div>
         <div class="card-action" style="position: relative">
             <!-- må ha en if setning. Om man er med i arrangementet så "meld deg av" og om man ikke er påmeldt
             så "meld deg på"-->
-          <a href="#" style="position: relative; left: 0%" class="btn teal lighten-2">Meld deg på</a>
+          <form action='.' method="POST">
+            {% csrf_token %}
+
+            {% if am_I_attending == False %}
+              <input type="submit" value="Attend" style="position: relative; left: 0%" class="btn teal lighten-2"/>
+            {% else %}
+              <input type="submit" value="Unattend" style="position: relative; left: 0%" class="btn teal lighten-2"/>
+            {% endif %}
+          </form>
           <a href="../" style="position: absolute; left: 90%" class="btn teal lighten-2">Go Back</a>
           {% if user.is_staff %}
             {% if user == object.organizer %}

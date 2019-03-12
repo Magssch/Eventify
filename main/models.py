@@ -10,6 +10,7 @@ class Event(models.Model):
     price       = models.IntegerField()
     description = models.TextField()
     image       = models.ImageField(upload_to='event_image', blank=True, null=True)
+    capacity    = models.IntegerField(null=True)
 
     def __str__(self):
         return self.name
@@ -21,7 +22,10 @@ class Event(models.Model):
 class Attendee(models.Model):
     user = models.ForeignKey(User, models.CASCADE)
     event = models.ForeignKey(Event, models.CASCADE)
-    has_paid = models.BooleanField()
+    has_paid = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.user.first_name + " " + self.user.last_name + " attending " + self.event.name
 
-
+    class Meta:
+        unique_together = ('event', 'user')
