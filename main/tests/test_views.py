@@ -6,8 +6,27 @@ from django.http import HttpRequest
 from main.forms import EditProfileForm
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.contrib.messages.middleware import MessageMiddleware
+import unittest
+from PIL import Image
+from django.utils.six import BytesIO
 
 from main.views import * 
+from main.forms import *
+
+# "borrowed" from easy_thumbnails/tests/test_processors.py
+def create_image(storage, filename, size=(100, 100), image_mode='RGB', image_format='JPEG'):
+    """
+    Generate a test image, returning the filename that it was saved as.
+    If ``storage`` is ``None``, the BytesIO containing the image data
+    will be passed instead.
+    """
+    data = BytesIO()
+    Image.new(image_mode, size).save(data, image_format)
+    data.seek(0)
+    if not storage:
+        return data
+    image_file = ContentFile(data.read())
+    return storage.save(filename, image_file)
 
 
 class HomeViewTestCaseNotAUser(TestCase):
@@ -86,12 +105,19 @@ class HomeViewTestCasualUser(TestCase):
         request = response.wsgi_request
         self.assertTemplateUsed(response, 'registration/edit_profile.html')       
 
+    #@unittest.skip("WIP")
     def test_user_edit_profile_post(self):
         request = self.factory.get('/edit_profile')
+        from django.contrib.messages.storage.fallback import FallbackStorage
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
         request.user = self.user
         request.method = 'POST'
         response = edit_profile(request)
         self.assertEqual(response.status_code, 302)
+
+        #My solution was to just mock out the messages framework for those tests, there may be better solutions (the django test client?)
 
 class HomeViewTestStaffUser(TestCase):
 
@@ -102,8 +128,8 @@ class HomeViewTestStaffUser(TestCase):
         self.client = Client()
         self.url = reverse('homepage')
         self.user = User.objects.create_user(self.username, 'email@test.com', self.password, is_staff=False)
-        self.login = self.client.login(username=self.username, password=self.password)
         self.user.is_staff = True
+        self.login = self.client.login(username=self.username, password=self.password)
         self.user.save()
 
     def setup_request(self, request):
@@ -117,4 +143,39 @@ class HomeViewTestStaffUser(TestCase):
         request.user = self.user
         response = create_event(request)
         self.assertEqual(response.status_code, 200)
+
+
+        
+    def test_staff_can_create_event(self):
+        ## Creating image
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        image = create_image(None, 'testbilde.jpg')
+        image_file = SimpleUploadedFile('testbilde.jpg', image.getvalue())
+
+        ## Setting up request
+        request = self.factory.get('/create_event')
+        from django.contrib.messages.storage.fallback import FallbackStorage
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        request.user = self.user
+        request.POST._mutable = True
+        request.POST['name']= 'Test'
+        request.POST['location'] = 'Trondheim'
+        request.POST['price'] = '1'
+        request.POST['description'] = 'Desc'
+        request.POST['date'] = timezone.now()
+        request.FILES['image'] = image_file
+        form = EventForm(request.POST or None, request.FILES or None) 
+        print(form.errors)
+        self.assertTrue(form.is_valid())
+        response = create_event(request)
+        self.assertEqual(response.status_code, 302)    
+
+    @unittest.skip("WIP")
+    def test_staff_can_update_event(self):
+        request = self.factory.get('/event_update')
+        request.user = self.user
+        response = event_update(request)
+        self.assertEqual(response.status_code, Http404)
     
