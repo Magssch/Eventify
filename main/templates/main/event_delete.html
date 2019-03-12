@@ -6,7 +6,7 @@
 <form action='.' method='POST'>
 	{% csrf_token %}
 	<p> Are you sure you want to delete the <strong>{{ object.name }}</strong> event? </p>
-	<p><input type='submit' value='Confirm' class="waves-effect red darken btn" /><a class="waves-effect green darken-1 btn" href='../'>Cancel</a></p>
+	<p><input style="position: absolute; left: 10%" type='submit' value='Confirm' class="waves-effect btn" /><a style="position: absolute; left: 25%" class="waves-effect btn" href='../'>Cancel</a></p>
 </form>
 
 {% endblock %}

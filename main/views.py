@@ -1,4 +1,6 @@
 # Django imports
+# django.db
+# from django.db.models import count
 # djano.utils
 from django.utils import timezone
 # django shortcuts
@@ -17,7 +19,7 @@ from django.core.paginator import Paginator
 from django.core.files.storage import FileSystemStorage
 
 # Local project imports
-from .models import Event
+from .models import Event, Attendee
 from .forms import RegistrationForm, EditProfileForm, EventForm
 
 
@@ -92,18 +94,26 @@ def events(request):
 	paginator = Paginator(events_list, 4)  # Show 25 contacts per page
 	page = request.GET.get('page')
 	events = paginator.get_page(page)
-	return render(request, 'main/events.html', {'events': events, 'view_past': view_past})
+	context = {
+		'events': events,
+		'view_past': view_past
+	}
+	return render(request, 'main/events.html', context)
 
 def event_info(request, my_id):
-	obj = get_object_or_404(Event, id=my_id)
-	context = {"object":obj}
+	event = get_object_or_404(Event, id=my_id)
+	attendees = Attendee.objects.filter(event=event)
+	context = {
+		"object":event,
+		"attendees":attendees
+	}
 	return render(request, "main/event_info.html", context)
 
 def event_update(request, my_id=None):
 	obj = get_object_or_404(Event, id=my_id)
 
 	if not request.user.is_staff:
-		messages.info(request, "You must be logged into a staff account to update events.")
+		messages.error(request, "You must be logged into a staff account to update events.")
 		return redirect('../')
 	if not obj.organizer==request.user:
 		messages.error(request, "You must be the organizer of this event to update it.")
@@ -129,10 +139,10 @@ def event_delete(request, my_id):
 	obj = get_object_or_404(Event, id=my_id)
 
 	if not (request.user.is_staff or request.user.is_superuser):
-		messages.info(request, "You must be logged into a staff account to update events.")
+		messages.error(request, "You do not have this privilege.")
 		return redirect('../')
 	if not (obj.organizer==request.user or request.user.is_superuser):
-		messages.info(request, "You must be the organizer of this event to update it.")
+		messages.error(request, "You must be the organizer of this event to delete it.")
 		return redirect('../')
 
 	if request.method =="POST":
@@ -143,3 +153,23 @@ def event_delete(request, my_id):
 		"object": obj
 	}
 	return render(request, "main/event_delete.html", context)
+
+def event_attendees(request, my_id):
+	event = get_object_or_404(Event, id=my_id)
+
+	if not (request.user.is_staff):
+		messages.error(request, "You do not have the privilege to see this page.")
+		return redirect('../')
+	if not (obj.organizer==request.user):
+		messages.error(request, "You must be the organizer of this event to look at this page")
+		return redirect('../')
+
+	attendees = Attendee.objects.filter(event=event)
+	context = {
+		"event": event,
+		"attendees": attendees
+	}
+	return render(request, "main/event_attendees.html", context)
+
+
+
