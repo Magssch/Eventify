@@ -68,6 +68,7 @@ class HomeViewTestCaseNotAUser(TestCase):
         url = reverse('terms')
         response = self.client.get(url)
         self.assertTemplateUsed(response, 'main/terms.html')
+    
 
 
 class HomeViewTestCasualUser(TestCase):
@@ -117,7 +118,6 @@ class HomeViewTestCasualUser(TestCase):
         response = edit_profile(request)
         self.assertEqual(response.status_code, 302)
 
-        #My solution was to just mock out the messages framework for those tests, there may be better solutions (the django test client?)
 
 class HomeViewTestStaffUser(TestCase):
 
@@ -240,7 +240,67 @@ class HomeViewTestStaffUser(TestCase):
         self.user.save()
         request.user = self.user
         response = event_update(request, id)
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 302) 
 
+    def test_we_can_get_event_info_on_valid_event(self):
+        ## Creating image
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        image = create_image(None, 'testbilde.jpg')
+        image_file = SimpleUploadedFile('testbilde.jpg', image.getvalue())
+
+        ## Setting up request
+        request = self.factory.get('/create_event')
+        from django.contrib.messages.storage.fallback import FallbackStorage
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        request.user = self.user
+        request.POST._mutable = True
+        request.POST['name']= 'Test'
+        request.POST['location'] = 'Trondheim'
+        request.POST['price'] = '1'
+        request.POST['description'] = 'Desc'
+        request.POST['date'] = timezone.now()
+        request.FILES['image'] = image_file
+        form = EventForm(request.POST or None, request.FILES or None) 
+        self.assertTrue(form.is_valid())
+        response = create_event(request)
+        self.assertEqual(response.status_code, 302) 
+         
+        #Getting the event 
+        events_list = Event.objects.all()
+        paginator = Paginator(events_list, 4)
+        page = request.GET.get('page')
+        events = paginator.get_page(page)
+        my_event = events.__getitem__(0)
+        id = my_event.__getattribute__('id')
+        ### TESTING THE EVENT MODEL
+        self.assertEqual(str(my_event), 'Test')
+
+        request = self.factory.get('event_info')
+        from django.contrib.messages.storage.fallback import FallbackStorage
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        request.user = self.user
+        response = event_info(request, id)
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_staff_can_see_own_events(self):
+        request = self.factory.get('/create_event')
+        from django.contrib.messages.storage.fallback import FallbackStorage
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        request.user = self.user
+        request.GET._mutable = True
+        request.GET['view_past']= 'True'
+        response = events(request)
+        self.assertEqual(response.status_code, 200) 
+
+        request.GET['organizer']= True
+        response = events(request)
+        self.assertEqual(response.status_code, 200) 
 
     
