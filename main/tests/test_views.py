@@ -127,7 +127,7 @@ class HomeViewTestStaffUser(TestCase):
         self.password = 'valid_password1'
         self.client = Client()
         self.url = reverse('homepage')
-        self.user = User.objects.create_user(self.username, 'email@test.com', self.password, is_staff=False)
+        self.user = User.objects.create_user(self.username, 'email@test.com', self.password, is_staff=True)
         self.user.is_staff = True
         self.login = self.client.login(username=self.username, password=self.password)
         self.user.save()
@@ -166,6 +166,7 @@ class HomeViewTestStaffUser(TestCase):
         request.POST['description'] = 'Desc'
         request.POST['date'] = timezone.now()
         request.POST['registration_starts'] = timezone.now() #FiX
+        request.POST['capacity'] = 2 #FiX
         request.FILES['image'] = image_file
         form = EventForm(request.POST or None, request.FILES or None) 
         self.assertTrue(form.is_valid())
@@ -194,6 +195,7 @@ class HomeViewTestStaffUser(TestCase):
         request.POST['description'] = 'Desc'
         request.POST['date'] = timezone.now()
         request.POST['registration_starts'] = timezone.now() #FiX
+        request.POST['capacity'] = 2 #FiX
         request.FILES['image'] = image_file
         form = EventForm(request.POST or None, request.FILES or None) 
         self.assertTrue(form.is_valid())
@@ -201,7 +203,7 @@ class HomeViewTestStaffUser(TestCase):
         self.assertEqual(response.status_code, 302) 
          
         #Getting the event 
-        events_list = Event.objects.all()
+        events_list = Event.objects.get_queryset().order_by('id')
         paginator = Paginator(events_list, 4)
         page = request.GET.get('page')
         events = paginator.get_page(page)
@@ -217,13 +219,15 @@ class HomeViewTestStaffUser(TestCase):
         response = event_update(request, id)
         self.assertEqual(response.status_code, 200)
 
+        #Changed every field of the event
         request.POST._mutable = True
         request.POST['name']= 'Test'
         request.POST['location'] = 'Trondheim'
-        request.POST['price'] = '1'
+        request.POST['price'] = '10'
         request.POST['description'] = 'Desc'
         request.POST['date'] = timezone.now()
         request.POST['registration_starts'] = timezone.now() #FiX
+        request.POST['capacity'] = 3 #FiX
         request.FILES['image'] = image_file
         response = event_update(request, id)
         self.assertEqual(response.status_code, 302)
@@ -265,6 +269,7 @@ class HomeViewTestStaffUser(TestCase):
         request.POST['description'] = 'Desc'
         request.POST['date'] = timezone.now()
         request.POST['registration_starts'] = timezone.now() #FiX
+        request.POST['capacity'] = 1 #FiX
         request.FILES['image'] = image_file
         form = EventForm(request.POST or None, request.FILES or None) 
         self.assertTrue(form.is_valid())
@@ -272,7 +277,7 @@ class HomeViewTestStaffUser(TestCase):
         self.assertEqual(response.status_code, 302) 
          
         #Getting the event 
-        events_list = Event.objects.all()
+        events_list = Event.objects.get_queryset().order_by('id')
         paginator = Paginator(events_list, 4)
         page = request.GET.get('page')
         events = paginator.get_page(page)
@@ -289,6 +294,22 @@ class HomeViewTestStaffUser(TestCase):
         request.user = self.user
         response = event_info(request, id)
         self.assertEqual(response.status_code, 200)
+
+        #Join event
+        request.method = 'POST'
+        response = event_info(request, id)
+        self.assertEqual(response.status_code, 302)
+
+        #Leave event
+        request.method = 'POST'
+        response = event_info(request, id)
+        self.assertEqual(response.status_code, 302)
+
+        request.user = User.objects.create_user("User2", 'email@test2.com', "Justrandomnoise", is_staff=False)
+        #Try to join full event
+        request.method = 'POST'
+        response = event_info(request, id)
+        self.assertEqual(response.status_code, 302)
 
 
     def test_staff_can_see_own_events(self):
@@ -345,6 +366,7 @@ class HomeViewTestEventRelated(TestCase):
         request.POST['description'] = 'Desc'
         request.POST['date'] = timezone.now()
         request.POST['registration_starts'] = timezone.now() #FiX
+        request.POST['capacity'] = 2 #FiX
         request.FILES['image'] = image_file
         form = EventForm(request.POST or None, request.FILES or None) 
         print(form.errors)
@@ -353,7 +375,7 @@ class HomeViewTestEventRelated(TestCase):
         self.assertEqual(response.status_code, 302) 
          
         #Getting the event 
-        events_list = Event.objects.all()
+        events_list = Event.objects.get_queryset().order_by('id')
         paginator = Paginator(events_list, 4)
         page = request.GET.get('page')
         events = paginator.get_page(page)
