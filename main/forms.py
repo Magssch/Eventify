@@ -73,19 +73,19 @@ class EventForm(forms.ModelForm):
     price       = forms.IntegerField(label='Price of the event:', initial=250)
     description = forms.CharField(
                                     label       = 'Description of the event, not required',
-                                    required    = False,
                                     widget      = forms.Textarea()
                                 )
     capacity    = forms.IntegerField(label      = 'Maximum number of attendees', initial=100)
-    date        = forms.DateField(
-                                    widget      = forms.DateInput(format=('%d-%m-%Y'),
+    date        = forms.DateField(  required    = False,
+                                    widget      = forms.DateInput(format=('%Y-%m-%d'),
                                              attrs={'id':'date1',
                                             'placeholder':'Select a date'})
                                 )
     registration_starts = forms.DateField(
-                                    widget      = forms.DateInput(format=('%d-%m-%Y'),
-                                             attrs={'id':'date2',
-                                            'placeholder':'Select a date'})
+                                    required    = False,
+                                    widget      = forms.DateInput(format=('%Y-%m-%d'),
+                                    attrs       ={'id':'date2',
+                                                    'placeholder':'Select a date'})
     )
     image       = forms.FileField()
 

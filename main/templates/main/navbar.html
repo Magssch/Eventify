@@ -3,37 +3,48 @@
       <li><a href="{% url 'events' %}?view_past=True">All events</a></li>
     </ul>
 
-<div class="navbar-fixed">
-    <nav>
-      <div class="nav-wrapper black">
-        <a href="{% url 'home' %}" style="margin-left: 20px" class="brand-logo"><i class="material-icons">graphic_eq</i>Eventify</a>
+    <!--upcoming evetns, all events, events i organizes, my event organizer/user-->
+    <ul id="dropdown-event" class="dropdown-content">
+      {% if user.is_staff %}
+        <li><a href="{% url 'events' %}?organizer=True">Events I organize</a></li>
+      {% endif %}
+      <li><a href="{% url 'events' %}">Upcoming events</a></li>
+      <li><a href="{% url 'events' %}?view_past=True">All events</a></li>
+      <li><a href="{% url 'events' %}?my_events=True">My events</a></li>
+    </ul>
 
-        <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    <div class="navbar-fixed">
+        <nav>
+          <div class="nav-wrapper black">
+            <a href="{% url 'home' %}" style="margin-left: 20px" class="brand-logo"><i class="material-icons">graphic_eq</i>Eventify</a>
 
-        <ul class="right hide-on-med-and-down">
-            <!-- TODO: FIX DROPDOWN FOR EVENTS -->
-            <!--<li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Events<i class="material-icons right">arrow_drop_down</i></a></li>-->
-            <li><a href="{% url 'events' %}">Events</a></li>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 
-              {% if user.is_staff %} <!--enables admin and organizers to create events-->
-                <li><a href="{% url 'create_event' %}">Create Event</a></li>
-              {% endif %}
+            <ul class="right hide-on-med-and-down">
+                <!-- TODO: FIX DROPDOWN FOR EVENTS -->
+                <!--<li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Events<i class="material-icons right">arrow_drop_down</i></a></li>-->
+                <!--<li><a href="{% url 'events' %}">Events</a></li>-->
+              <li><a class="dropdown-trigger" href="#!" data-target="dropdown-event">Events<i class="material-icons right">arrow_drop_down</i></a></li>
 
-              {% if user.is_authenticated %}
-                {% if user.is_superuser %}
-                <li><a href="{% url 'admin:index' %}">Admin page</a></li>
-                {% endif %}
-                <li><b><a href="{% url 'profile' %}">{{ user.username }}</a></b></li>
-                <li><a href="{% url 'logout' %}">Logout</a></li>
-              {% else %}
-                <li><a href="{% url 'login' %}">Login</a></li>
-                <li><a href="{% url 'signup' %}">Sign up</a></li>
-              {% endif %}
+                  {% if user.is_staff %} <!--enables admin and organizers to create events-->
+                    <li><a href="{% url 'create_event' %}">Create Event</a></li>
+                  {% endif %}
 
-        </ul>
-      </div>
-    </nav>
-</div>
+                  {% if user.is_authenticated %}
+                    {% if user.is_superuser %}
+                    <li><a href="{% url 'admin:index' %}">Admin page</a></li>
+                    {% endif %}
+                    <li><b><a href="{% url 'profile' %}">{{ user.username }}</a></b></li>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                  {% else %}
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'signup' %}">Sign up</a></li>
+                  {% endif %}
+
+            </ul>
+          </div>
+        </nav>
+    </div>
 
   <ul class="sidenav" id="mobile-demo">
       {% if user.is_authenticated %}
