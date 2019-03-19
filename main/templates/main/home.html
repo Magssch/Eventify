@@ -10,11 +10,11 @@
     {% endif %}
 {% endblock %}
 
-
+<!-- this is the homepage-->
 {% block content %}
     {% load static from staticfiles %}
 <body>
-  <div class="slider">
+  <div class="slider"><!-- slider with fout different pictrures and infoscreens-->
       <ul class="slides">
         <li>
           <img src="{% static 'main/css/concert.png' %}" /> <!-- random image -->
@@ -48,7 +48,7 @@
       </ul>
   </div>
 
-  <div class="row" style="width: 80%; margin-top:40px;">
+  <div class="row" style="width: 80%; margin-top:40px;"><!-- sets up signs and text that can be used to get more information-->
     <div class="center-align col s12 m4 l4">
         <ul><li><a href="sass.html"><i class="large material-icons black-text">flash_on</i></a></li></ul>
         <h4>Up to date</h4>
