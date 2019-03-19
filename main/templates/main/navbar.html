@@ -3,6 +3,16 @@
       <li><a href="{% url 'events' %}?view_past=True">All events</a></li>
     </ul>
 
+    <!--upcoming evetns, all events, events i organizes, my event organizer/user-->
+    <ul id="dropdown-event" class="dropdown-content">
+      {% if user.is_staff %}
+        <li><a href="?organizer=True">Events I organize</a></li>
+      {% endif %}
+      <li><a href="{% url 'events' %}">Upcoming events</a></li>
+      <li><a href="{% url 'events' %}?view_past=True">All events</a></li>
+      <li><a href="?my_events=True">My events</a></li>
+    </ul>
+
 <div class="navbar-fixed">
     <nav>
       <div class="nav-wrapper black">
@@ -13,7 +23,8 @@
         <ul class="right hide-on-med-and-down">
             <!-- TODO: FIX DROPDOWN FOR EVENTS -->
             <!--<li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Events<i class="material-icons right">arrow_drop_down</i></a></li>-->
-            <li><a href="{% url 'events' %}">Events</a></li>
+            <!--<li><a href="{% url 'events' %}">Events</a></li>-->
+          <li><a class="dropdown-trigger" href="#!" data-target="dropdown-event">Events<i class="material-icons right">arrow_drop_down</i></a></li>
 
               {% if user.is_staff %} <!--enables admin and organizers to create events-->
                 <li><a href="{% url 'create_event' %}">Create Event</a></li>
