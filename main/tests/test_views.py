@@ -165,6 +165,7 @@ class HomeViewTestStaffUser(TestCase):
         request.POST['price'] = '1'
         request.POST['description'] = 'Desc'
         request.POST['date'] = timezone.now()
+        request.POST['registration_starts'] = timezone.now() #FiX
         request.FILES['image'] = image_file
         form = EventForm(request.POST or None, request.FILES or None) 
         self.assertTrue(form.is_valid())
@@ -192,6 +193,7 @@ class HomeViewTestStaffUser(TestCase):
         request.POST['price'] = '1'
         request.POST['description'] = 'Desc'
         request.POST['date'] = timezone.now()
+        request.POST['registration_starts'] = timezone.now() #FiX
         request.FILES['image'] = image_file
         form = EventForm(request.POST or None, request.FILES or None) 
         self.assertTrue(form.is_valid())
@@ -221,6 +223,7 @@ class HomeViewTestStaffUser(TestCase):
         request.POST['price'] = '1'
         request.POST['description'] = 'Desc'
         request.POST['date'] = timezone.now()
+        request.POST['registration_starts'] = timezone.now() #FiX
         request.FILES['image'] = image_file
         response = event_update(request, id)
         self.assertEqual(response.status_code, 302)
@@ -261,6 +264,7 @@ class HomeViewTestStaffUser(TestCase):
         request.POST['price'] = '1'
         request.POST['description'] = 'Desc'
         request.POST['date'] = timezone.now()
+        request.POST['registration_starts'] = timezone.now() #FiX
         request.FILES['image'] = image_file
         form = EventForm(request.POST or None, request.FILES or None) 
         self.assertTrue(form.is_valid())
@@ -340,8 +344,10 @@ class HomeViewTestEventRelated(TestCase):
         request.POST['price'] = '1'
         request.POST['description'] = 'Desc'
         request.POST['date'] = timezone.now()
+        request.POST['registration_starts'] = timezone.now() #FiX
         request.FILES['image'] = image_file
         form = EventForm(request.POST or None, request.FILES or None) 
+        print(form.errors)
         self.assertTrue(form.is_valid())
         response = create_event(request)
         self.assertEqual(response.status_code, 302) 
