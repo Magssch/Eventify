@@ -76,6 +76,7 @@ class EventForm(forms.ModelForm):
                                     required    = False,
                                     widget      = forms.Textarea()
                                 )
+    capacity    = forms.IntegerField(label      = 'Maximum number of attendees'),
     date        = forms.DateField(
                                     widget      = forms.DateInput(format=('%d-%m-%Y'),
                                              attrs={'id':'date1',
@@ -94,6 +95,7 @@ class EventForm(forms.ModelForm):
             'name',
             'location',
             'price',
+            'capacity',
             'description',
             'date',
             'registration_starts',
