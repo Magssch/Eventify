@@ -22,6 +22,7 @@ from django.core.files.storage import FileSystemStorage
 from .models import Event, Attendee
 from .forms import RegistrationForm, EditProfileForm, EventForm
 
+from newsletter.models import Newsletter, Subscription
 
 
 # Create your views here.
@@ -71,6 +72,8 @@ def create_event(request):
 		messages.success(request, f"New event created: {form.cleaned_data.get('name')}")
 		event_name = form.cleaned_data.get('name')
 		event = get_object_or_404(Event, name=event_name)
+		newsletter = Newsletter(title=event_name, slug=event_name.lower(), email="eventify.site@gmail.com", sender="Eventify")
+		newsletter.save()
 		return redirect(event)
 
 	form = EventForm()
@@ -105,33 +108,51 @@ def events(request):
 
 def event_info(request, my_id):
 	event = get_object_or_404(Event, id=my_id)
+	newsletter = Newsletter.objects.get(title=event.name)
 	attendees = Attendee.objects.filter(event=event)
 	if not request.user.is_anonymous:
 		am_I_attending = Attendee.objects.filter(event=event, user=request.user).exists()
+		am_I_subscribed = Subscription.objects.filter(newsletter=newsletter, user=request.user).exists()
 	else:
 		am_I_attending = False
+		am_I_subscribed = False
 
 	# If a user wants to attend we must check if he/she is logged in.
 	# Also we want to check if the number of attendees does not preceed the capacity.
 	if request.method=="POST":
 		try:
 			if request.user.is_anonymous:
-				messages.info(request, "Please login or register to attend event.")
-			else:
+				messages.info(request, "Please login or register to attend or subscribe event.")
+
+			if  request.POST.get('attend') == 'Attend' or request.POST.get('unattend') == 'Unattend':
 				if attendees.count() < event.capacity and am_I_attending==False:
+					# attend the event
 					attendee = Attendee.objects.create(user=request.user, event=event)
 					attendee.save()
 					messages.success(request, f"Successfully signed up for {event.name}")
 					return redirect('event_info', my_id)
 				elif am_I_attending==True:
+					# unattend the event
 					attendee = Attendee.objects.filter(event=event, user=request.user)
 					attendee.delete()
 					messages.success(request, f"Successfully unattended {event.name}")
 					return redirect('event_info', my_id)
 				else:
+					# base-case: capacity reached maximum, do not allow more attendees
 					messages.error(request, "Sorry, you were too late. The event is full")
 					return redirect('event_info', my_id)
-
+			elif request.POST.get('subscribe') == 'Subscribe':
+				# add subscription
+				subscription = Subscription.objects.create(user=request.user, newsletter=newsletter)
+				subscription.save()
+				messages.success(request, f"Successfully subscribed to newsletter: {event.name}")
+				return redirect('event_info', my_id)
+			elif request.POST.get('unsubscribe') == 'Unsubscribe':
+				# remove subscription.
+				subscription = Subscription.objects.filter(user=request.user, newsletter=newsletter)
+				subscription.delete()
+				messages.success(request, "Successfully unsubscribed to newsletter.")
+				return redirect('event_info', my_id)
 		except IntegrityError as e:
 			messages.error(request, "You have already signed up for this event")
 			return redirect('event_info', my_id)
@@ -139,7 +160,8 @@ def event_info(request, my_id):
 	context = {
 		"event": event,
 		"attendees": attendees,
-		"am_I_attending": am_I_attending
+		"am_I_attending": am_I_attending,
+		"am_I_subscribed": am_I_subscribed
 	}
 	return render(request, "main/event_info.html", context)
 
