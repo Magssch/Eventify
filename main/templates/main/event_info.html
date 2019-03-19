@@ -29,26 +29,26 @@
 						<!-- må ha en if setning. Om man er med i arrangementet så "meld deg av" og om man ikke er påmeldt
 						så "meld deg på"-->
 
-                    <div style="display: flex; justify-content: space-evenly; width: 100%">
+                    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; width: 100%; margin-top: -10px;">
                         {% if object.registration_open %}
                             <form action='.' method="POST">
                                 {% csrf_token %}
                                 {% if am_I_attending == False %}
-                                    <input type="submit" value="Attend" class="btn teal lighten-2"/>
+                                    <input type="submit" value="Attend" class="btn teal lighten-2" style="margin-top: 10px;"/>
                                 {% else %}
-                                    <input type="submit" value="Unattend" class="btn teal lighten-2"/>
+                                    <input type="submit" value="Unattend" class="btn teal lighten-2" style="margin-top: 10px;"/>
                                 {% endif %}
                             </form>
                         {% endif %}
                         {% if user.is_staff %}
                             {% if user == object.organizer %}
-                                <a href="update/" class="btn teal lighten-2">Update event</a>
-                                <a href="attendees/" class="btn teal lighten-2">Attendees</a>
-                                <a href="delete/" class="btn teal lighten-2">Delete event</a>
+                                <a href="attendees/" class="btn teal lighten-2" style="margin-top: 10px;">Attendees</a>
+                                <a href="update/" class="btn teal lighten-2" style="margin-top: 10px;">Update</a>
+                                <a href="delete/" class="btn red lighten-2" style="margin-top: 10px;">Delete</a>
                             {% endif %}
                         {% endif %}
 
-                        <a href="../" class="btn teal lighten-2">Back</a>
+                        <a href="../" class="btn teal lighten-2" style="margin-top: 10px;">Back</a>
                     </div>
 				</div>
 			</div>
