@@ -5,8 +5,8 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 from .models import Event
 
-
-class EditProfileForm(forms.ModelForm):
+#TODO en kommentar om denne filen generelt?
+class EditProfileForm(forms.ModelForm): #editing profile
     class Meta:
         model = User
         fields = {
@@ -21,14 +21,14 @@ class EditProfileForm(forms.ModelForm):
         'last_name',
         'email'
     ]
-
+#registration form
 class RegistrationForm(UserCreationForm):
 
     check = forms.BooleanField(required = True, label="I accept the Eventify terms of use and privacy policy")
 
     class Meta:
         model = User
-        fields = {
+        fields = { #attributes that each user have
             'username',
             'first_name',
             'last_name',
@@ -37,7 +37,7 @@ class RegistrationForm(UserCreationForm):
             'password2'
         }
 
-        widgets = {
+        widgets = { #TODO sth om dette
             'username':forms.TextInput(attrs={'class':'form-control', 'required':'required'}),
             'first_name':forms.TextInput(attrs={'class':'form-control', 'required':'required'}),
             'last_name':forms.TextInput(attrs={'class':'form-control', 'required':'required'}),
@@ -55,7 +55,7 @@ class RegistrationForm(UserCreationForm):
         'password2',
     ]
 
-    def save(self, commit=True):
+    def save(self, commit=True): #saves the data that user sets
         user = super(RegistrationForm, self).save(commit=False)
         user.first_name = self.cleaned_data["first_name"]
         user.last_name = self.cleaned_data["last_name"]
@@ -65,7 +65,7 @@ class RegistrationForm(UserCreationForm):
         return user
 
 
-class EventForm(forms.ModelForm):
+class EventForm(forms.ModelForm): #TODO fyll inn kommentar på dette
     name        = forms.CharField(label='Name of the event:',
                     widget=forms.TextInput(attrs={"placeholder": "enter event name"})
                     )
@@ -75,7 +75,7 @@ class EventForm(forms.ModelForm):
                                     label       = 'Description of the event, not required',
                                     widget      = forms.Textarea()
                                 )
-    capacity    = forms.IntegerField(label      = 'Maximum number of attendees', initial=100)
+    capacity    = forms.IntegerField(label      = 'Maximum number of attendees', initial=100) #ensures that the capacity is the actual capacity
     date        = forms.DateField(  required    = False,
                                     widget      = forms.DateInput(format=('%Y-%m-%d'),
                                              attrs={'id':'date1',
@@ -91,7 +91,7 @@ class EventForm(forms.ModelForm):
 
     class Meta:
         model = Event
-        fields = [
+        fields = [ #all attributes that each event need
             'name',
             'location',
             'price',
