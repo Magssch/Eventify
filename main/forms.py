@@ -3,6 +3,8 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
+from models.newsletter import Message, Submission, Articles
+
 from .models import Event
 
 
@@ -102,3 +104,22 @@ class EventForm(forms.ModelForm):
             'image',
         ]
         widgets = {}
+
+class MessagingForm(forms.ModelForm):
+    title = forms.CharField(        label="Message title", 
+                                    widget=forms.TextInput(attrs={"placeholder": "Enter your message title"}))
+
+    message = forms.CharField(
+                                    label       = 'Message',
+                                    widget      = forms.Textarea()
+                                )
+
+    class Meta:
+        model = Message
+        fields = [
+            'title'
+        ]
+
+
+
+class SubmissionForm(forms.ModelForm):
