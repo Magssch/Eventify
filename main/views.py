@@ -124,7 +124,7 @@ def event_info(request, my_id):
 					attendee.save()
 					messages.success(request, f"Successfully signed up for {event.name}")
 					return redirect('event_info', my_id)
-				elif attendees.count() < event.capacity and am_I_attending==True:
+				elif am_I_attending==True:
 					attendee = Attendee.objects.filter(event=event, user=request.user)
 					attendee.delete()
 					messages.success(request, f"Successfully unattended {event.name}")
@@ -156,10 +156,12 @@ def event_update(request, my_id=None):
 
 	form = EventForm(request.POST or None, request.FILES or None, instance=obj)
 	if form.is_valid():
-		form.save()
+		print("Dette tyder på at formen er valid.")
+		event = form
 		obj_name = form.cleaned_data.get('name')
 		messages.success(request, f"Successfully updates event: {obj_name}")
 		obj = get_object_or_404(Event, name=obj_name)
+		event.save()
 		return redirect(obj)
 	form = EventForm(instance=obj)
 	context = {
