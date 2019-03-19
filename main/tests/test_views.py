@@ -1,6 +1,6 @@
 from django.test import TestCase, RequestFactory
 from django.test import Client
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AnonymousUser
 from django.urls import reverse
 from django.http import HttpRequest
 from main.forms import EditProfileForm
@@ -296,20 +296,55 @@ class HomeViewTestStaffUser(TestCase):
         self.assertEqual(response.status_code, 200)
 
         #Join event
+        request = self.factory.get('event_info')
+        from django.contrib.messages.storage.fallback import FallbackStorage
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        request.method = 'POST'
+        request.user=self.user
+        response = event_info(request, id)
+        self.assertEqual(response.status_code, 302)
+
+        request.user = User.objects.create_user("User2", 'email@test2.com', "Justrandomnoise", is_staff=False)
+        self.user2 = request.user
+        self.client.login(username="User2", password="Justrandomnoise")
+        self.user2.save()
+        #Try to join full event
+        request = self.factory.get('event_info')
+        from django.contrib.messages.storage.fallback import FallbackStorage
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        request.method = 'POST'
+        request.user=self.user2
         request.method = 'POST'
         response = event_info(request, id)
         self.assertEqual(response.status_code, 302)
 
         #Leave event
+        request = self.factory.get('event_info')
+        from django.contrib.messages.storage.fallback import FallbackStorage
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        request.method = 'POST'
+        request.user=self.user
         request.method = 'POST'
         response = event_info(request, id)
         self.assertEqual(response.status_code, 302)
 
-        request.user = User.objects.create_user("User2", 'email@test2.com', "Justrandomnoise", is_staff=False)
-        #Try to join full event
+        ## Try to join event as anonumus user
+        request = self.factory.get('event_info')
+        from django.contrib.messages.storage.fallback import FallbackStorage
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        request.method = 'POST'
+        request.user= AnonymousUser()
         request.method = 'POST'
         response = event_info(request, id)
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
 
 
     def test_staff_can_see_own_events(self):
