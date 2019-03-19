@@ -205,3 +205,5 @@ def event_attendees(request, my_id):
 		"attendees": attendees
 	}
 	return render(request, "main/event_attendees.html", context)
+
+
