@@ -1,5 +1,5 @@
 {% if messages %}
-    {% for message in messages %}
+    {% for message in messages %}<!-- sets up the pop-ups when you for example want to delete an arrangement-->
         {% if message.tags == 'success'%}
             <script>M.toast({html: "{{message}}", classes: 'green rounded', displayLength:4000});</script>
         {% elif message.tags == 'info'%}

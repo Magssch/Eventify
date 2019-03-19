@@ -3,8 +3,8 @@
       <li><a href="{% url 'events' %}?view_past=True">All events</a></li>
     </ul>
 
-    <!--upcoming evetns, all events, events i organizes, my event organizer/user-->
-    <ul id="dropdown-event" class="dropdown-content">
+    <!--upcoming events, all events, events i organizes, my event organizer/user-->
+    <ul id="dropdown-event" class="dropdown-content"> <!--wj´´en you click events a dropdown meny pops up -->
       {% if user.is_staff %}
         <li><a href="{% url 'events' %}?organizer=True">Events I organize</a></li>
       {% endif %}
@@ -21,16 +21,14 @@
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 
             <ul class="right hide-on-med-and-down">
-                <!-- TODO: FIX DROPDOWN FOR EVENTS -->
-                <!--<li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Events<i class="material-icons right">arrow_drop_down</i></a></li>-->
-                <!--<li><a href="{% url 'events' %}">Events</a></li>-->
+
               <li><a class="dropdown-trigger" href="#!" data-target="dropdown-event">Events<i class="material-icons right">arrow_drop_down</i></a></li>
 
                   {% if user.is_staff %} <!--enables admin and organizers to create events-->
                     <li><a href="{% url 'create_event' %}">Create Event</a></li>
                   {% endif %}
 
-                  {% if user.is_authenticated %}
+                  {% if user.is_authenticated %}<!-- checks if youre logged in as user, admin or orgnizer and adds alternatives to the navbar-->
                     {% if user.is_superuser %}
                     <li><a href="{% url 'admin:index' %}">Admin page</a></li>
                     {% endif %}
@@ -46,7 +44,7 @@
         </nav>
     </div>
 
-  <ul class="sidenav" id="mobile-demo">
+  <ul class="sidenav" id="mobile-demo"><!-- sets up the sidenav that is used for small windows or phones-->
       {% if user.is_authenticated %}
           <li><a href="{% url 'profile' %}" style="font-weight: bolder">{{ user.username }}</a></li>
       {% endif %}
@@ -57,7 +55,7 @@
         <li><a href="{% url 'create_event' %}">Create Event</a></li>
       {% endif %}
 
-      {% if user.is_authenticated %}
+      {% if user.is_authenticated %}<!--lets the user log in, log off and enter their usersettings -->
         {% if user.is_superuser %}
         <li><a href="{% url 'admin:index' %}">Admin page</a></li>
         {% endif %}
