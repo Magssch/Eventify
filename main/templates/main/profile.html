@@ -9,21 +9,20 @@
 {% endblock %}
 
 {% block content %}
-    {% if user.is_authenticated %}
-        <div style="width: 100%; display: flex;">
-            <div style="margin:auto; padding: 10px;">
-                <h4>Username: {{user.username}}</h4>
-                <h4>First name: {{user.first_name}}</h4>
-                <h4>Last name: {{user.last_name}}</h4>
-                <h4>E-mail: {{user.email}}</h4>
-                <br/>
-                <a href="{% url 'edit_profile' %}">Update profile</a>
-            </div>
-        </div>
-    {% else %}
-      <p>You are not logged in.</p>
-        <br/>
-      <a href="{% url 'login' %}">Login</a>
-      <a href="{% url 'signup' %}">Sign up</a>
-    {% endif %}
+
+    <div class="container" style="display:flex; flex-direction: column; justify-content: space-evenly; align-items: center; text-align: left; min-height: 60vh">
+        {% if user.is_authenticated %}
+                    <h4>Hi {{user.username}}! Here is your profile:</h4>
+                    <h5>First name: {{user.first_name}}</h5>
+                    <h5>Last name: {{user.last_name}}</h5>
+                    <h5>E-mail: {{user.email}}</h5>
+                    <h5>Receive newsletters: {% if user.profile.subscribed %}Yes{% else %}No{% endif %}</h5>
+                    <a href="{% url 'edit_profile' %}">Update profile</a>
+        {% else %}
+          <p>You are not logged in.</p>
+            <br/>
+          <a href="{% url 'login' %}">Login</a>
+          <a href="{% url 'signup' %}">Sign up</a>
+        {% endif %}
+    </div>
 {% endblock %}

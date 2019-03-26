@@ -12,7 +12,7 @@ urlpatterns = [
     path('account/', include('django.contrib.auth.urls')),
     path('', TemplateView.as_view(template_name='main/home.html'), name='home'),
     path('create_event/', views.create_event, name='create_event'),
-    path('signup/', views.SignUp.as_view(), name='signup'),
+    path('signup/', views.SignUp, name='signup'),
     path('profile/', views.profile, name="profile"),
     path('profile/edit/', views.edit_profile, name='edit_profile'),
     path('terms', views.terms, name='terms'),
@@ -24,5 +24,8 @@ urlpatterns = [
     path('events/<int:my_id>/update/', views.event_update, name="event_update"),
     path('events/<int:my_id>/delete/', views.event_delete, name="event_delete"),
     path('events/<int:my_id>/attendees/', views.event_attendees, name="event_attendees"),
+    # URL-path for Newletter (import (un)subscription and archive)
+    path('newsletter/', include('newsletter.urls')),
+    path('events/<int:my_id>/event_newsletter/', views.event_newsletter, name="event_newsletter"),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

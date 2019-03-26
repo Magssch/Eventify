@@ -1,49 +1,75 @@
 {% extends 'main/base.html' %}
 
+{% block title %}
+        {{event.name}}
+{% endblock %}
 
 {% block content %}
 
 <div class="container">
  <div class="row">
-    <div class="col s12 m12">
-      <div class="card">
-        <div class="card-image">
-          <img style="height:220px" src={{object.image.url}}> <!-- legge til bilde fra objektet-->
-          <span class="card-title">{{object.name}}</span>
-        </div>
-        <div class="card-content">
-          <p>{{object.description}}</p>
-            <br>
-            <br>
+		<div class="col s12 m12">
+			<div class="card">
+				<div class="card-image">
+						<div style="height:400px; background: url({{event.image.url}}) no-repeat center; background-size: cover;"></div> <!-- legge til bilde fra objektet-->
+					<span class="card-title" style="text-shadow: 2px 2px 5px rgba(0,0,0,0.8)">{{event.name}}</span>
+				</div>
+				<div class="card-content">
+					<p>{{event.description}}</p>
+						<br/>
+						<br/>
 
-            <p>Location: {{object.location}}</p>
-            <p>Price: {{object.price}}kr</p>
-            <p>Organized by: {{object.organizer}}</p>
+						<p>Date: {{event.date}}</p>
+						<p>Location: {{event.location}}</p>
+						<p>Price: {{event.price}},-</p>
+						<p>Organized by: {{event.organizer}}</p>
+						<br/>
+						<p>Number of attendees: {{ attendees.count }} / {{event.capacity}} </p>
 
-            
-            <p>Number of attendees: {{ attendees.count }}</p>
+						<!-- dobbel if setning, om man har meldt seg på, har man da betalt?-->
+				</div>
+				<div class="card-action" style="position: relative">
+						<!-- må ha en if setning. Om man er med i arrangementet så "meld deg av" og om man ikke er påmeldt
+						så "meld deg på"-->
 
-            <!-- dobbel if setning, om man har meldt seg på, har man da betalt?-->
-        </div>
-        <div class="card-action" style="position: relative">
-            <!-- må ha en if setning. Om man er med i arrangementet så "meld deg av" og om man ikke er påmeldt
-            så "meld deg på"-->
-            {% if object.registration_open %}
-                <a href="#" style="position: relative; left: 0%" class="btn teal lighten-2">Attend this event</a>
-            {% endif %}
-          <a href="../" style="position: absolute; left: 90%" class="btn teal lighten-2">Go Back</a>
-          {% if user.is_staff %}
-            {% if user == object.organizer %}
-              <a href="update/" style="position: absolute; left: 25%;" class="btn teal lighten-2">Update event</a>
-              <a href="attendees/" style="position: absolute; left: 50%;" class="btn teal lighten-2">Attendees</a>
-              <a href="delete/" style="position: absolute; left: 70%;" class="btn teal lighten-2">Delete event</a>
-            {% endif %}
-          {% endif %}
-        </div>
-      </div>
-    </div>
-  </div>
-  </div>
+                    <div style="display: flex; justify-content: space-between; flex-wrap: wrap; width: 100%; margin-top: -10px;">
+                        {% if registration_open %}
+                            <form action='.' method="POST">
+                                {% csrf_token %}
+                                {% if am_I_attending %}
+                                    <input type="submit" name="unattend" value="Unattend" class="btn teal lighten-2" style="margin-top: 10px;"/>
+                                {% else %}
+                                    <input type="submit" name="attend" value="Attend" class="btn teal lighten-2" style="margin-top: 10px;"/>
+                                {% endif %}
+                            </form>
+                        {% endif %}
+                            {% if is_upcoming %}
+                                <form action='.' method="POST">
+                                    {% csrf_token %}
+                                    {% if am_I_subscribed %}
+                                    <!-- Unsubscribe user -->
+                                        <input type="submit" name="unsubscribe" value="Unsubscribe" class="btn teal lighten-2" style="margin-top: 10px;"/>
+                                    {% else %}
+                                    <!-- Subscribe user -->
+                                        <input type="submit" name="subscribe" value="Subscribe" class="btn teal lighten-2" style="margin-top: 10px;"/>
+                                    {% endif %}
+                                </form>
+                            {% endif %}
+                        {% if user.is_staff or user.is_superuser %}
+                            {% if user == event.organizer or user.is_superuser %}
+                                <a href="attendees/" class="btn teal lighten-2" style="margin-top: 10px;">Attendees</a>
+                                <a href="update/" class="btn teal lighten-2" style="margin-top: 10px;">Update</a>
+                                <a href="delete/" class="btn red lighten-2" style="margin-top: 10px;"><i class="material-icons left">delete</i>Delete</a>
+                                <a href="event_newsletter/" class="btn blue lighten-2" style="margin-top: 10px;"><i class="material-icons left">send</i>Message</a>
+                            {% endif %}
+                        {% endif %}
+
+                        <a href="../" class="btn teal lighten-2" style="margin-top: 10px;">Back</a>
+                    </div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
 
 {% endblock %}
-

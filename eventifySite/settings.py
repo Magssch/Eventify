@@ -41,6 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
+    # For enabling the Newletter-libary
+    'django.contrib.sites',
+    'newsletter',
+    'sorl.thumbnail',
 ]
 
 MIDDLEWARE = [
@@ -142,3 +146,21 @@ except ImportError:
 
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
+
+SITE_ID = 1
+
+# E-mail information for the newsletter
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'eventify.site@gmail.com'
+EMAIL_HOST_PASSWORD = 'programvareutvikling'
+EMAIL_USE_TLS = True   
+EMAIL_USE_SSL = False
+
+
+
+
+
+
+
+

@@ -9,16 +9,17 @@
 
 
 {% block content %}
-    <div class="container">
+    {% load static from staticfiles %}
+    <div class="container" style="min-height: 60vh">
         <br/>
         <div style="display: flex; justify-content: center; ">
 
             {% if user.is_staff %}
-                <a style="margin: auto" href="?organizer=True" class="waves-effect waves-light btn">Events I organize</a>
+                <a style="margin: auto" href="?organizer=True" class="waves-effect waves-light btn">Manage events</a>
             {% endif %}
 
             {% if user.is_authenticated %}
-                <a style="margin: auto" href="?my_events=True" class="waves-effect waves-light btn">My Events</a>
+                <a style="margin: auto" href="?my_events=True" class="waves-effect waves-light btn">Attending Events</a>
             {% endif %}
 
             <a style="margin: auto" href="?" class="waves-effect waves-light btn">Upcoming events</a>
@@ -27,20 +28,25 @@
         <br/>
       <div class="row">
         {% for event in events %}
-        <div class="col s12 m6">
+        <div class="col s12 m6 l6">
           <div class="card">
             <div class="card-image">
-              <img src="{{event.image.url}}" alt="NO PICTURE"  height="270">
-              <span class="card-title">{{event.name}}</span>
+                <a href="{{event.get_absolute_url}}" class="waves-effect waves-light" style="width: 100%"><img src="{% static 'main/images/bg.png' %}" style="height: 270px; width: 100%; background: url({{event.image.url}}) no-repeat center; background-size: cover;" alt="NO PICTURE"></a>
             </div>
-            <div class="content" style="margin-left: 10px">
-              <p>{{event.location}}</p>
-              <p>{{event.price}}kr</p>
-              <p>{{event.date}}</p>
+            <div class="card-content"><span class="card-title activator grey-text text-darken-4">
+                {{event.name}}<i class="material-icons right">more_vert</i></span>
+                <p>{{event.location}}</p>
+                <p>{{event.price}},-</p>
+                <p>{{event.date}}</p>
+                <div style="width: 100%; display: flex; flex-direction: column;">
+                  <a href="{{event.get_absolute_url}}" style="align-self: flex-end; flex: 0.4;" class="btn waves-effect waves-light"><i class="material-icons left">info_outline</i>Info</a></div>
             </div>
-            <div> 
-              <a href="{{event.get_absolute_url}}" style="margin-left: 300px" class="btn waves-effect waves-light">Les mer</a>
-              <p style="font-size:70%">Hosted by: {{event.organizer}}</p>
+            <div class="card-reveal">
+              <span class="card-title grey-text text-darken-4">{{event.name}}<i class="material-icons right">close</i></span>
+                <div><br/>
+                    <p>{{event.description}}</p><br/>
+                    <p style="align-self: flex-end">Hosted by <b>{{event.organizer}}</b></p>
+                </div>
             </div>
           </div>
         </div>
@@ -70,4 +76,3 @@
         </ul>
     </div>
 {% endblock %}
-

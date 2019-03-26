@@ -3,7 +3,7 @@ from django.test import Client
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.http import HttpRequest
-from main.forms import EditProfileForm
+from main.forms import EditUserForm
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.contrib.messages.middleware import MessageMiddleware
 import unittest
@@ -165,6 +165,7 @@ class HomeViewTestStaffUser(TestCase):
         request.POST['price'] = '1'
         request.POST['description'] = 'Desc'
         request.POST['date'] = timezone.now()
+        request.POST['registration_starts'] = timezone.now() #FiX
         request.FILES['image'] = image_file
         form = EventForm(request.POST or None, request.FILES or None) 
         self.assertTrue(form.is_valid())
@@ -192,6 +193,7 @@ class HomeViewTestStaffUser(TestCase):
         request.POST['price'] = '1'
         request.POST['description'] = 'Desc'
         request.POST['date'] = timezone.now()
+        request.POST['registration_starts'] = timezone.now() #FiX
         request.FILES['image'] = image_file
         form = EventForm(request.POST or None, request.FILES or None) 
         self.assertTrue(form.is_valid())
@@ -221,6 +223,7 @@ class HomeViewTestStaffUser(TestCase):
         request.POST['price'] = '1'
         request.POST['description'] = 'Desc'
         request.POST['date'] = timezone.now()
+        request.POST['registration_starts'] = timezone.now() #FiX
         request.FILES['image'] = image_file
         response = event_update(request, id)
         self.assertEqual(response.status_code, 302)
@@ -261,6 +264,7 @@ class HomeViewTestStaffUser(TestCase):
         request.POST['price'] = '1'
         request.POST['description'] = 'Desc'
         request.POST['date'] = timezone.now()
+        request.POST['registration_starts'] = timezone.now() #FiX
         request.FILES['image'] = image_file
         form = EventForm(request.POST or None, request.FILES or None) 
         self.assertTrue(form.is_valid())
@@ -303,4 +307,115 @@ class HomeViewTestStaffUser(TestCase):
         response = events(request)
         self.assertEqual(response.status_code, 200) 
 
-    
+
+class HomeViewTestEventRelated(TestCase):
+
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.username = 'myuser'
+        self.password = 'valid_password1'
+        self.client = Client()
+        self.url = reverse('homepage')
+        self.staff = User.objects.create_user(self.username, 'email@test.com', self.password, is_staff=True)
+        self.staff.is_staff = True
+        self.staff.save()
+        self.staff2 = User.objects.create_user("Staff", 'email@test.com', "HeiJegErStaf", is_staff=True)
+        self.staff2.is_staff = True
+        self.staff2.save()
+        self.user = User.objects.create_user("Bruker", 'email@test.com', "Svallalakkaldsa", is_staff=False)
+        self.user.is_staff = False
+        self.user.save()
+
+        ## Creating image
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        image = create_image(None, 'testbilde.jpg')
+        image_file = SimpleUploadedFile('testbilde.jpg', image.getvalue())
+
+        ## Setting up request
+        request = self.factory.get('/create_event')
+        from django.contrib.messages.storage.fallback import FallbackStorage
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        request.user = self.staff
+        request.POST._mutable = True
+        request.POST['name']= 'Test'
+        request.POST['location'] = 'Trondheim'
+        request.POST['price'] = '1'
+        request.POST['description'] = 'Desc'
+        request.POST['date'] = timezone.now()
+        request.POST['registration_starts'] = timezone.now() #FiX
+        request.FILES['image'] = image_file
+        form = EventForm(request.POST or None, request.FILES or None) 
+        print(form.errors)
+        self.assertTrue(form.is_valid())
+        response = create_event(request)
+        self.assertEqual(response.status_code, 302) 
+         
+        #Getting the event 
+        events_list = Event.objects.all()
+        paginator = Paginator(events_list, 4)
+        page = request.GET.get('page')
+        events = paginator.get_page(page)
+        my_event = events.__getitem__(0)
+        self.event_id = my_event.__getattribute__('id')
+
+    def test_owner_can_delete_own_event(self):
+        ## Setting up request
+        request = self.factory.get('/event_delete')
+        from django.contrib.messages.storage.fallback import FallbackStorage
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        request.user = self.staff
+        response=event_delete(request, self.event_id)
+        self.assertEqual(response.status_code, 200)
+        request.method = 'POST'
+        response=event_delete(request, self.event_id)
+        self.assertEqual(response.status_code, 302)
+
+    def test_user_cannot_delete_event(self):
+        ## Setting up request
+        request = self.factory.get('/event_delete')
+        from django.contrib.messages.storage.fallback import FallbackStorage
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        request.user = self.user
+        response=event_delete(request, self.event_id)
+        self.assertEqual(response.status_code, 302)
+
+    def test_another_staff_cannot_delete_other_staff_event(self):
+        ## Setting up request
+        request = self.factory.get('/event_delete')
+        from django.contrib.messages.storage.fallback import FallbackStorage
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        request.user = self.staff2
+        response=event_delete(request, self.event_id)
+        self.assertEqual(response.status_code, 302)
+
+    def test_event_attendees_works_correctly(self):
+        ## Setting up request
+        request = self.factory.get('/event_delete')
+        from django.contrib.messages.storage.fallback import FallbackStorage
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+
+        #User
+        request.user = self.user
+        response=event_attendees(request, self.event_id)
+        self.assertEqual(response.status_code, 302)
+
+        #Staff but not organizer
+        request.user = self.staff2
+        response=event_attendees(request, self.event_id)
+        self.assertEqual(response.status_code, 302)
+
+        #Organizer of event
+        request.user = self.staff
+        response=event_attendees(request, self.event_id)
+        self.assertEqual(response.status_code, 200)
+

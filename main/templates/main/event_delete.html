@@ -1,12 +1,16 @@
 {% extends "main/base.html" %}
 
 
+{% block title %}
+        Delete event
+{% endblock %}
+
 {% block content %}
-
-<form action='.' method='POST'>
-	{% csrf_token %}
-	<p> Are you sure you want to delete the <strong>{{ object.name }}</strong> event? </p>
-	<p><input style="position: absolute; left: 10%" type='submit' value='Confirm' class="waves-effect btn" /><a style="position: absolute; left: 25%" class="waves-effect btn" href='../'>Cancel</a></p>
-</form>
-
+    <div class="container" style="display:flex; justify-content: center; align-items: center; text-align: center; min-height: 60vh"><br/>
+        <form action='.' method='POST'>
+            {% csrf_token %}
+            <p> Are you sure you want to delete the <strong>{{ event.name }}</strong> event? </p>
+            <p style="width: 100%; display: flex; flex-direction: row; justify-content: space-between; margin-top: 50px;"><input type='submit' value='Confirm' class="waves-effect btn red lighten-2" /><a class="waves-effect btn teal lighten-2" href='../'>Cancel</a></p>
+        </form>
+    </div>
 {% endblock %}
