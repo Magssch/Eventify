@@ -28,5 +28,10 @@ Run the following:
 
 ## Tests
 
-TODO: Describe and show how to run the tests with code examples.
+To run the tests write the following:
+
+`pip install requirements.txt`
+
+`coverage run manage.py test`
+
 
