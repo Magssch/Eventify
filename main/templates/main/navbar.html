@@ -1,4 +1,10 @@
     <ul id="dropdown1" class="dropdown-content"> <!--refers to the menu displaying when clicking events in the sidenav-->
+      {% if user.is_staff %}
+        <li><a href="{% url 'events' %}?organizer=True">Manage Events</a></li>
+      {% endif %}
+      {% if user.is_authenticated %}
+      <li><a href="{% url 'events' %}?my_events=True">Attending events</a></li>
+      {% endif %}
       <li><a href="{% url 'events' %}">Upcoming events</a></li>
       <li><a href="{% url 'events' %}?view_past=True">All events</a></li>
     </ul>
@@ -6,11 +12,13 @@
     <!--upcoming evetns, all events, events i organizes, my event organizer/user-->
     <ul id="dropdown-event" class="dropdown-content">
       {% if user.is_staff %}
-        <li><a href="{% url 'events' %}?organizer=True">Events I organize</a></li>
+        <li><a href="{% url 'events' %}?organizer=True">Manage Events</a></li>
+      {% endif %}
+      {% if user.is_authenticated %}
+      <li><a href="{% url 'events' %}?my_events=True">Attending events</a></li>
       {% endif %}
       <li><a href="{% url 'events' %}">Upcoming events</a></li>
       <li><a href="{% url 'events' %}?view_past=True">All events</a></li>
-      <li><a href="{% url 'events' %}?my_events=True">My events</a></li>
     </ul>
 
     <div class="navbar-fixed">

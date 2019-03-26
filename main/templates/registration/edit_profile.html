@@ -10,8 +10,10 @@
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
+        {{ profile_form.as_p }}<br/>
         <button class="btn teal lighten-2" type = "submit">Submit</button>
     </form>
+    <br/>
     <p>Changing passwords coming soon.</p>
 </div>
 

@@ -12,10 +12,11 @@
     {% if user.is_authenticated %}
         <div style="width: 100%; display: flex;">
             <div style="margin:auto; padding: 10px;">
-                <h4>Username: {{user.username}}</h4>
-                <h4>First name: {{user.first_name}}</h4>
-                <h4>Last name: {{user.last_name}}</h4>
-                <h4>E-mail: {{user.email}}</h4>
+                <h4>Hi {{user.username}}! Here is your profile:</h4><br/>
+                <h5>First name: {{user.first_name}}</h5><br/>
+                <h5>Last name: {{user.last_name}}</h5><br/>
+                <h5>E-mail: {{user.email}}</h5><br/>
+                <h5>Receive newsletters: {% if user.profile.subscribed %}Yes{% else %}No{% endif %}</h5>
                 <br/>
                 <a href="{% url 'edit_profile' %}">Update profile</a>
             </div>

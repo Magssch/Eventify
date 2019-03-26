@@ -13,14 +13,17 @@
 				</div>
 				<div class="card-content">
 					<p>{{event.description}}</p>
-						<br>
-						<br>
+						<br/>
+						<br/>
 
+						<p>Date: {{event.date}}</p>
+						<br/>
 						<p>Location: {{event.location}}</p>
+						<br/>
 						<p>Price: {{event.price}}kr</p>
+						<br/>
 						<p>Organized by: {{event.organizer}}</p>
-
-						
+						<br/>
 						<p>Number of attendees: {{ attendees.count }} / {{event.capacity}} </p>
 
 						<!-- dobbel if setning, om man har meldt seg på, har man da betalt?-->

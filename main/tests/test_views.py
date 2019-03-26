@@ -3,7 +3,7 @@ from django.test import Client
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.http import HttpRequest
-from main.forms import EditProfileForm
+from main.forms import EditUserForm
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.contrib.messages.middleware import MessageMiddleware
 import unittest
