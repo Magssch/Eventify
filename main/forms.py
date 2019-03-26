@@ -1,12 +1,12 @@
 from django import forms
-from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm
 
-from .models import Event
+from .models import Event, Profile
 
 
-class EditProfileForm(forms.ModelForm):
+# Form for editing user attributes
+class EditUserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = {
@@ -15,13 +15,32 @@ class EditProfileForm(forms.ModelForm):
             'last_name'
         }
 
-
     field_order = [
         'first_name',
         'last_name',
         'email'
     ]
 
+
+# Form for accepting attributes in extended user model
+class EditProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = Profile
+        fields = {
+            'subscribed'
+        }
+
+        labels = {
+            'subscribed':"Yes, I'd like to receive newsletters from Eventify"
+        }
+
+    field_order = [
+        'subscribed'
+    ]
+
+
+# User registration form
 class RegistrationForm(UserCreationForm):
 
     check = forms.BooleanField(required = True, label="I accept the Eventify terms of use and privacy policy")
@@ -52,7 +71,7 @@ class RegistrationForm(UserCreationForm):
         'last_name',
         'email',
         'password1',
-        'password2',
+        'password2'
     ]
 
     def save(self, commit=True):
@@ -65,29 +84,51 @@ class RegistrationForm(UserCreationForm):
         return user
 
 
+# Form for extended user model registration
+class ProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = Profile
+        fields = {
+            'subscribed'
+        }
+
+        widgets = {
+            'subscribed':forms.CheckboxInput(attrs={'class':'form-control'})
+        }
+
+        labels = {
+            'subscribed':"Yes, I'd like to receive newsletters from Eventify"
+        }
+
+    field_order = [
+        'subcribed'
+    ]
+
+
+# Form for events
 class EventForm(forms.ModelForm):
-    name        = forms.CharField(label='Name of the event:',
-                    widget=forms.TextInput(attrs={"placeholder": "enter event name"})
-                    )
-    location    = forms.CharField(label='Location:', widget=forms.TextInput(attrs={"placeholder": "location"}))
-    price       = forms.IntegerField(label='Price of the event:', initial=250)
-    description = forms.CharField(
-                                    label       = 'Description of the event, not required',
-                                    widget      = forms.Textarea()
-                                )
-    capacity    = forms.IntegerField(label      = 'Maximum number of attendees', initial=100)
-    date        = forms.DateField(  required    = False,
-                                    widget      = forms.DateInput(format=('%Y-%m-%d'),
-                                             attrs={'id':'date1',
-                                            'placeholder':'Select a date'})
-                                )
-    registration_starts = forms.DateField(
-                                    required    = False,
-                                    widget      = forms.DateInput(format=('%Y-%m-%d'),
-                                    attrs       ={'id':'date2',
-                                                    'placeholder':'Select a date'})
+    name = forms.CharField(
+                                    label='Name of the event:',
+                                    widget=forms.TextInput(attrs={"placeholder": "Enter event name"})
     )
-    image       = forms.FileField()
+    location = forms.CharField(     label='Location:', widget=forms.TextInput(attrs={"placeholder": "London, New York, etc."}))
+    price = forms.IntegerField(     label='Price of the event:', initial=250)
+    description = forms.CharField(
+                                    label='Description of the event, not required',
+                                    required=False,
+                                    widget=forms.Textarea()
+    )
+    capacity = forms.IntegerField(  label='Maximum number of attendees', initial=100)
+    date = forms.DateField(
+                                    widget=forms.DateInput(format='%d-%m-%Y',
+                                    attrs={'id':'date1', 'placeholder':'Select a date'})
+    )
+    registration_starts = forms.DateField(
+                                    widget=forms.DateInput(format='%d-%m-%Y',
+                                    attrs={'id':'date2', 'placeholder':'Select a date'})
+    )
+    image = forms.FileField()
 
     class Meta:
         model = Event

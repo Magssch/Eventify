@@ -17,10 +17,11 @@ from django.views.generic.edit import UpdateView
 # django.core:
 from django.core.paginator import Paginator
 from django.core.files.storage import FileSystemStorage
+from django.contrib.auth import login, authenticate
 
 # Local project imports
 from .models import Event, Attendee
-from .forms import RegistrationForm, EditProfileForm, EventForm
+from .forms import RegistrationForm, EditUserForm, EventForm, ProfileForm, EditProfileForm
 
 
 
@@ -31,10 +32,26 @@ def homepage(request):
 				  template_name = "main/home.html",
 				  context = {"events":Event.objects.all})
 
+"""
 class SignUp(generic.CreateView):
 	form_class = RegistrationForm
 	success_url = reverse_lazy('login')
 	template_name = 'registration/signup.html'
+"""
+def SignUp(request):
+	if request.method == 'POST':
+		form = RegistrationForm(request.POST)
+		profile_form = ProfileForm(request.POST)
+		if form.is_valid() and profile_form.is_valid():
+			user = form.save()
+			user.refresh_from_db()  # load the profile instance created by the signal
+			user.profile.subscribed = form.cleaned_data.get('subscribed')
+			user.save()
+			return redirect(reverse_lazy('login'))
+	else:
+		form = RegistrationForm()
+		profile_form = ProfileForm()
+	return render(request, 'registration/signup.html', {'form': form, 'profile_form': profile_form})
 
 
 def profile(request):
@@ -49,15 +66,19 @@ def terms(request):
 
 def edit_profile(request):
 	if request.method == 'POST':
-		form = EditProfileForm(request.POST, instance=request.user)
-		if form.is_valid():
+		form = EditUserForm(request.POST, instance=request.user)
+		profile_form = EditProfileForm(request.POST, instance=request.user.profile)
+
+		if form.is_valid() and profile_form.is_valid():
 			form.save()
+			profile_form.save()
 			messages.success(request, f"Successfully edited profile")
 			return redirect(reverse('profile'))
 	else:
-		form = EditProfileForm(instance=request.user)
-		context = {'form': form}
-		return render(request, 'registration/edit_profile.html', context)
+		form = EditUserForm(instance=request.user)
+		profile_form = EditProfileForm(instance=request.user.profile)
+		args = {'form': form, 'profile_form': profile_form}
+		return render(request, 'registration/edit_profile.html', args)
 
 def create_event(request):
 	if not request.user.is_staff:
