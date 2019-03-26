@@ -1,34 +1,40 @@
 {% extends 'main/base.html' %}
 
+{% block title %}
+        {{event}}
+{% endblock %}
+
 {% block content %}
 
-	<h2>{{event}}</h2>
-	<p> Number of attendees: {{ attendees.count }}</p>
+    <div class="container">
+        <h2>{{event}}</h2>
+        <p> Number of attendees: {{ attendees.count }}</p>
 
-	<table class="highlight centered">
-		<thead>
-		  <tr>
-			  <th>Name</th>
-			  <th>Paid</th>
-			  <th>Full Name</th>
-			  <th>Email</th>
-		  </tr>
-		</thead>
+        <table class="highlight centered">
+            <thead>
+              <tr>
+                  <th>Name</th>
+                  <th>Paid</th>
+                  <th>Full Name</th>
+                  <th>Email</th>
+              </tr>
+            </thead>
 
-		{% for attendee in attendees %}
-		<tbody>
-		  <tr>
-			<td>{{ attendee.user }}</td>
-			<td>{{ attendee.has_paid }}</td>
-			<td>{{ attendee.user.first_name }} {{ attendee.user.last_name }} </td>
-			<td>{{ attendee.user.email }}</td>
-		  </tr>
-		</tbody>
-		{% endfor %}
-	</table>
-	<br>
-	<div style="width: 100%">
-		<a href="../" style="position: absolute; right: 20%" class="btn teal lighten-2">Back</a>
-	</div>
+            {% for attendee in attendees %}
+            <tbody>
+              <tr>
+                <td>{{ attendee.user }}</td>
+                <td>{{ attendee.has_paid }}</td>
+                <td>{{ attendee.user.first_name }} {{ attendee.user.last_name }} </td>
+                <td>{{ attendee.user.email }}</td>
+              </tr>
+            </tbody>
+            {% endfor %}
+        </table>
+        <br>
+        <div style="width: 100%">
+            <a href="../" style="position: absolute; right: 20%" class="btn teal lighten-2">Back</a>
+        </div>
+    </div>
 
 {% endblock %} 

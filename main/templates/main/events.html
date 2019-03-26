@@ -9,7 +9,7 @@
 
 
 {% block content %}
-    <div class="container">
+    <div class="container" style=" min-height: 60vh">
         <br/>
         <div style="display: flex; justify-content: center; ">
 
@@ -30,12 +30,12 @@
         <div class="col s12 m6" style="min-width: 400px">
           <div class="card">
             <div class="card-image">
-                <a href="{{event.get_absolute_url}}" class="waves-effect waves-light"><img src="{{event.image.url}}" alt="NO PICTURE" height="270"></a>
+                <a href="{{event.get_absolute_url}}" class="waves-effect waves-light"><div style="background: url({{event.image.url}}) no-repeat center; background-size: cover; height: 270px;"> </div></a>
               <span class="card-title">{{event.name}}</span>
             </div>
             <div class="content" style="margin-left: 10px">
               <p>{{event.location}}</p>
-              <p>{{event.price}}kr</p>
+              <p>{{event.price}},-</p>
               <p>{{event.date}}</p>
             </div>
             <div style="display: flex; flex-direction: row; width: 100%">

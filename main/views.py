@@ -172,10 +172,10 @@ def event_info(request, my_id):
 def event_update(request, my_id=None):
 	event = get_object_or_404(Event, id=my_id)
 
-	if not request.user.is_staff:
+	if not (request.user.is_staff or request.user.is_superuser):
 		messages.error(request, "You must be logged into a staff account to update events.")
 		return redirect('../')
-	if not event.organizer==request.user:
+	if not (event.organizer==request.user or request.user.is_superuser):
 		messages.error(request, "You must be the organizer of this event to update it.")
 		return redirect('../')
 
@@ -201,7 +201,7 @@ def event_delete(request, my_id):
 	if not (request.user.is_staff or request.user.is_superuser):
 		messages.error(request, "You do not have this privilege.")
 		return redirect('../')
-	if not (obj.organizer==request.user or request.user.is_superuser):
+	if not (event.organizer==request.user or request.user.is_superuser):
 		messages.error(request, "You must be the organizer of this event to delete it.")
 		return redirect('../')
 
@@ -217,10 +217,10 @@ def event_delete(request, my_id):
 def event_attendees(request, my_id):
 	event = get_object_or_404(Event, id=my_id)
 
-	if not (request.user.is_staff):
+	if not (request.user.is_staff or request.user.is_superuser):
 		messages.error(request, "You do not have the privilege to see this page.")
 		return redirect('../')
-	if not (event.organizer==request.user):
+	if not (event.organizer==request.user or request.user.is_superuser):
 		messages.error(request, "You must be the organizer of this event to look at this page")
 		return redirect('../')
 
