@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
-from models.newsletter import Message, Submission, Articles
+from newsletter.models import Message, Submission, Article
 
 from .models import Event
 
@@ -123,3 +123,4 @@ class MessagingForm(forms.ModelForm):
 
 
 class SubmissionForm(forms.ModelForm):
+    pass
