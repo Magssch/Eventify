@@ -21,7 +21,7 @@ from django.contrib.auth import login, authenticate
 
 # Local project imports
 from .models import Event, Attendee
-from .forms import RegistrationForm, EditProfileForm, EventForm, ProfileForm
+from .forms import RegistrationForm, EditUserForm, EventForm, ProfileForm, EditProfileForm
 
 
 
@@ -66,15 +66,18 @@ def terms(request):
 
 def edit_profile(request):
 	if request.method == 'POST':
-		form = EditProfileForm(request.POST, instance=request.user)
+		form = EditUserForm(request.POST, instance=request.user)
+		profile_form = EditProfileForm(request.POST, instance=request.user.profile)
 
-		if form.is_valid():
+		if form.is_valid() and profile_form.is_valid():
 			form.save()
+			profile_form.save()
 			messages.success(request, f"Successfully edited profile")
 			return redirect(reverse('profile'))
 	else:
-		form = EditProfileForm(instance=request.user)
-		args = {'form': form}
+		form = EditUserForm(instance=request.user)
+		profile_form = EditProfileForm(instance=request.user.profile)
+		args = {'form': form, 'profile_form': profile_form}
 		return render(request, 'registration/edit_profile.html', args)
 
 def create_event(request):
