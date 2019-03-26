@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
-from .models import Event
+from .models import Event, Profile
 
 
 class EditProfileForm(forms.ModelForm):
@@ -52,7 +52,7 @@ class RegistrationForm(UserCreationForm):
         'last_name',
         'email',
         'password1',
-        'password2',
+        'password2'
     ]
 
     def save(self, commit=True):
@@ -65,11 +65,27 @@ class RegistrationForm(UserCreationForm):
         return user
 
 
+class ProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = Profile
+        fields = {
+            'subscribed'
+        }
+
+        widgets = {
+            'subscribed':forms.CheckboxInput(attrs={'class':'form-control'})
+        }
+
+    field_order = [
+        'subcribed'
+    ]
+
 class EventForm(forms.ModelForm):
     name        = forms.CharField(label='Name of the event:',
-                    widget=forms.TextInput(attrs={"placeholder": "enter event name"})
+                    widget=forms.TextInput(attrs={"placeholder": "Enter event name"})
                     )
-    location    = forms.CharField(label='Location:', widget=forms.TextInput(attrs={"placeholder": "location"}))
+    location    = forms.CharField(label='Location:', widget=forms.TextInput(attrs={"placeholder": "London, New York, etc."}))
     price       = forms.IntegerField(label='Price of the event:', initial=250)
     description = forms.CharField(
                                     label       = 'Description of the event, not required',

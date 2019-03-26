@@ -17,10 +17,11 @@ from django.views.generic.edit import UpdateView
 # django.core:
 from django.core.paginator import Paginator
 from django.core.files.storage import FileSystemStorage
+from django.contrib.auth import login, authenticate
 
 # Local project imports
 from .models import Event, Attendee
-from .forms import RegistrationForm, EditProfileForm, EventForm
+from .forms import RegistrationForm, EditProfileForm, EventForm, ProfileForm
 
 
 
@@ -31,10 +32,26 @@ def homepage(request):
 				  template_name = "main/home.html",
 				  context = {"events":Event.objects.all})
 
+"""
 class SignUp(generic.CreateView):
 	form_class = RegistrationForm
 	success_url = reverse_lazy('login')
 	template_name = 'registration/signup.html'
+"""
+def SignUp(request):
+	if request.method == 'POST':
+		form = RegistrationForm(request.POST)
+		profile_form = ProfileForm(request.POST)
+		if form.is_valid() and profile_form.is_valid():
+			user = form.save()
+			user.refresh_from_db()  # load the profile instance created by the signal
+			user.profile.subscribed = form.cleaned_data.get('subscribed')
+			user.save()
+			return redirect(reverse_lazy('login'))
+	else:
+		form = RegistrationForm()
+		profile_form = ProfileForm()
+	return render(request, 'registration/signup.html', {'form': form, 'profile_form': profile_form})
 
 
 def profile(request):

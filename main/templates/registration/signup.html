@@ -9,7 +9,9 @@
       <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
+        {{ profile_form.subscribed }}<br/><br/>
           <a href="{% url 'terms' %}" target="_blank">Terms of service and privacy policy for Eventify.</a><br/><br/>
+
         <button class="btn teal lighten-2" type = "submit">Submit</button>
       </form>
     </div>
