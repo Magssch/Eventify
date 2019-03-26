@@ -125,8 +125,12 @@ def events(request):
 	return render(request, 'main/events.html', context)
 
 def event_info(request, my_id):
+	now = timezone.now()
 	event = get_object_or_404(Event, id=my_id)
 	attendees = Attendee.objects.filter(event=event)
+
+	is_upcoming = Event.objects.filter(id=my_id, date__gte=now).exists()
+
 	if not request.user.is_anonymous:
 		am_I_attending = Attendee.objects.filter(event=event, user=request.user).exists()
 	else:
@@ -160,7 +164,8 @@ def event_info(request, my_id):
 	context = {
 		"event": event,
 		"attendees": attendees,
-		"am_I_attending": am_I_attending
+		"am_I_attending": am_I_attending,
+		"is_upcoming": is_upcoming
 	}
 	return render(request, "main/event_info.html", context)
 
