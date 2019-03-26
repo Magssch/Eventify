@@ -38,7 +38,8 @@
                 <p>{{event.location}}</p>
                 <p>{{event.price}},-</p>
                 <p>{{event.date}}</p>
-                <div style="width: 100%; display: flex; flex-direction: column;"><a href="{{event.get_absolute_url}}" style="align-self: flex-end" class="btn waves-effect waves-light">Info</a></div>
+                <div style="width: 100%; display: flex; flex-direction: column;">
+                  <a href="{{event.get_absolute_url}}" style="align-self: flex-end; flex: 0.4; margin: 8px;" class="btn waves-effect waves-light"><i class="material-icons left">info_outline</i>Info</a></div>
             </div>
             <div class="card-reveal">
               <span class="card-title grey-text text-darken-4">{{event.name}}<i class="material-icons right">close</i></span>
@@ -75,4 +76,3 @@
         </ul>
     </div>
 {% endblock %}
-

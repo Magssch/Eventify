@@ -20,13 +20,15 @@
 						<br/>
 
 						<p>Date: {{event.date}}</p>
+						<br/>
 						<p>Location: {{event.location}}</p>
+						<br/>
 						<p>Price: {{event.price}},-</p>
-						<p>Organized by: {{event.organizer}}</p>
+						<br/>
+						<p>Hosted by: {{event.organizer}}</p>
 						<br/>
 						<p>Number of attendees: {{ attendees.count }} / {{event.capacity}} </p>
 
-						<!-- dobbel if setning, om man har meldt seg på, har man da betalt?-->
 				</div>
 				<div class="card-action" style="position: relative">
 						<!-- må ha en if setning. Om man er med i arrangementet så "meld deg av" og om man ikke er påmeldt
@@ -42,23 +44,12 @@
                                     <input type="submit" value="Unattend" class="btn teal lighten-2" style="margin-top: 10px;"/>
                                 {% endif %}
                             </form>
-              							<form action='.' method="POST">
-              								{% csrf_token %}
-              								{% if am_I_subscribed %}
-              								<!-- Unsubscribe user -->
-              									<input type="submit" name="unsubscribe" value="Unsubscribe" class="btn teal lighten-2" style="margin-top: 10px;"/>
-              								{% else %}
-              								<!-- Subscribe user -->
-              									<input type="submit" name="subscribe" value="Subscribe" class="btn teal lighten-2" style="margin-top: 10px;"/>
-              								{% endif %}
-              							</form>
                         {% endif %}
                         {% if user.is_staff or user.is_superuser %}
                             {% if user == event.organizer or user.is_superuser %}
                                 <a href="attendees/" class="btn teal lighten-2" style="margin-top: 10px;">Attendees</a>
                                 <a href="update/" class="btn teal lighten-2" style="margin-top: 10px;">Update</a>
-                								<a href="delete/" class="btn red lighten-2" style="margin-top: 10px;"><i class="material-icons left">delete</i>Delete</a>
-                								<a href="event_newsletter/" class="btn blue lighten-2" style="margin-top: 10px;"><i class="material-icons left">send</i>Message</a>
+                                <a href="delete/" class="btn red lighten-2" style="margin-top: 10px;">Delete</a>
                             {% endif %}
                         {% endif %}
 
@@ -71,3 +62,4 @@
 	</div>
 
 {% endblock %}
+
