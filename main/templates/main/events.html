@@ -9,6 +9,7 @@
 
 
 {% block content %}
+    {% load static from staticfiles %}
     <div class="container" style=" min-height: 60vh">
         <br/>
         <div style="display: flex; justify-content: center; ">
@@ -30,17 +31,21 @@
         <div class="col s12 m6" style="min-width: 400px">
           <div class="card">
             <div class="card-image">
-                <a href="{{event.get_absolute_url}}" class="waves-effect waves-light"><div style="background: url({{event.image.url}}) no-repeat center; background-size: cover; height: 270px;"> </div></a>
-              <span class="card-title">{{event.name}}</span>
+                <a href="{{event.get_absolute_url}}" class="waves-effect waves-light" style="width: 100%"><img src="{% static 'main/images/bg.png' %}" style="height: 270px; width: 100%; background: url({{event.image.url}}) no-repeat center; background-size: cover;" alt="NO PICTURE"></a>
             </div>
-            <div class="content" style="margin-left: 10px">
-              <p>{{event.location}}</p>
-              <p>{{event.price}},-</p>
-              <p>{{event.date}}</p>
+            <div class="card-content"><span class="card-title activator grey-text text-darken-4">
+                {{event.name}}<i class="material-icons right">more_vert</i></span>
+                <p>{{event.location}}</p>
+                <p>{{event.price}},-</p>
+                <p>{{event.date}}</p>
+                <div style="width: 100%; display: flex; flex-direction: column;"><a href="{{event.get_absolute_url}}" style="align-self: flex-end" class="btn waves-effect waves-light">Info</a></div>
             </div>
-            <div style="display: flex; flex-direction: row; width: 100%">
-              <p style="font-size:70%; margin: 8px; align-self: flex-start; flex: 1">Hosted by: {{event.organizer}}</p>
-              <a href="{{event.get_absolute_url}}" style="align-self: flex-end; flex: 0.4; margin: 8px;" class="btn waves-effect waves-light">Info</a>
+            <div class="card-reveal">
+              <span class="card-title grey-text text-darken-4">{{event.name}}<i class="material-icons right">close</i></span>
+                <div><br/>
+                    <p>{{event.description}}</p><br/>
+                    <p style="align-self: flex-end">Hosted by <b>{{event.organizer}}</b></p>
+                </div>
             </div>
           </div>
         </div>
