@@ -1,4 +1,4 @@
-# Django imports
+# Django imports:
 # django.db
 from django.db import IntegrityError
 # djano.utils
@@ -270,6 +270,8 @@ def event_newsletter(request, my_id):
     if messagingForm.is_valid():
         message = messagingForm.save(commit=False)
         slug = message.title.lower()
+        slug = slug.replace(' ', '_')
+        print(slug)
         message.slug = slug
         newsletter_name = event.name
         newsletter = Newsletter.objects.get(title=newsletter_name)
@@ -278,7 +280,7 @@ def event_newsletter(request, my_id):
 
         if articleForm.is_valid():
             article = articleForm.save(commit=False)
-            article.title = message.title
+            article.title = ' '
             article.post = message
             article.save()
 
