@@ -102,7 +102,9 @@ def create_event(request):
         messages.success(request, f"New event created: {form.cleaned_data.get('name')}")
         event_name = form.cleaned_data.get('name')
         event = get_object_or_404(Event, name=event_name)
-        newsletter = Newsletter(title=event_name, slug=event_name.lower(), email="eventify.site@gmail.com", sender="Eventify")
+        new_slug = event_name.lower()
+        new_slug = new_slug.replace(" ", "_")
+        newsletter = Newsletter(title=event_name, slug=new_slug, email="eventify.site@gmail.com", sender="Eventify")
         newsletter.save()
         return redirect(event)
     else:
@@ -284,7 +286,7 @@ def event_newsletter(request, my_id):
     if messagingForm.is_valid():
         message = messagingForm.save(commit=False)
         slug = message.title.lower()
-        slug = slug.replace(' ', '_')
+        slug = slug.replace(" ", "_")
         print(slug)
         message.slug = slug
         newsletter_name = event.name
@@ -318,4 +320,4 @@ def event_newsletter(request, my_id):
 
 
 
-    
+
