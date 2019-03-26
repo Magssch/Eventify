@@ -142,6 +142,13 @@ def event_info(request, my_id):
     event = get_object_or_404(Event, id=my_id)
     newsletter = Newsletter.objects.get(title=event.name)
     attendees = Attendee.objects.filter(event=event)
+    now = timezone.now()
+
+    is_upcoming = Event.objects.filter(id=my_id, date__gte=now).exists()
+
+    registration_open = Event.objects.filter(id=my_id, registration_starts__lte=now).exists()
+
+
     if not request.user.is_anonymous:
         am_I_attending = Attendee.objects.filter(event=event, user=request.user).exists()
         am_I_subscribed = Subscription.objects.filter(newsletter=newsletter, user=request.user).exists()
@@ -193,8 +200,12 @@ def event_info(request, my_id):
         "event": event,
         "attendees": attendees,
         "am_I_attending": am_I_attending,
-        "am_I_subscribed": am_I_subscribed
+        "am_I_subscribed": am_I_subscribed,
+        "is_upcoming": is_upcoming,
+        "registration_open": registration_open,
+
     }
+
     return render(request, "main/event_info.html", context)
 
 
