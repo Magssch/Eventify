@@ -29,38 +29,39 @@
 						<!-- må ha en if setning. Om man er med i arrangementet så "meld deg av" og om man ikke er påmeldt
 						så "meld deg på"-->
 
-                    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; width: 100%; margin-top: -10px;">
-                        {% if event.registration_open %}
-                            <form action='.' method="POST">
-                                {% csrf_token %}
-                                {% if am_I_attending == False %}
-                                    <input type="submit" name="attend" value="Attend" class="btn teal lighten-2" style="margin-top: 10px;"/>
-                                {% else %}
-                                    <input type="submit" name="unattend" value="Unattend" class="btn teal lighten-2" style="margin-top: 10px;"/>
-                                {% endif %}
-                            </form>
-                            <form action='.' method="POST">
-                            	{% csrf_token %}
-                            	{% if am_I_subscribed %}
-                            	<!-- Unsubscribe user -->
-                            		<input type="submit" name="unsubscribe" value="Unsubscribe" class="btn teal lighten-2" style="margin-top: 10px;"/>
-                            	{% else %}
-                            	<!-- Subscribe user -->
-                            		<input type="submit" name="subscribe" value="Subscribe" class="btn teal lighten-2" style="margin-top: 10px;"/>
-                            	{% endif %}
-                            </form>
+					<div style="display: flex; justify-content: space-around; flex-wrap: wrap; width: 100%; margin-top: -10px;">
+						{% if event.registration_open %}
+							<form action='.' method="POST">
+								{% csrf_token %}
+								{% if am_I_attending == False %}
+									<input type="submit" name="attend" value="Attend" class="btn teal lighten-2" style="margin-top: 10px;"/>
+								{% else %}
+									<input type="submit" name="unattend" value="Unattend" class="btn teal lighten-2" style="margin-top: 10px;"/>
+								{% endif %}
+							</form>
+							<form action='.' method="POST">
+								{% csrf_token %}
+								{% if am_I_subscribed %}
+								<!-- Unsubscribe user -->
+									<input type="submit" name="unsubscribe" value="Unsubscribe" class="btn teal lighten-2" style="margin-top: 10px;"/>
+								{% else %}
+								<!-- Subscribe user -->
+									<input type="submit" name="subscribe" value="Subscribe" class="btn teal lighten-2" style="margin-top: 10px;"/>
+								{% endif %}
+							</form>
 
-                        {% endif %}
-                        {% if user.is_staff %}
-                            {% if user == event.organizer %}
-                                <a href="attendees/" class="btn teal lighten-2" style="margin-top: 10px;">Attendees</a>
-                                <a href="update/" class="btn teal lighten-2" style="margin-top: 10px;">Update</a>
-                                <a href="delete/" class="btn red lighten-2" style="margin-top: 10px;">Delete</a>
-                            {% endif %}
-                        {% endif %}
+						{% endif %}
+						{% if user.is_staff %}
+							{% if user == event.organizer %}
+								<a href="attendees/" class="btn teal lighten-2" style="margin-top: 10px;">Attendees</a>
+								<a href="update/" class="btn teal lighten-2" style="margin-top: 10px;">Update</a>
+								<a href="delete/" class="btn red lighten-2" style="margin-top: 10px;">Delete</a>
+								<a href="event_newsletter/" class="btn blue lighten-2" style="margin-top: 10px;">Send message</a>
+							{% endif %}
+						{% endif %}
 
-                        <a href="../" class="btn teal lighten-2" style="margin-top: 10px;">Back</a>
-                    </div>
+						<a href="../" class="btn teal lighten-2" style="margin-top: 10px;">Back</a>
+					</div>
 				</div>
 			</div>
 		</div>

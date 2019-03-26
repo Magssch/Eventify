@@ -26,5 +26,6 @@ urlpatterns = [
     path('events/<int:my_id>/attendees/', views.event_attendees, name="event_attendees"),
     # URL-path for Newletter (import (un)subscription and archive)
     path('newsletter/', include('newsletter.urls')),
+    path('events/<int:my_id>/event_newsletter/', views.event_newsletter, name="event_newsletter"),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

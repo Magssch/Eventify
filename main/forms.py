@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
-from models.newsletter import Message, Submission, Articles
+from newsletter.models import Message, Submission, Article
 
 from .models import Event
 
@@ -108,18 +108,24 @@ class EventForm(forms.ModelForm):
 class MessagingForm(forms.ModelForm):
     title = forms.CharField(        label="Message title", 
                                     widget=forms.TextInput(attrs={"placeholder": "Enter your message title"}))
-
-    message = forms.CharField(
-                                    label       = 'Message',
-                                    widget      = forms.Textarea()
-                                )
-
+    # We might need the foreign key to newsletter?
+    # newsletter = forms.foreign
     class Meta:
         model = Message
         fields = [
             'title'
         ]
 
-
+class ArticleForm(forms.ModelForm):
+    text = forms.CharField(
+                                    label       = 'Message',
+                                    widget      = forms.Textarea()
+                                )
+    class Meta:
+        model = Article
+        fields = [
+            'text'
+        ]
 
 class SubmissionForm(forms.ModelForm):
+    pass
