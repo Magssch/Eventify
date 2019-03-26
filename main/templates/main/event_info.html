@@ -17,11 +17,8 @@
 						<br/>
 
 						<p>Date: {{event.date}}</p>
-						<br/>
 						<p>Location: {{event.location}}</p>
-						<br/>
 						<p>Price: {{event.price}}kr</p>
-						<br/>
 						<p>Organized by: {{event.organizer}}</p>
 						<br/>
 						<p>Number of attendees: {{ attendees.count }} / {{event.capacity}} </p>
@@ -58,8 +55,8 @@
 							{% if user == event.organizer %}
 								<a href="attendees/" class="btn teal lighten-2" style="margin-top: 10px;">Attendees</a>
 								<a href="update/" class="btn teal lighten-2" style="margin-top: 10px;">Update</a>
-								<a href="delete/" class="btn red lighten-2" style="margin-top: 10px;">Delete</a>
-								<a href="event_newsletter/" class="btn blue lighten-2" style="margin-top: 10px;">Send message</a>
+								<a href="delete/" class="btn red lighten-2" style="margin-top: 10px;"><i class="material-icons left">delete</i>Delete</a>
+								<a href="event_newsletter/" class="btn blue lighten-2" style="margin-top: 10px;"><i class="material-icons left">send</i>Message</a>
 							{% endif %}
 						{% endif %}
 
