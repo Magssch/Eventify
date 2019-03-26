@@ -175,7 +175,7 @@ def event_delete(request, my_id):
 	if not (request.user.is_staff or request.user.is_superuser):
 		messages.error(request, "You do not have this privilege.")
 		return redirect('../')
-	if not (obj.organizer==request.user or request.user.is_superuser):
+	if not (event.organizer==request.user or request.user.is_superuser):
 		messages.error(request, "You must be the organizer of this event to delete it.")
 		return redirect('../')
 

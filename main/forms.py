@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 from .models import Event
 
-
+#This form is used when users edit their profile
 class EditProfileForm(forms.ModelForm):
     class Meta:
         model = User
@@ -22,8 +22,9 @@ class EditProfileForm(forms.ModelForm):
         'email'
     ]
 
+#This form is used when users registrate for the site
 class RegistrationForm(UserCreationForm):
-
+    #Users need to accept the Eventify terms of use and privacy policy
     check = forms.BooleanField(required = True, label="I accept the Eventify terms of use and privacy policy")
 
     class Meta:
@@ -64,7 +65,7 @@ class RegistrationForm(UserCreationForm):
             user.save()
         return user
 
-
+#This form is used when events are created
 class EventForm(forms.ModelForm):
     name        = forms.CharField(label='Name of the event:',
                     widget=forms.TextInput(attrs={"placeholder": "enter event name"})
