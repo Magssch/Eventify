@@ -121,13 +121,15 @@ class EventForm(forms.ModelForm):
     )
     capacity = forms.IntegerField(  label='Maximum number of attendees', initial=100)
     date = forms.DateField(         required    = False,
-                                    widget      = forms.DateInput(format=('%Y-%m-%d'),
-                                    attrs={'id':'date1', 'placeholder':'Select a date'})
+                                    widget      = forms.DateInput(format=('%m/%d/%Y'),
+                                    attrs={'id':'date1', 'placeholder':'Select a date'}),
+                                    input_formats=('%m/%d/%Y', )
     )
     registration_starts = forms.DateField(
                                     required    = False,
-                                    widget      = forms.DateInput(format=('%Y-%m-%d'),
-                                    attrs={'id':'date2', 'placeholder':'Select a date'})
+                                    widget      = forms.DateInput(format=('%m/%d/%Y'),
+                                    attrs={'id':'date2', 'placeholder':'Select a date'}),
+                                    input_formats=('%m/%d/%Y', )
     )
     image = forms.FileField()
 
@@ -159,7 +161,7 @@ class MessagingForm(forms.ModelForm):
 class ArticleForm(forms.ModelForm):
     text = forms.CharField(
                                     label       = 'Message',
-                                    widget      = forms.Textarea()
+                                    widget      = forms.Textarea(attrs={'cols': 60, 'rows': 60})
                                 )
     class Meta:
         model = Article

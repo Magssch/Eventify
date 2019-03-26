@@ -91,7 +91,7 @@ def edit_profile(request):
 		return render(request, 'registration/edit_profile.html', args)
 
 def create_event(request):
-    if not request.user.is_staff:
+    if not (request.user.is_staff or request.user.is_superuser):
         return redirect('/')
 
     form = EventForm(request.POST or None, request.FILES or None)
@@ -105,6 +105,8 @@ def create_event(request):
         newsletter = Newsletter(title=event_name, slug=event_name.lower(), email="eventify.site@gmail.com", sender="Eventify")
         newsletter.save()
         return redirect(event)
+    else:
+        print(form.errors)
 
     form = EventForm()
     context = {
@@ -194,6 +196,7 @@ def event_info(request, my_id):
         "am_I_subscribed": am_I_subscribed
     }
     return render(request, "main/event_info.html", context)
+
 
 def event_update(request, my_id=None):
 	event = get_object_or_404(Event, id=my_id)
