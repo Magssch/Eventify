@@ -37,9 +37,9 @@
                             <form action='.' method="POST">
                                 {% csrf_token %}
                                 {% if am_I_attending %}
-                                    <input type="submit" value="Unattend" class="btn teal lighten-2" style="margin-top: 10px;"/>
+                                    <input type="submit" name="unattend" value="Unattend" class="btn teal lighten-2" style="margin-top: 10px;"/>
                                 {% else %}
-                                    <input type="submit" value="Attend" class="btn teal lighten-2" style="margin-top: 10px;"/>
+                                    <input type="submit" name="attend" value="Attend" class="btn teal lighten-2" style="margin-top: 10px;"/>
                                 {% endif %}
                             </form>
                         {% endif %}

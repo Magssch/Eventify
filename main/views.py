@@ -314,3 +314,8 @@ def event_newsletter(request, my_id):
         'articleForm': articleForm
     }
     return render(request, "main/newsletter.html", context)
+
+
+
+
+    
