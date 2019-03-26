@@ -90,9 +90,9 @@ def create_event(request):
 		event.organizer = request.user
 		event.save()
 		messages.success(request, f"New event created: {form.cleaned_data.get('name')}")
-		obj_name = form.cleaned_data.get('name')
-		obj = get_object_or_404(Event, name=obj_name)
-		return redirect(obj)
+		event_name = form.cleaned_data.get('name')
+		event = get_object_or_404(Event, name=event_name)
+		return redirect(event)
 
 	form = EventForm()
 	context = {
@@ -144,7 +144,7 @@ def event_info(request, my_id):
 					attendee.save()
 					messages.success(request, f"Successfully signed up for {event.name}")
 					return redirect('event_info', my_id)
-				elif attendees.count() < event.capacity and am_I_attending==True:
+				elif am_I_attending==True:
 					attendee = Attendee.objects.filter(event=event, user=request.user)
 					attendee.delete()
 					messages.success(request, f"Successfully unattended {event.name}")
@@ -158,32 +158,32 @@ def event_info(request, my_id):
 			return redirect('event_info', my_id)
 
 	context = {
-		"object":event,
-		"attendees":attendees,
+		"event": event,
+		"attendees": attendees,
 		"am_I_attending": am_I_attending
 	}
 	return render(request, "main/event_info.html", context)
 
 def event_update(request, my_id=None):
-	obj = get_object_or_404(Event, id=my_id)
+	event = get_object_or_404(Event, id=my_id)
 
 	if not request.user.is_staff:
 		messages.error(request, "You must be logged into a staff account to update events.")
 		return redirect('../')
-	if not obj.organizer==request.user:
+	if not event.organizer==request.user:
 		messages.error(request, "You must be the organizer of this event to update it.")
 		return redirect('../')
 
-	form = EventForm(request.POST or None, request.FILES or None, instance=obj)
+	form = EventForm(request.POST or None, request.FILES or None, instance=event)
 	if form.is_valid():
 		form.save()
-		obj_name = form.cleaned_data.get('name')
-		messages.success(request, f"Successfully updates event: {obj_name}")
-		obj = get_object_or_404(Event, name=obj_name)
-		return redirect(obj)
-	form = EventForm(instance=obj)
+		event_name = form.cleaned_data.get('name')
+		messages.success(request, f"Successfully updates event: {event_name}")
+		event = get_object_or_404(Event, name=event_name)
+		return redirect(event)
+	form = EventForm(instance=event)
 	context = {
-		'object': obj,
+		'event': event,
 		'form': form
 	}
 	return render(request, "main/event_update.html", context)
@@ -191,7 +191,7 @@ def event_update(request, my_id=None):
 # An option to delete existing event.
 # Has to be admin or the staff user that created the event.
 def event_delete(request, my_id):
-	obj = get_object_or_404(Event, id=my_id)
+	event = get_object_or_404(Event, id=my_id)
 
 	if not (request.user.is_staff or request.user.is_superuser):
 		messages.error(request, "You do not have this privilege.")
@@ -202,10 +202,10 @@ def event_delete(request, my_id):
 
 	if request.method =="POST":
 		# Confirming delete
-		obj.delete()
+		event.delete()
 		return redirect('../../')
 	context = {
-		"object": obj
+		"event": event
 	}
 	return render(request, "main/event_delete.html", context)
 

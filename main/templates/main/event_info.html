@@ -8,20 +8,20 @@
 		<div class="col s12 m12">
 			<div class="card">
 				<div class="card-image">
-						<div style="height:400px; background: url({{object.image.url}}) no-repeat center;"></div> <!-- legge til bilde fra objektet-->
-					<span class="card-title">{{object.name}}</span>
+						<div style="height:400px; background: url({{event.image.url}}) no-repeat center;"></div> <!-- legge til bilde fra objektet-->
+					<span class="card-title">{{event.name}}</span>
 				</div>
 				<div class="card-content">
-					<p>{{object.description}}</p>
+					<p>{{event.description}}</p>
 						<br>
 						<br>
 
-						<p>Location: {{object.location}}</p>
-						<p>Price: {{object.price}}kr</p>
-						<p>Organized by: {{object.organizer}}</p>
+						<p>Location: {{event.location}}</p>
+						<p>Price: {{event.price}}kr</p>
+						<p>Organized by: {{event.organizer}}</p>
 
 						
-						<p>Number of attendees: {{ attendees.count }} / {{object.capacity}} </p>
+						<p>Number of attendees: {{ attendees.count }} / {{event.capacity}} </p>
 
 						<!-- dobbel if setning, om man har meldt seg på, har man da betalt?-->
 				</div>
@@ -30,7 +30,7 @@
 						så "meld deg på"-->
 
                     <div style="display: flex; justify-content: space-around; flex-wrap: wrap; width: 100%; margin-top: -10px;">
-                        {% if object.registration_open %}
+                        {% if event.registration_open %}
                             <form action='.' method="POST">
                                 {% csrf_token %}
                                 {% if am_I_attending == False %}
@@ -41,7 +41,7 @@
                             </form>
                         {% endif %}
                         {% if user.is_staff %}
-                            {% if user == object.organizer %}
+                            {% if user == event.organizer %}
                                 <a href="attendees/" class="btn teal lighten-2" style="margin-top: 10px;">Attendees</a>
                                 <a href="update/" class="btn teal lighten-2" style="margin-top: 10px;">Update</a>
                                 <a href="delete/" class="btn red lighten-2" style="margin-top: 10px;">Delete</a>
