@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     # For enabling the Newletter-libary
     'django.contrib.sites',
     'newsletter',
-    # 'sorl.thumbnail',
+    'sorl.thumbnail',
 ]
 
 MIDDLEWARE = [
