@@ -22,9 +22,30 @@
     </ul>
 
     <div class="navbar-fixed">
+        <ul id="dropdown-event" class="dropdown-content">
+          {% if user.is_staff %}
+            <li><a href="{% url 'events' %}?organizer=True">Manage Events</a></li>
+          {% endif %}
+          {% if user.is_authenticated %}
+          <li><a href="{% url 'events' %}?my_events=True">Attending events</a></li>
+          {% endif %}
+          <li><a href="{% url 'events' %}">Upcoming events</a></li>
+          <li><a href="{% url 'events' %}?view_past=True">All events</a></li>
+        </ul>
+
+        <ul id="dropdown-profile" class="dropdown-content">
+          {% if user.is_authenticated %}
+          <li><a href="{% url 'profile' %}">Profile</a></li>
+          {% endif %}
+          {% if user.is_superuser %}
+          <li><a href="{% url 'admin:index' %}">Adminpage</a></li>
+          <li><a href="{% url 'site_newsletter' %}">Newsletter</a></li>
+          {% endif %}
+
+        </ul>
         <nav>
           <div class="nav-wrapper black" style="min-width: 325px">
-            <a href="{% url 'home' %}" style="margin-left: 20px" class="brand-logo"><i class="material-icons" style="margin-right: 5px;">graphic_eq</i>Eventify</a>
+            <a href="{% url 'home' %}" style="margin-left: 1vw" class="brand-logo"><i class="material-icons" style="margin-right: 5px;">graphic_eq</i>Eventify</a>
 
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 
