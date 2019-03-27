@@ -28,4 +28,6 @@ urlpatterns = [
     path('newsletter/', include('newsletter.urls')),
     path('events/<int:my_id>/event_newsletter/', views.event_newsletter, name="event_newsletter"),
 
+    path('site_newsletter/', views.site_newsletter, name='site_newsletter'),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
