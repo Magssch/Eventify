@@ -16,7 +16,7 @@
                     <h5>First name: {{user.first_name}}</h5>
                     <h5>Last name: {{user.last_name}}</h5>
                     <h5>E-mail: {{user.email}}</h5>
-                    <h5>Receive newsletters: {% if user.profile.subscribed %}Yes{% else %}No{% endif %}</h5>
+                    <h5>Receive newsletters: {% if subscribed %}Yes{% else %}No{% endif %}</h5>
                     <a href="{% url 'edit_profile' %}">Update profile</a>
         {% else %}
           <p>You are not logged in.</p>

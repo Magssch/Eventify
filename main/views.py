@@ -18,6 +18,7 @@ from django.views.generic.edit import UpdateView
 from django.core.paginator import Paginator
 from django.core.files.storage import FileSystemStorage
 from django.contrib.auth import login, authenticate
+from django.core.exceptions import ObjectDoesNotExist
 
 # Local project imports
 from .models import Event, Attendee
@@ -25,18 +26,19 @@ from .forms import (
     RegistrationForm,
     EditUserForm,
     EventForm,
-    ProfileForm,
-    EditProfileForm,
     MessagingForm,
-    ArticleForm
+    ArticleForm,
+    SubscribeNewsletterForm
 )
 
 # Django-newsletter:
 from newsletter.models import Newsletter, Subscription, Submission
 
+#ENUMS
+SITE_NEWSLETTER = "Eventify"
+
 
 # Create your views here.
-
 def homepage(request):
     return render(request = request,
                   template_name = "main/home.html",
@@ -44,30 +46,50 @@ def homepage(request):
 
 """
 class SignUp(generic.CreateView):
-	form_class = RegistrationForm
-	success_url = reverse_lazy('login')
-	template_name = 'registration/signup.html'
+    form_class = RegistrationForm
+    success_url = reverse_lazy('login')
+    template_name = 'registration/signup.html'
 """
 def SignUp(request):
-	if request.method == 'POST':
-		form = RegistrationForm(request.POST)
-		profile_form = ProfileForm(request.POST)
-		if form.is_valid() and profile_form.is_valid():
-			user = form.save()
-			user.refresh_from_db()  # load the profile instance created by the signal
-			user.profile.subscribed = form.cleaned_data.get('subscribed')
-			user.save()
-			return redirect(reverse_lazy('login'))
-	else:
-		form = RegistrationForm()
-		profile_form = ProfileForm()
-	return render(request, 'registration/signup.html', {'form': form, 'profile_form': profile_form})
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST or None)
+        sub_form = SubscribeNewsletterForm(request.POST or None)
+        if form.is_valid():
+            user = form.save()
+            if sub_form.is_valid():
+                try:
+                    sub = sub_form.save(commit=False)
+                    sub.user = user
+                    sub.newsletter = Newsletter.objects.get(title=SITE_NEWSLETTER)
+                    sub.save()
+                except Newsletter.DoesNotExist:
+                    messages.error(request, "No newsletter called Eventify")
+                finally:
+                    messages.success(request, "User successfully created!")
+                    return redirect('login')
+    else:
+        form = RegistrationForm()
+        sub_form = SubscribeNewsletterForm()
+        context = {
+            'form': form,
+            'sub_form': sub_form
+        }
+        return render(request, 'registration/signup.html', context)
 
 
 def profile(request):
+    try:
+        newsletter = Newsletter.objects.get(title=SITE_NEWSLETTER)
+        subscription = Subscription.objects.get(newsletter=newsletter, user=request.user).subscribed
+    except (Newsletter.DoesNotExist):
+        messages.error(request, "NewsletterError")
+        subscription = False
+    context = {
+        # "events":Event.objects.all,
+        "subscribed": subscription
+    }
     return render(request = request,
-                  template_name ="main/profile.html",
-                  context = {"events":Event.objects.all})
+                  template_name ="main/profile.html", context=context)
 
 def terms(request):
     return render(request = request,
@@ -75,20 +97,39 @@ def terms(request):
                   context = {"events":Event.objects.all})
 
 def edit_profile(request):
-	if request.method == 'POST':
-		form = EditUserForm(request.POST, instance=request.user)
-		profile_form = EditProfileForm(request.POST, instance=request.user.profile)
+    # Check if the user is subscribed and pass that instance into the subscription form.
+    try:
+        newsletter = Newsletter.objects.get(title=SITE_NEWSLETTER)
+        subscription = Subscription.objects.get(newsletter=newsletter, user=request.user)
+    except (Newsletter.DoesNotExist):
+        messages.error(request, "NewsletterError")
+        subscription = False
 
-		if form.is_valid() and profile_form.is_valid():
-			form.save()
-			profile_form.save()
-			messages.success(request, f"Successfully edited profile")
-			return redirect(reverse('profile'))
-	else:
-		form = EditUserForm(instance=request.user)
-		profile_form = EditProfileForm(instance=request.user.profile)
-		args = {'form': form, 'profile_form': profile_form}
-		return render(request, 'registration/edit_profile.html', args)
+    if request.method == 'POST':
+        form = EditUserForm(request.POST or None, instance=request.user)
+        sub_form = SubscribeNewsletterForm(request.POST or None, instance=subscription)
+
+        if form.is_valid():
+            form.save()
+            if sub_form.is_valid():
+                try:
+                    sub_form.save()
+                except Newsletter.DoesNotExist:
+                    messages.error(request, "No newsletter called Eventify")
+                finally:
+                    messages.success(request, 
+                                            "Successfully updated your profile")
+                    return redirect('profile')
+            messages.success(request, f"Successfully edited profile")
+            return redirect(reverse('profile'))
+    else:
+        form = EditUserForm(instance=request.user)
+        sub_form = SubscribeNewsletterForm(instance=subscription)
+        context = {
+            'form': form,
+            'sub_form': sub_form
+        }
+        return render(request, 'registration/edit_profile.html', context)
 
 def create_event(request):
     if not (request.user.is_staff or request.user.is_superuser):
@@ -212,71 +253,71 @@ def event_info(request, my_id):
 
 
 def event_update(request, my_id=None):
-	event = get_object_or_404(Event, id=my_id)
+    event = get_object_or_404(Event, id=my_id)
 
-	if not (request.user.is_staff or request.user.is_superuser):
-		messages.error(request, "You must be logged into a staff account to update events.")
-		return redirect('../')
-	if not (event.organizer==request.user or request.user.is_superuser):
-		messages.error(request, "You must be the organizer of this event to update it.")
-		return redirect('../')
+    if not (request.user.is_staff or request.user.is_superuser):
+        messages.error(request, "You must be logged into a staff account to update events.")
+        return redirect('../')
+    if not (event.organizer==request.user or request.user.is_superuser):
+        messages.error(request, "You must be the organizer of this event to update it.")
+        return redirect('../')
 
-	form = EventForm(request.POST or None, request.FILES or None, instance=event)
-	if form.is_valid():
-		form.save()
-		event_name = form.cleaned_data.get('name')
-		messages.success(request, f"Successfully updates event: {event_name}")
-		event = get_object_or_404(Event, name=event_name)
-		return redirect(event)
-	form = EventForm(instance=event)
-	context = {
-		'event': event,
-		'form': form
-	}
-	return render(request, "main/event_update.html", context)
+    form = EventForm(request.POST or None, request.FILES or None, instance=event)
+    if form.is_valid():
+        form.save()
+        event_name = form.cleaned_data.get('name')
+        messages.success(request, f"Successfully updates event: {event_name}")
+        event = get_object_or_404(Event, name=event_name)
+        return redirect(event)
+    form = EventForm(instance=event)
+    context = {
+        'event': event,
+        'form': form
+    }
+    return render(request, "main/event_update.html", context)
 
 # An option to delete existing event.
 # Has to be admin or the staff user that created the event.
 def event_delete(request, my_id):
-	event = get_object_or_404(Event, id=my_id)
+    event = get_object_or_404(Event, id=my_id)
 
-	if not (request.user.is_staff or request.user.is_superuser):
-		messages.error(request, "You do not have this privilege.")
-		return redirect('../')
-	if not (event.organizer==request.user or request.user.is_superuser):
-		messages.error(request, "You must be the organizer of this event to delete it.")
-		return redirect('../')
+    if not (request.user.is_staff or request.user.is_superuser):
+        messages.error(request, "You do not have this privilege.")
+        return redirect('../')
+    if not (event.organizer==request.user or request.user.is_superuser):
+        messages.error(request, "You must be the organizer of this event to delete it.")
+        return redirect('../')
 
-	if request.method =="POST":
-		# Confirming delete
-		event.delete()
-		return redirect('../../')
-	context = {
-		"event": event
-	}
-	return render(request, "main/event_delete.html", context)
+    if request.method =="POST":
+        # Confirming delete
+        event.delete()
+        return redirect('../../')
+    context = {
+        "event": event
+    }
+    return render(request, "main/event_delete.html", context)
 
 def event_attendees(request, my_id):
-	event = get_object_or_404(Event, id=my_id)
+    event = get_object_or_404(Event, id=my_id)
 
-	if not (request.user.is_staff or request.user.is_superuser):
-		messages.error(request, "You do not have the privilege to see this page.")
-		return redirect('../')
-	if not (event.organizer==request.user or request.user.is_superuser):
-		messages.error(request, "You must be the organizer of this event to look at this page")
-		return redirect('../')
+    if not (request.user.is_staff or request.user.is_superuser):
+        messages.error(request, "You do not have the privilege to see this page.")
+        return redirect('../')
+    if not (event.organizer==request.user or request.user.is_superuser):
+        messages.error(request, "You must be the organizer of this event to look at this page")
+        return redirect('../')
 
-	attendees = Attendee.objects.filter(event=event)
-	context = {
-		"event": event,
-		"attendees": attendees
-	}
-	return render(request, "main/event_attendees.html", context)
+    attendees = Attendee.objects.filter(event=event)
+    context = {
+        "event": event,
+        "attendees": attendees
+    }
+    return render(request, "main/event_attendees.html", context)
 
 
 def event_newsletter(request, my_id):
 
-    if not (request.user.is_staff or request.user.is_admin):
+    if not (request.user.is_staff or request.user.is_superuser):
         return redirect('/')
 
     event = get_object_or_404(Event, id=my_id)
@@ -287,7 +328,6 @@ def event_newsletter(request, my_id):
         message = messagingForm.save(commit=False)
         slug = message.title.lower()
         slug = slug.replace(" ", "_")
-        print(slug)
         message.slug = slug
         newsletter_name = event.name
         newsletter = Newsletter.objects.get(title=newsletter_name)
@@ -318,6 +358,42 @@ def event_newsletter(request, my_id):
     return render(request, "main/newsletter.html", context)
 
 
+def site_newsletter(request):
+    if not request.user.is_superuser:
+        return redirect('/')
 
+    messagingForm = MessagingForm(request.POST or None)
+    articleForm = ArticleForm(request.POST or None)
 
+    if messagingForm.is_valid():
+        message = messagingForm.save(commit=False)
+        slug = message.title.lower()
+        slug = slug.replace(" ", "_")
+        message.slug = slug
+        newsletter_name = SITE_NEWSLETTER
+        newsletter = Newsletter.objects.get(title=newsletter_name)
+        message.newsletter = newsletter
+        message.save()
 
+        if articleForm.is_valid():
+            article = articleForm.save(commit=False)
+            article.title = ' '
+            article.post = message
+            article.save()
+
+            if not (article is None or message is None):
+                submission = Submission.objects.create(message=message, newsletter=newsletter)
+                subs = Subscription.objects.filter(newsletter=newsletter)
+                submission.subscriptions.set(subs)
+                submission.prepared = True
+                submission.save()
+                messages.success(request, "Successfully submitted newsletter!")
+                return redirect('site_newsletter')
+
+    MessagingForm()
+    ArticleForm()
+    context = {
+        'messagingForm': messagingForm,
+        'articleForm': articleForm
+    }
+    return render(request, "main/site_newsletter.html", context)
