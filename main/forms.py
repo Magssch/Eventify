@@ -2,9 +2,8 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
-from newsletter.models import Message, Submission, Article
-from .models import Event, Profile
-
+from newsletter.models import Message, Submission, Article, Subscription
+from .models import Event
 
 # Form for editing user attributes
 class EditUserForm(forms.ModelForm):
@@ -22,25 +21,6 @@ class EditUserForm(forms.ModelForm):
         'email'
     ]
 
-
-# Form for accepting attributes in extended user model
-class EditProfileForm(forms.ModelForm):
-
-    class Meta:
-        model = Profile
-        fields = {
-            'subscribed'
-        }
-
-        labels = {
-            'subscribed':"Yes, I'd like to receive newsletters from Eventify"
-        }
-
-    field_order = [
-        'subscribed'
-    ]
-
-
 # User registration form
 class RegistrationForm(UserCreationForm):
 
@@ -57,7 +37,7 @@ class RegistrationForm(UserCreationForm):
             'password2'
         }
 
-        widgets = {
+        widget = {
             'username':forms.TextInput(attrs={'class':'form-control', 'required':'required'}),
             'first_name':forms.TextInput(attrs={'class':'form-control', 'required':'required'}),
             'last_name':forms.TextInput(attrs={'class':'form-control', 'required':'required'}),
@@ -83,28 +63,6 @@ class RegistrationForm(UserCreationForm):
         if commit:
             user.save()
         return user
-
-
-# Form for extended user model registration
-class ProfileForm(forms.ModelForm):
-
-    class Meta:
-        model = Profile
-        fields = {
-            'subscribed'
-        }
-
-        widgets = {
-            'subscribed':forms.CheckboxInput(attrs={'class':'form-control'})
-        }
-
-        labels = {
-            'subscribed':"Yes, I'd like to receive newsletters from Eventify"
-        }
-
-    field_order = [
-        'subscribed'
-    ]
 
 
 # Form for events
@@ -145,11 +103,11 @@ class EventForm(forms.ModelForm):
             'registration_starts',
             'image',
         ]
-        widgets = {}
+        widget = {}
 
 class MessagingForm(forms.ModelForm):
     title = forms.CharField(        label="Message title", 
-                                    widget=forms.TextInput(attrs={"placeholder": "Enter your message title"}))
+                                    widget =forms.TextInput(attrs={"placeholder": "Enter your message title"}))
     # We might need the foreign key to newsletter?
     # newsletter = forms.foreign
     class Meta:
@@ -161,7 +119,7 @@ class MessagingForm(forms.ModelForm):
 class ArticleForm(forms.ModelForm):
     text = forms.CharField(
                                     label       = 'Message',
-                                    widget      = forms.Textarea(attrs={'cols': 60, 'rows': 60})
+                                    widget      = forms.Textarea(attrs={'rows': '100','cols': '60','style': 'height: 15em;'}),
                                 )
     class Meta:
         model = Article
@@ -169,5 +127,11 @@ class ArticleForm(forms.ModelForm):
             'text'
         ]
 
-class SubmissionForm(forms.ModelForm):
-    pass
+class SubscribeNewsletterForm(forms.ModelForm):
+    subscribed = forms.BooleanField(required=False, initial=False, label="I'd like to subscribe to Eventify's newsletter")
+
+    class Meta:
+        model = Subscription
+        fields = [
+            'subscribed'
+        ]
