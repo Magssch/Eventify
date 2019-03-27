@@ -9,4 +9,5 @@ Pillow==5.4.1
 pytz==2018.9
 psycopg2==2.7.2
 gunicorn==19.9.0
-git+http://github.com/dokterbob/django-newsletter.git#egg=django-newsletter
+git+://github.com/dokterbob/django-newsletter.git#egg=django-newsletter
+
