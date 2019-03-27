@@ -51,7 +51,7 @@ class SignUp(generic.CreateView):
 def SignUp(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
-        profile_form = ProfileForm(request.POST or None)
+        profile_form = ProfileForm(request.POST or None, instace=request.user.profile() or None)
         if (form.is_valid() and profile_form.is_valid()):
             user = form.save()  
             user.refresh_from_db()  # load the profile instance created by the signal

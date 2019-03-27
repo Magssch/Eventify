@@ -40,9 +40,9 @@ class Attendee(models.Model):
 		unique_together = ('event', 'user')
 
 
-#class Profile(models.Model):
-#	user = models.OneToOneField(User, on_delete=models.CASCADE)
-#	subscribed = models.BooleanField(default=False)
+class Profile(models.Model):
+	user = models.OneToOneField(User, on_delete=models.CASCADE)
+	subscribed = models.BooleanField(default=False)
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
