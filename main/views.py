@@ -49,19 +49,21 @@ class SignUp(generic.CreateView):
 	template_name = 'registration/signup.html'
 """
 def SignUp(request):
-	if request.method == 'POST':
-		form = RegistrationForm(request.POST)
-		profile_form = ProfileForm(request.POST)
-		if form.is_valid() and profile_form.is_valid():
-			user = form.save()
-			user.refresh_from_db()  # load the profile instance created by the signal
-			user.profile.subscribed = form.cleaned_data.get('subscribed')
-			user.save()
-			return redirect(reverse_lazy('login'))
-	else:
-		form = RegistrationForm()
-		profile_form = ProfileForm()
-	return render(request, 'registration/signup.html', {'form': form, 'profile_form': profile_form})
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        profile_form = ProfileForm(request.POST or None)
+        if (form.is_valid() and profile_form.is_valid()):
+            user = form.save()  
+            user.refresh_from_db()  # load the profile instance created by the signal
+            user.profile.subscribed = form.cleaned_data.get('subscribed')
+            print(user.profile.subscribed)  
+            notify = profile_form.save(commit=False)
+            user.save()
+            return redirect(reverse_lazy('login'))
+    else:
+        form = RegistrationForm()
+        profile_form = ProfileForm()
+        return render(request, 'registration/signup.html', {'form': form, 'profile_form': profile_form})
 
 
 def profile(request):

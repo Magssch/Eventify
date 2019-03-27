@@ -103,7 +103,7 @@ class ProfileForm(forms.ModelForm):
         }
 
     field_order = [
-        'subcribed'
+        'subscribed'
     ]
 
 
