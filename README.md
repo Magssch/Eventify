@@ -1,6 +1,6 @@
 ## Eventify
 
-Eventify is an event platform where you can make your own events and attend others events. 
+Eventify is an event platform where you can make your own events and attend others events. The platform should also give the user an easy way to keep track of future events you are attending. Further it was a priority from the customer that security should be taken care of.
 
 ## Motivation
 
@@ -30,7 +30,6 @@ Run the following:
 
 To run the tests write the following:
 
-`pip install requirements.txt`
 
 `coverage run manage.py test`
 
