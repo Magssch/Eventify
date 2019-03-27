@@ -1,0 +1,24 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+       Send newsletter
+{% endblock %}
+
+{% block content %}
+
+<div class="container" style="display:flex; flex-direction: column; justify-content: space-evenly; align-items: center; text-align: left; min-height: 60vh;">
+   <h2> Newsletter </h2>
+   <h4> Create your message </h4>
+    <form method="POST" enctype="multipart/form-data">
+		{% csrf_token %}
+        {{messagingForm.as_p}}
+        {{articleForm.as_p}}
+
+            <p style="width: 100%; display: flex; flex-direction: row; justify-content: space-between; margin-top: 50px;">
+		        <button  class="btn blue lighten-2" type="Submit"><i class="material-icons left">send</i>Send Newsletter</button>
+                <a class="waves-effect btn red lighten-2" href='../'>Cancel</a>
+            </p>
+	</form>
+</div>
+
+{% endblock %}
