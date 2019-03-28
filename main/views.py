@@ -67,7 +67,7 @@ def SignUp(request):
                     sub.newsletter = Newsletter.objects.get(title=SITE_NEWSLETTER)
                     sub.save()
                 except Newsletter.DoesNotExist:
-                    messages.error(request, "No newsletter called Eventify")
+                    messages.error(request, "No newsletter called {}, please contact costumer services.".format(SITE_NEWSLETTER))
                 finally:
                     messages.success(request, "User successfully created!")
                     return redirect('login')
@@ -152,8 +152,6 @@ def create_event(request):
         newsletter = Newsletter(title=event_name, slug=new_slug, email="eventify.site@gmail.com", sender="Eventify")
         newsletter.save()
         return redirect(event)
-    else:
-        print(form.errors)
 
     form = EventForm()
     context = {
@@ -260,6 +258,7 @@ def event_info(request, my_id):
 def event_update(request, my_id=None):
     ''' An update view for specific events, allowed for organizer and superuser. '''
     event = get_object_or_404(Event, id=my_id)
+    old_event_name = event.name
     if not (request.user.is_staff or request.user.is_superuser):
         messages.error(request, "You must be logged into a staff account to update events.")
         return redirect('../')
@@ -269,10 +268,17 @@ def event_update(request, my_id=None):
 
     form = EventForm(request.POST or None, request.FILES or None, instance=event)
     if form.is_valid():
-        form.save()
-        event_name = form.cleaned_data.get('name')
-        messages.success(request, f"Successfully updates event: {event_name}")
-        event = get_object_or_404(Event, name=event_name)
+        try:
+            new_event = form.save(commit=False)
+            newsletter = Newsletter.objects.get(title=old_event_name)
+            newsletter.title = new_event.name
+            newsletter.save()
+            new_event.save()
+            event_name = form.cleaned_data.get('name')
+            messages.success(request, f"Successfully updates event: {event_name}")
+            event = get_object_or_404(Event, name=event_name)
+        except Newsletter.DoesNotExist:
+            messages.error(request, "An error has occured with the database, please contact costumer service.")
         return redirect(event)
     form = EventForm(instance=event)
     context = {
