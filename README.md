@@ -23,14 +23,25 @@ TODO: Et bilde av forsiden?
 
 Install postgreSQL from <a href="https://www.postgresql.org/download/" rel="nofollow">here</a>
 
-Run the following:
+(Recommended) Setup virtualenv
 
-`pip install requirements.txt`
+Install requirements with:
+
+`pip install -r requirements.txt`
+
+// TODO: HER KOMMER GUIDE PÅ OPPSETT AV NEWSLETTER
+
+Start the server:
+
+`python manage.py runserver`
+
+Create admin user to access the admin page:
+
+`python manage.py createsuperuser`
 
 ## Tests
 
-To run the tests write the following:
-
+Running the tests:
 
 `coverage run manage.py test`
 
