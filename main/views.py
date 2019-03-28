@@ -34,6 +34,9 @@ from .forms import (
 # Django-newsletter:
 from newsletter.models import Newsletter, Subscription, Submission
 
+# Python imports:
+import re
+
 #ENUMS
 SITE_NEWSLETTER = "Eventify"
 
@@ -51,6 +54,7 @@ class SignUp(generic.CreateView):
     template_name = 'registration/signup.html'
 """
 def SignUp(request):
+    ''' A view for anonymous users to sign up to Eventify. '''
     if request.method == 'POST':
         form = RegistrationForm(request.POST or None)
         sub_form = SubscribeNewsletterForm(request.POST or None)
@@ -78,6 +82,7 @@ def SignUp(request):
 
 
 def profile(request):
+    ''' A profile page with a simple overview of contact detail. '''
     try:
         newsletter = Newsletter.objects.get(title=SITE_NEWSLETTER)
         subscription = Subscription.objects.get(newsletter=newsletter, user=request.user).subscribed
@@ -85,7 +90,6 @@ def profile(request):
         messages.error(request, "NewsletterError")
         subscription = False
     context = {
-        # "events":Event.objects.all,
         "subscribed": subscription
     }
     return render(request = request,
@@ -97,7 +101,7 @@ def terms(request):
                   context = {"events":Event.objects.all})
 
 def edit_profile(request):
-    # Check if the user is subscribed and pass that instance into the subscription form.
+    ''' Check if the user is subscribed and pass that instance into the subscription form. '''
     try:
         newsletter = Newsletter.objects.get(title=SITE_NEWSLETTER)
         subscription = Subscription.objects.get(newsletter=newsletter, user=request.user)
@@ -108,7 +112,6 @@ def edit_profile(request):
     if request.method == 'POST':
         form = EditUserForm(request.POST or None, instance=request.user)
         sub_form = SubscribeNewsletterForm(request.POST or None, instance=subscription)
-
         if form.is_valid():
             form.save()
             if sub_form.is_valid():
@@ -132,9 +135,9 @@ def edit_profile(request):
         return render(request, 'registration/edit_profile.html', context)
 
 def create_event(request):
+    ''' A view where staff and superuser can create new events '''
     if not (request.user.is_staff or request.user.is_superuser):
         return redirect('/')
-
     form = EventForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         event = form.save(commit=False)
@@ -144,7 +147,8 @@ def create_event(request):
         event_name = form.cleaned_data.get('name')
         event = get_object_or_404(Event, name=event_name)
         new_slug = event_name.lower()
-        new_slug = new_slug.replace(" ", "_")
+        new_slug = re.sub(r'[\s]', '-', new_slug)               # Replace all spaces with dash.
+        new_slug = re.sub(r'[^\w|-]', '', new_slug)             # Remove all non alphabetic characters except dash.
         newsletter = Newsletter(title=event_name, slug=new_slug, email="eventify.site@gmail.com", sender="Eventify")
         newsletter.save()
         return redirect(event)
@@ -158,6 +162,7 @@ def create_event(request):
     return render(request, "main/create_event.html", context)
 
 def events(request):
+    ''' A view of all events '''
     now = timezone.now()
     view_past = request.GET.get('view_past', False) == 'True'
     organizer = request.GET.get('organizer', False)
@@ -182,16 +187,16 @@ def events(request):
     return render(request, 'main/events.html', context)
 
 def event_info(request, my_id):
+    ''' Detailed info about a specific event where users can click attend and subscribe to the event. '''
     event = get_object_or_404(Event, id=my_id)
     newsletter = Newsletter.objects.get(title=event.name)
     attendees = Attendee.objects.filter(event=event)
     now = timezone.now()
 
     is_upcoming = Event.objects.filter(id=my_id, date__gte=now).exists()
-
     registration_open = Event.objects.filter(id=my_id, registration_starts__lte=now).exists()
 
-
+    ''' A logical test if the current user is already attending or/and subscribing to the event. '''
     if not request.user.is_anonymous:
         am_I_attending = Attendee.objects.filter(event=event, user=request.user).exists()
         am_I_subscribed = Subscription.objects.filter(newsletter=newsletter, user=request.user).exists()
@@ -253,8 +258,8 @@ def event_info(request, my_id):
 
 
 def event_update(request, my_id=None):
+    ''' An update view for specific events, allowed for organizer and superuser. '''
     event = get_object_or_404(Event, id=my_id)
-
     if not (request.user.is_staff or request.user.is_superuser):
         messages.error(request, "You must be logged into a staff account to update events.")
         return redirect('../')
@@ -279,8 +284,8 @@ def event_update(request, my_id=None):
 # An option to delete existing event.
 # Has to be admin or the staff user that created the event.
 def event_delete(request, my_id):
+    ''' A confirmation view to delete an event, allowed for organizer and superuser. '''
     event = get_object_or_404(Event, id=my_id)
-
     if not (request.user.is_staff or request.user.is_superuser):
         messages.error(request, "You do not have this privilege.")
         return redirect('../')
@@ -298,8 +303,8 @@ def event_delete(request, my_id):
     return render(request, "main/event_delete.html", context)
 
 def event_attendees(request, my_id):
+    ''' A view with a list of all attendees for a specific event, allowed for organizer and superuser. '''
     event = get_object_or_404(Event, id=my_id)
-
     if not (request.user.is_staff or request.user.is_superuser):
         messages.error(request, "You do not have the privilege to see this page.")
         return redirect('../')
@@ -316,7 +321,7 @@ def event_attendees(request, my_id):
 
 
 def event_newsletter(request, my_id):
-
+    ''' Newsletter function specific event, allowed for staff and superuser. '''
     if not (request.user.is_staff or request.user.is_superuser):
         return redirect('/')
 
@@ -327,7 +332,8 @@ def event_newsletter(request, my_id):
     if messagingForm.is_valid():
         message = messagingForm.save(commit=False)
         slug = message.title.lower()
-        slug = slug.replace(" ", "_")
+        slug = re.sub(r'[\s]', '-', slug)               # Replace all spaces with dash.
+        slug = re.sub(r'[^\w|-]', '', slug)             # Remove all non alphabetic characters except dash.
         message.slug = slug
         newsletter_name = event.name
         newsletter = Newsletter.objects.get(title=newsletter_name)
@@ -359,6 +365,7 @@ def event_newsletter(request, my_id):
 
 
 def site_newsletter(request):
+    ''' A view for superuser to send out site-wide newsletter to subscribed users.  '''
     if not request.user.is_superuser:
         return redirect('/')
 
@@ -368,7 +375,8 @@ def site_newsletter(request):
     if messagingForm.is_valid():
         message = messagingForm.save(commit=False)
         slug = message.title.lower()
-        slug = slug.replace(" ", "_")
+        slug = re.sub(r'[\s]', '-', slug)               # Replace all spaces with dash.
+        slug = re.sub(r'[^\w|-]', '', slug)             # Remove all non alphabetic characters except dash.
         message.slug = slug
         newsletter_name = SITE_NEWSLETTER
         newsletter = Newsletter.objects.get(title=newsletter_name)
