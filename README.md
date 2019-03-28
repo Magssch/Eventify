@@ -16,7 +16,7 @@ TODO: Et bilde av forsiden?
 <li><a href="https://www.djangoproject.com/" rel="nofollow">Django</a> - Web framework for Python</li>
 <li><a href="https://www.postgresql.org/" rel="nofollow">PostgreSQL</a> - Database</li>
 <li><a href="https://materializecss.com/" rel="nofollow">Materialize CSS</a> - Front-end framework</li>
-<li><a href="https://materializecss.com/" rel="nofollow">Bootstrap 4</a> - CSS framework</li>
+<li><a href="https://pypi.org/project/django-bootstrap4/" rel="nofollow">Bootstrap 4</a> - CSS framework</li>
 </ul>
 
 ## How to install
