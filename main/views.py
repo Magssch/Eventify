@@ -56,8 +56,8 @@ class SignUp(generic.CreateView):
 def SignUp(request):
     ''' A view for anonymous users to sign up to Eventify. '''
     if request.method == 'POST':
-        form = RegistrationForm(request.POST or None)
-        sub_form = SubscribeNewsletterForm(request.POST or None)
+        form = RegistrationForm(request.POST)
+        sub_form = SubscribeNewsletterForm(request.POST)
         if form.is_valid():
             user = form.save()
             if sub_form.is_valid():
@@ -71,6 +71,9 @@ def SignUp(request):
                 finally:
                     messages.success(request, "User successfully created!")
                     return redirect('login')
+        else:
+            messages.info(request, "Username already taken.")
+            return redirect('signup')
     else:
         form = RegistrationForm()
         sub_form = SubscribeNewsletterForm()
