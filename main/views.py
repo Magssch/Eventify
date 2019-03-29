@@ -211,7 +211,7 @@ def event_info(request, my_id):
         try:
             if request.user.is_anonymous:
                 messages.info(request, "Please login or register to attend or subscribe event.")
-
+                return redirect('event_info', my_id)    
             if  request.POST.get('attend') == 'Attend' or request.POST.get('unattend') == 'Unattend':
                 if attendees.count() < event.capacity and am_I_attending==False:
                     # attend the event
