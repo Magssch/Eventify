@@ -71,9 +71,9 @@ def SignUp(request):
                 finally:
                     messages.success(request, "User successfully created!")
                     return redirect('login')
-        else:
-            messages.info(request, "Username already taken.")
-            return redirect('signup')
+        # else:
+        #     messages.info(request, "Username already taken.")
+        #     return redirect('signup')
     else:
         form = RegistrationForm()
         sub_form = SubscribeNewsletterForm()
