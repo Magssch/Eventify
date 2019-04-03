@@ -49,7 +49,6 @@ This project was a part of our submission in the subject TDT4140 Programvareutvi
     ├── models.py
     ├── static
     │   └── main
-    │       ├── BebasNeue.otf
     │       ├── css
     │       │   └── . . .
     │       ├── fonts
