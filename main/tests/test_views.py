@@ -1,18 +1,12 @@
-from django.test import TestCase, RequestFactory
-from django.test import Client
-from django.contrib.auth.models import User
-from django.urls import reverse
-from django.http import HttpRequest
-from main.forms import EditUserForm
-from django.contrib.sessions.middleware import SessionMiddleware
-from django.contrib.messages.middleware import MessageMiddleware
-from django.core.files.base import ContentFile
-import unittest
 from PIL import Image
+from django.contrib.sessions.middleware import SessionMiddleware
+from django.core.files.base import ContentFile
+from django.test import Client
+from django.test import TestCase, RequestFactory
 from django.utils.six import BytesIO
 
-from main.views import *
 from main.forms import *
+from main.views import *
 
 
 # "borrowed" from easy_thumbnails/tests/test_processors.py

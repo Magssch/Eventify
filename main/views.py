@@ -1,27 +1,21 @@
 # Django imports:
 # django.db
-from django.db import IntegrityError
-# djano.utils
-from django.utils import timezone
-# django shortcuts
-from django.shortcuts import render, redirect, reverse, get_object_or_404
+# Python imports:
+import re
+
 # django.contrib
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-from django.contrib.admin.views.decorators import staff_member_required
 # django.urls and django.views
-from django.urls import reverse_lazy
-from django.views import generic
-from django.views.generic.edit import UpdateView
 # django.core:
 from django.core.paginator import Paginator
-from django.core.files.storage import FileSystemStorage
-from django.contrib.auth import login, authenticate
-from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
+# django shortcuts
+from django.shortcuts import render, redirect, reverse, get_object_or_404
+# djano.utils
+from django.utils import timezone
+# Django-newsletter:
+from newsletter.models import Newsletter, Subscription, Submission
 
-# Local project imports
-from .models import Event, Attendee
 from .forms import (
     RegistrationForm,
     EditUserForm,
@@ -30,28 +24,26 @@ from .forms import (
     ArticleForm,
     SubscribeNewsletterForm
 )
+# Local project imports
+from .models import Event, Attendee
 
-# Django-newsletter:
-from newsletter.models import Newsletter, Subscription, Submission
-
-# Python imports:
-import re
-
-#ENUMS
+# ENUMS
 SITE_NEWSLETTER = "Eventify"
 SITE_EMAIL = 'eventify.site@gmail.com'
+
 
 # Create your views here.
 def homepage(request):
     try:
         newsletter = Newsletter.objects.get(title=SITE_NEWSLETTER)
     except Newsletter.DoesNotExist:
-        Newsletter.objects.create(title=SITE_NEWSLETTER, email=SITE_EMAIL, sender=SITE_NEWSLETTER, slug=SITE_NEWSLETTER.lower())
+        Newsletter.objects.create(title=SITE_NEWSLETTER, email=SITE_EMAIL, sender=SITE_NEWSLETTER,
+                                  slug=SITE_NEWSLETTER.lower())
 
+    return render(request=request,
+                  template_name="main/home.html",
+                  context={"events": Event.objects.all})
 
-    return render(request = request,
-                  template_name = "main/home.html",
-                  context = {"events":Event.objects.all})
 
 """
 class SignUp(generic.CreateView):
@@ -59,6 +51,8 @@ class SignUp(generic.CreateView):
     success_url = reverse_lazy('login')
     template_name = 'registration/signup.html'
 """
+
+
 def SignUp(request):
     ''' A view for anonymous users to sign up to Eventify. '''
     if request.method == 'POST':
@@ -73,7 +67,9 @@ def SignUp(request):
                     sub.newsletter = Newsletter.objects.get(title=SITE_NEWSLETTER)
                     sub.save()
                 except Newsletter.DoesNotExist:
-                    messages.error(request, "No newsletter called {}, please contact costumer services.".format(SITE_NEWSLETTER))
+                    messages.error(request,
+                                   "No newsletter called {}, please contact costumer services."
+                                   .format(SITE_NEWSLETTER))
                 finally:
                     messages.success(request, "User successfully created!")
                     return redirect('login')
@@ -98,13 +94,15 @@ def profile(request):
     context = {
         "subscribed": subscription
     }
-    return render(request = request,
-                  template_name ="main/profile.html", context=context)
+    return render(request=request,
+                  template_name="main/profile.html", context=context)
+
 
 def terms(request):
-    return render(request = request,
-                  template_name ="main/terms.html",
-                  context = {"events":Event.objects.all})
+    return render(request=request,
+                  template_name="main/terms.html",
+                  context={"events": Event.objects.all})
+
 
 def edit_profile(request):
     ''' Check if the user is subscribed and pass that instance into the subscription form. '''
@@ -126,8 +124,8 @@ def edit_profile(request):
                 except Newsletter.DoesNotExist:
                     messages.error(request, "No newsletter called Eventify")
                 finally:
-                    messages.success(request, 
-                                            "Successfully updated your profile")
+                    messages.success(request,
+                                     "Successfully updated your profile")
                     return redirect('profile')
             messages.success(request, f"Successfully edited profile")
             return redirect(reverse('profile'))
@@ -139,6 +137,7 @@ def edit_profile(request):
             'sub_form': sub_form
         }
         return render(request, 'registration/edit_profile.html', context)
+
 
 def create_event(request):
     ''' A view where staff and superuser can create new events '''
@@ -153,8 +152,8 @@ def create_event(request):
         event_name = form.cleaned_data.get('name')
         event = get_object_or_404(Event, name=event_name)
         new_slug = event_name.lower()
-        new_slug = re.sub(r'[\s]', '-', new_slug)               # Replace all spaces with dash.
-        new_slug = re.sub(r'[^\w|-]', '', new_slug)             # Remove all non alphabetic characters except dash.
+        new_slug = re.sub(r'[\s]', '-', new_slug)  # Replace all spaces with dash.
+        new_slug = re.sub(r'[^\w|-]', '', new_slug)  # Remove all non alphabetic characters except dash.
         newsletter = Newsletter(title=event_name, slug=new_slug, email="eventify.site@gmail.com", sender="Eventify")
         newsletter.save()
         return redirect(event)
@@ -165,6 +164,7 @@ def create_event(request):
     }
     return render(request, "main/create_event.html", context)
 
+
 def events(request):
     ''' A view of all events '''
     now = timezone.now()
@@ -172,10 +172,10 @@ def events(request):
     organizer = request.GET.get('organizer', False)
     my_events = request.GET.get('my_events', False)
 
-    if organizer != False:
-        events_list = Event.objects.filter(organizer = request.user)
-    elif my_events != False:
-        events_list = Event.objects.filter(attendee__user = request.user)
+    if organizer is not False:
+        events_list = Event.objects.filter(organizer=request.user)
+    elif my_events is not False:
+        events_list = Event.objects.filter(attendee__user=request.user)
     elif view_past:
         events_list = Event.objects.all()
     else:
@@ -189,6 +189,7 @@ def events(request):
         'view_past': view_past
     }
     return render(request, 'main/events.html', context)
+
 
 def event_info(request, my_id):
     ''' Detailed info about a specific event where users can click attend and subscribe to the event. '''
@@ -210,19 +211,19 @@ def event_info(request, my_id):
 
     # If a user wants to attend we must check if he/she is logged in.
     # Also we want to check if the number of attendees does not preceed the capacity.
-    if request.method=="POST":
+    if request.method == "POST":
         try:
             if request.user.is_anonymous:
                 messages.info(request, "Please login or register to attend or subscribe event.")
-                return redirect('event_info', my_id)    
-            if  request.POST.get('attend') == 'Attend' or request.POST.get('unattend') == 'Unattend':
-                if attendees.count() < event.capacity and am_I_attending==False:
+                return redirect('event_info', my_id)
+            if request.POST.get('attend') == 'Attend' or request.POST.get('unattend') == 'Unattend':
+                if attendees.count() < event.capacity and am_I_attending:
                     # attend the event
                     attendee = Attendee.objects.create(user=request.user, event=event)
                     attendee.save()
                     messages.success(request, f"Successfully signed up for {event.name}")
                     return redirect('event_info', my_id)
-                elif am_I_attending==True:
+                elif am_I_attending:
                     # unattend the event
                     attendee = Attendee.objects.filter(event=event, user=request.user)
                     attendee.delete()
@@ -268,7 +269,7 @@ def event_update(request, my_id=None):
     if not (request.user.is_staff or request.user.is_superuser):
         messages.error(request, "You must be logged into a staff account to update events.")
         return redirect('../')
-    if not (event.organizer==request.user or request.user.is_superuser):
+    if not (event.organizer == request.user or request.user.is_superuser):
         messages.error(request, "You must be the organizer of this event to update it.")
         return redirect('../')
 
@@ -293,6 +294,7 @@ def event_update(request, my_id=None):
     }
     return render(request, "main/event_update.html", context)
 
+
 # An option to delete existing event.
 # Has to be admin or the staff user that created the event.
 def event_delete(request, my_id):
@@ -301,11 +303,11 @@ def event_delete(request, my_id):
     if not (request.user.is_staff or request.user.is_superuser):
         messages.error(request, "You do not have this privilege.")
         return redirect('../')
-    if not (event.organizer==request.user or request.user.is_superuser):
+    if not (event.organizer == request.user or request.user.is_superuser):
         messages.error(request, "You must be the organizer of this event to delete it.")
         return redirect('../')
 
-    if request.method =="POST":
+    if request.method == "POST":
         # Confirming delete
         event.delete()
         return redirect('../../')
@@ -314,13 +316,14 @@ def event_delete(request, my_id):
     }
     return render(request, "main/event_delete.html", context)
 
+
 def event_attendees(request, my_id):
     ''' A view with a list of all attendees for a specific event, allowed for organizer and superuser. '''
     event = get_object_or_404(Event, id=my_id)
     if not (request.user.is_staff or request.user.is_superuser):
         messages.error(request, "You do not have the privilege to see this page.")
         return redirect('../')
-    if not (event.organizer==request.user or request.user.is_superuser):
+    if not (event.organizer == request.user or request.user.is_superuser):
         messages.error(request, "You must be the organizer of this event to look at this page")
         return redirect('../')
 
@@ -344,8 +347,8 @@ def event_newsletter(request, my_id):
     if messagingForm.is_valid():
         message = messagingForm.save(commit=False)
         slug = message.title.lower()
-        slug = re.sub(r'[\s]', '-', slug)               # Replace all spaces with dash.
-        slug = re.sub(r'[^\w|-]', '', slug)             # Remove all non alphabetic characters except dash.
+        slug = re.sub(r'[\s]', '-', slug)  # Replace all spaces with dash.
+        slug = re.sub(r'[^\w|-]', '', slug)  # Remove all non alphabetic characters except dash.
         message.slug = slug
         newsletter_name = event.name
         newsletter = Newsletter.objects.get(title=newsletter_name)
@@ -387,8 +390,8 @@ def site_newsletter(request):
     if messagingForm.is_valid():
         message = messagingForm.save(commit=False)
         slug = message.title.lower()
-        slug = re.sub(r'[\s]', '-', slug)               # Replace all spaces with dash.
-        slug = re.sub(r'[^\w|-]', '', slug)             # Remove all non alphabetic characters except dash.
+        slug = re.sub(r'[\s]', '-', slug)  # Replace all spaces with dash.
+        slug = re.sub(r'[^\w|-]', '', slug)  # Remove all non alphabetic characters except dash.
         message.slug = slug
         newsletter_name = SITE_NEWSLETTER
         newsletter = Newsletter.objects.get(title=newsletter_name)

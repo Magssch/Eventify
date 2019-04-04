@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import User, Event, Attendee
+
+from .models import Event, Attendee
 
 # Register your models here.
 
