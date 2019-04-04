@@ -82,11 +82,12 @@ This project was a part of our submission in the subject TDT4140 Programvareutvi
 * Setup newletter component:
 
     In views.py `SITE_NEWSLETTER` and `SITE_EMAIL` are set by default to:
-```
-    * SITE_NEWSLETTER = 'Eventify'
-    * SITE_EMAIL = 'eventify.site@gmail.com'
-```
-
+    
+    ```
+    SITE_NEWSLETTER = 'Eventify'
+    SITE_EMAIL = 'eventify.site@gmail.com'
+    ```
+    
     These can be changed by choice. The values declare the name and email for the sites newsletter.
     
     ![Views](./SITE.PNG "views")
