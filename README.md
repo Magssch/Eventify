@@ -129,3 +129,7 @@ This project was a part of our submission in the subject TDT4140 Programvareutvi
 Running the tests:
 
 * `$ coverage run manage.py test`
+
+## How to use
+* For a guide on how to use the project, please read the: [Brukermanual](https://gitlab.stud.idi.ntnu.no/programvareutvikling-v19/gruppe-32/wikis/Brukermanual)
+
