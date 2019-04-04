@@ -96,17 +96,28 @@ This project was a part of our submission in the subject TDT4140 Programvareutvi
     The utilities are set by default, but can be configured in settings.py.
     
     * EMAIL_HOST = 'localhost'
-    * EMAIL_PORT = 25
-    * EMAIL_USER = ' '
-    * EMAIL_HOST_PASSWORD = ' '
-    * EMAIL_USE_TLS = False
-    * EMAIL_USE_SSL = False
-    
-    * EMAIL_HOST:
         * The host to use for sending email i.e. gmail, outlook, etc.
-    
-    * EMAIL_PORT:
-        * 
+        
+    * EMAIL_PORT = 25
+        * Port to use for the SMTP server defined in EMAIL_HOST.
+        
+    * EMAIL_USER = ' '
+        * Username to use for the SMTP server defined in EMAIL_HOST. If empty, Django won’t attempt authentication.
+        
+    * EMAIL_HOST_PASSWORD = ' '
+        * Password to use for the SMTP server defined in EMAIL_HOST. This setting is used in conjunction with 
+          EMAIL_HOST_USER when authenticating to the SMTP server. If either of these settings is empty, 
+          Django won’t attempt authentication.
+          
+    * EMAIL_USE_TLS = False
+        * Whether to use a TLS (secure) connection when talking to the SMTP server. This is used for explicit 
+          TLS connections, generally on port 587. If you are experiencing hanging connections, see the implicit 
+          TLS setting EMAIL_USE_SSL.
+          
+    * EMAIL_USE_SSL = False
+        * Whether to use an implicit TLS (secure) connection when talking to the SMTP server. In most email 
+          documentation this type of TLS connection is referred to as SSL. It is generally used on port 465. 
+          If you are experiencing problems, see the explicit TLS setting EMAIL_USE_TLS.
 
 * Start server:
 
