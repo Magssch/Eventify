@@ -1,14 +1,6 @@
 before_script:
-  - apt-get update -q -y
-  - apt-get install -y python-pip
-  - python -V
-  - pip install flake8
   - git config user.email "krisfjen@stud.ntnu.no"
   - git config user.name "Kristian Flatheim Jensen"
-
-pep8:
-  script:
-    - flake8 .
 
 test_on_heroku:
   type: deploy
