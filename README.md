@@ -159,7 +159,7 @@ You are free to contribute to our project by pull requests.
 * Please ensure that the Pull Request description is complete. It should include the following:
     * The problem and your suggested solution
     * The operating system on which you tested your code
-    * If applicable, a relecant issue numnber
+    * If applicable, a relevant issue numnber
 
 
 ## License
