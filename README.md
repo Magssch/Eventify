@@ -79,7 +79,7 @@ This project was a part of our submission in the subject TDT4140 Programvareutvi
 
     * `$ pip install -r requirements.txt`
 
-* Setup newletter component:
+* Configure `django-newsletter`:
 
     In views.py `SITE_NEWSLETTER` and `SITE_EMAIL` are set by default to:
     
