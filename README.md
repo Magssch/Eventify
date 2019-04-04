@@ -79,8 +79,6 @@ This project was a part of our submission in the subject TDT4140 Programvareutvi
 
     * `$ pip install -r requirements.txt`
 
-* #####// TODO: HER KOMMER GUIDE PÅ OPPSETT AV NEWSLETTER
-
 * Start server:
 
     * `$ python manage.py runserver`
