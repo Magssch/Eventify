@@ -7,7 +7,8 @@ from main.forms import EditUserForm
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.contrib.messages.middleware import MessageMiddleware
 
-from main.forms import * 
+from main.forms import *
+
 
 class FormTestCase(TestCase):
 
@@ -20,14 +21,12 @@ class FormTestCase(TestCase):
 
     def test_registration_form_saves_data_to_instance_user_on_save(self):
         """ Tests that the form saves name, email to user object when committing form"""
-        form = RegistrationForm(data={'check': True, 'username':'user2',
-        'first_name':'user',
-        'last_name':'userlast',
-        'email':'email@test.com',
-        'password1':self.password,
-        'password2':self.password})
+        form = RegistrationForm(data={'check': True, 'username': 'user2',
+                                      'first_name': 'user',
+                                      'last_name': 'userlast',
+                                      'email': 'email@test.com',
+                                      'password1': self.password,
+                                      'password2': self.password})
         self.assertTrue(form.is_valid())
         person = form.save()
         self.assertEqual(person.first_name, 'user')
-        
-
