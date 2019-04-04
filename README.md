@@ -88,6 +88,8 @@ This project was a part of our submission in the subject TDT4140 Programvareutvi
     
     These can be changed by choice. The values declare the name and email for the sites newsletter.
     
+    ![Views](./SITE.png "views")
+    
 * SMTP setup / Email backend:
 
     To send mail, django-newsletter uses Django-provided email utilities, so ensure that email settings are properly configured for your project.
@@ -99,6 +101,12 @@ This project was a part of our submission in the subject TDT4140 Programvareutvi
     * EMAIL_HOST_PASSWORD = ' '
     * EMAIL_USE_TLS = False
     * EMAIL_USE_SSL = False
+    
+    * EMAIL_HOST:
+        * The host to use for sending email i.e. gmail, outlook, etc.
+    
+    * EMAIL_PORT:
+        * 
 
 * Start server:
 
