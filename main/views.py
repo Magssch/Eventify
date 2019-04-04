@@ -39,10 +39,16 @@ import re
 
 #ENUMS
 SITE_NEWSLETTER = "Eventify"
-
+SITE_EMAIL = 'eventify.site@gmail.com'
 
 # Create your views here.
 def homepage(request):
+    try:
+        newsletter = Newsletter.objects.get(title=SITE_NEWSLETTER)
+    except Newsletter.DoesNotExist:
+        Newsletter.objects.create(title=SITE_NEWSLETTER, email=SITE_EMAIL, sender=SITE_NEWSLETTER, slug=SITE_NEWSLETTER.lower())
+
+
     return render(request = request,
                   template_name = "main/home.html",
                   context = {"events":Event.objects.all})
@@ -71,9 +77,6 @@ def SignUp(request):
                 finally:
                     messages.success(request, "User successfully created!")
                     return redirect('login')
-        else:
-            messages.info(request, "Username already taken.")
-            return redirect('signup')
     else:
         form = RegistrationForm()
         sub_form = SubscribeNewsletterForm()
