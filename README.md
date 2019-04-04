@@ -79,6 +79,26 @@ This project was a part of our submission in the subject TDT4140 Programvareutvi
 
     * `$ pip install -r requirements.txt`
 
+* Setup newletter component:
+
+    In views.py SITE_NEWSLETTER and SITE_EMAIL are set by default to:
+    
+    SITE_NEWSLETTER = 'Eventify'
+    SITE_EMAIL = 'eventify.site@gmai.com'
+    
+    These can be changed by choice. The values declare the name and email for the sites newsletter.
+    
+* SMTP setup / Email backend:
+
+    
+    
+    EMAIL_HOST = 'localhost'
+    EMAIL_PORT = 25
+    EMAIL_USER = ''
+    EMAIL_HOST_PASSWORD = ''
+    EMAIL_USE_TLS = False
+    EMAIL_USE_SSL = False
+
 * Start server:
 
     * `$ python manage.py runserver`
