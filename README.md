@@ -90,12 +90,13 @@ This project was a part of our submission in the subject TDT4140 Programvareutvi
     
 * SMTP setup / Email backend:
 
-    
+    To send mail, django-newsletter uses Django-provided email utilities, so ensure that email settings are properly configured for your project.
+    The utilities are set by default, but can be configured in settings.py.
     
     * EMAIL_HOST = 'localhost'
     * EMAIL_PORT = 25
-    * EMAIL_USER = ''
-    * EMAIL_HOST_PASSWORD = ''
+    * EMAIL_USER = ' '
+    * EMAIL_HOST_PASSWORD = ' '
     * EMAIL_USE_TLS = False
     * EMAIL_USE_SSL = False
 
