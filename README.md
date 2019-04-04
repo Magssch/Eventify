@@ -81,11 +81,12 @@ This project was a part of our submission in the subject TDT4140 Programvareutvi
 
 * Setup newletter component:
 
-    In views.py SITE_NEWSLETTER and SITE_EMAIL are set by default to:
-    
+    In views.py `SITE_NEWSLETTER` and `SITE_EMAIL` are set by default to:
+```
     * SITE_NEWSLETTER = 'Eventify'
     * SITE_EMAIL = 'eventify.site@gmai.com'
-    
+```
+
     These can be changed by choice. The values declare the name and email for the sites newsletter.
     
     ![Views](./SITE.PNG "views")
@@ -93,32 +94,27 @@ This project was a part of our submission in the subject TDT4140 Programvareutvi
 * SMTP setup / Email backend:
 
     To send mail, django-newsletter uses Django-provided email utilities, so ensure that email settings are properly configured for your project.
-    The utilities are set by default, but can be configured in settings.py.
+    The utilities are set by default, but must be configured in `./eventifySite/settings.py.`
     
-    * EMAIL_HOST = 'localhost'
-        * The host to use for sending email i.e. gmail, outlook, etc.
+```
+    EMAIL_HOST = 'localhost'    # The host to use for sending email i.e. gmail, outlook, etc.
         
-    * EMAIL_PORT = 25
-        * Port to use for the SMTP server defined in EMAIL_HOST.
+    EMAIL_PORT = 25             # Port to use for the SMTP server defined in EMAIL_HOST.
         
-    * EMAIL_USER = ' '
-        * Username to use for the SMTP server defined in EMAIL_HOST. If empty, Django won’t attempt authentication.
+    EMAIL_USER = ' '            # Username to use for the SMTP server defined in EMAIL_HOST. If empty, Django won’t attempt authentication.
         
-    * EMAIL_HOST_PASSWORD = ' '
-        * Password to use for the SMTP server defined in EMAIL_HOST. This setting is used in conjunction with 
-          EMAIL_HOST_USER when authenticating to the SMTP server. If either of these settings is empty, 
-          Django won’t attempt authentication.
+    EMAIL_HOST_PASSWORD = ' '   # Password to use for the SMTP server defined in EMAIL_HOST. This setting is used in conjunction with 
+                                # EMAIL_HOST_USER when authenticating to the SMTP server. If either of these settings is empty, 
+                                # Django won’t attempt authentication.
           
-    * EMAIL_USE_TLS = False
-        * Whether to use a TLS (secure) connection when talking to the SMTP server. This is used for explicit 
-          TLS connections, generally on port 587. If you are experiencing hanging connections, see the implicit 
-          TLS setting EMAIL_USE_SSL.
+    EMAIL_USE_TLS = False       # Whether to use a TLS (secure) connection when talking to the SMTP server. This is used for explicit 
+                                # TLS connections, generally on port 587. If you are experiencing hanging connections, see the implicit 
+                                # TLS setting EMAIL_USE_SSL.
           
-    * EMAIL_USE_SSL = False
-        * Whether to use an implicit TLS (secure) connection when talking to the SMTP server. In most email 
-          documentation this type of TLS connection is referred to as SSL. It is generally used on port 465. 
-          If you are experiencing problems, see the explicit TLS setting EMAIL_USE_TLS.
-
+    EMAIL_USE_SSL = False       # Whether to use an implicit TLS (secure) connection when talking to the SMTP server. In most email 
+                                # documentation this type of TLS connection is referred to as SSL. It is generally used on port 465. 
+                                # If you are experiencing problems, see the explicit TLS setting EMAIL_USE_TLS.
+```
 * Start server:
 
     * `$ python manage.py runserver`
