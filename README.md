@@ -88,7 +88,7 @@ This project was a part of our submission in the subject TDT4140 Programvareutvi
     
     These can be changed by choice. The values declare the name and email for the sites newsletter.
     
-    ![Views](./SITE.png "views")
+    ![Views](./SITE.PNG "views")
     
 * SMTP setup / Email backend:
 
