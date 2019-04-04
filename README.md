@@ -138,5 +138,20 @@ Running the tests:
 * `$ coverage run manage.py test`
 
 ## How to use
+
 * For a guide on how to use the project, please read the: [Brukermanual](https://gitlab.stud.idi.ntnu.no/programvareutvikling-v19/gruppe-32/wikis/Brukermanual)
+
+## Credits 
+
+* Credits to:
+* @andrinl
+* @pettersb
+* @larsmagu
+* @kasperka
+* @magnuses
+* @aadneka
+
+## License
+
+* MIT © Eventify Site
 
