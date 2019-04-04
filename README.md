@@ -156,7 +156,7 @@ Running the tests:
 You are free to contribute to our project by pull requests. 
 
 * While editing your code, be sure to run `$ coverage run manage.py test` to check the formatting of your code before you git commit.
-* Please ensure that the Pull Request contains a complete description. This includes:
+* Please ensure that the Pull Request description is complete. It should include the following:
     * The problem and your suggested solution
     * The operating system on which you tested your code
     * If applicable, a relecant issue numnber
