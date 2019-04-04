@@ -144,12 +144,12 @@ Running the tests:
 ## Credits 
 
 * Credits to:
-* @andrinl
-* @pettersb
-* @larsmagu
-* @kasperka
-* @magnuses
-* @aadneka
+    * @andrinl
+    * @pettersb
+    * @larsmagu
+    * @kasperka
+    * @magnuses
+    * @aadneka
 
 ## License
 
