@@ -31,6 +31,13 @@ This project was a part of our submission in the subject TDT4140 Programvareutvi
 * Pillow 
 * django-newsletter
 
+## Features
+
+* Cross-platform
+* User authentication
+* Customizable newsletters
+* Broadcast events
+* Attend events
 
 ## Django directory structure
 ```
