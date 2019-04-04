@@ -97,7 +97,7 @@ This project was a part of our submission in the subject TDT4140 Programvareutvi
     To send mail, django-newsletter uses Django-provided email utilities, so ensure that email settings are properly configured for your project.
     The utilities are set by default, but must be configured in `./eventifySite/settings.py`
     
-```
+    ```
     EMAIL_HOST = 'localhost'    # The host to use for sending email i.e. gmail, outlook, etc.
         
     EMAIL_PORT = 25             # Port to use for the SMTP server defined in EMAIL_HOST.
@@ -115,7 +115,7 @@ This project was a part of our submission in the subject TDT4140 Programvareutvi
     EMAIL_USE_SSL = False       # Whether to use an implicit TLS (secure) connection when talking to the SMTP server. In most email 
                                 # documentation this type of TLS connection is referred to as SSL. It is generally used on port 465. 
                                 # If you are experiencing problems, see the explicit TLS setting EMAIL_USE_TLS.
-```
+    ```
 * Start server:
 
     * `$ python manage.py runserver`
