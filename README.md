@@ -143,13 +143,13 @@ Running the tests:
 
 ## Credits 
 
-* Credits to:
-    * @andrinl
-    * @pettersb
-    * @larsmagu
-    * @kasperka
-    * @magnuses
-    * @aadneka
+Credits to:
+* @andrinl
+* @pettersb
+* @larsmagu
+* @kasperka
+* @magnuses
+* @aadneka
 
 ## Contributes / Pull requests
 
