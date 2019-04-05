@@ -130,6 +130,10 @@ This project was a part of our submission in the subject TDT4140 Programvareutvi
 * Create admin user to access admin page:
 
     * `$ python manage.py createsuperuser`
+    
+* Automatic newsletter submission:
+
+    * For a guide on automatic submission, please read [this](https://django-newsletter.readthedocs.io/en/latest/installation.html)
 
 ## Tests
 
