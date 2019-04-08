@@ -1,12 +1,7 @@
-
 before_script:
   - git config user.email "krisfjen@stud.ntnu.no"
   - git config user.name "Kristian Flatheim Jensen"
-  
-stages:
-  - run_tests
-  - deploy_to_heroku
-
+ 
 run_tests:
   script:
     - apt-get update -qy
