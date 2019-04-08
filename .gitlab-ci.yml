@@ -3,13 +3,10 @@ image: python:latest
 before_script:
   - git config user.email "krisfjen@stud.ntnu.no"
   - git config user.name "Kristian Flatheim Jensen"
-#  - apt-get update -qq
-#  - apt-get install -y python3.5-dev python-pip
 
 run_tests:
   script:  
-    - pip install Django
-    - python -V
+    - pip install -r requirements.txt
     - python manage.py test
   
 deploy_to_heroku:
