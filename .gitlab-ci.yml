@@ -1,8 +1,18 @@
+image: python:latest
+
 before_script:
   - git config user.email "krisfjen@stud.ntnu.no"
   - git config user.name "Kristian Flatheim Jensen"
+#  - apt-get update -qq
+#  - apt-get install -y python3.5-dev python-pip
 
-test_on_heroku:
+run_tests:
+  script:  
+    - pip install Django
+    - python -V
+    - python manage.py test
+  
+deploy_to_heroku:
   type: deploy
   script:
     - git push --force https://heroku:$HEROKU_API_KEY@git.heroku.com/eventify-site.git HEAD:master
