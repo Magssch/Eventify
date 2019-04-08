@@ -16,7 +16,9 @@ run_tests:
   script:  
     - export DATABASE_URL=postgres://postgres:@postgres:5432/
     - pip install -r requirements.txt
-    - python manage.py test
+    - coverage run --source='.' manage.py test main
+    - coverage report
+    - coverage-badge -o coverage.svg
   
 deploy_to_heroku:
   type: deploy
