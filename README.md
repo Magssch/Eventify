@@ -161,7 +161,7 @@ Credits to:
 
 You are free to contribute to our project by pull requests.
 
-* We use continuous integration with unit-testing and pep8-linting (flake8) for all commits. 
+* We use continuous integration with unit-testing and PEP8-linting (flake8) for all commits. 
     *  Use `flake8` to check linting before commiting.
     *  Check Test-section above for how to run tests.
     
