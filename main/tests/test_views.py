@@ -8,6 +8,7 @@ from django.utils.six import BytesIO
 from main.forms import *
 from main.views import *
 
+
 # "borrowed" from easy_thumbnails/tests/test_processors.py
 def create_image(storage, filename, size=(100, 100), image_mode='RGB', image_format='JPEG'):
     """
