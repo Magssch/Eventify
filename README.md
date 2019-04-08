@@ -31,6 +31,7 @@ This project was a part of our submission in the subject TDT4140 Programvareutvi
 * whitenoise
 * Pillow
 * django-newsletter
+* Coverage.py
 
 ## Features
 
@@ -160,11 +161,14 @@ Credits to:
 
 You are free to contribute to our project by pull requests.
 
-* While editing your code, be sure to run `$ coverage run manage.py test` to check the formatting of your code before you git commit.
+* We use continuous integration with unit-testing and pep8-linting (flake8) for all commits. 
+    *  Use `flake8` to check linting before commiting.
+    *  Check Test-section above for how to run tests.
+    
 * Please ensure that the Pull Request description is complete. It should include the following:
     * The problem and your suggested solution
     * The operating system on which you tested your code
-    * If applicable, a relevant issue numnber
+    * If applicable, a relevant issue number
 
 
 ## License
