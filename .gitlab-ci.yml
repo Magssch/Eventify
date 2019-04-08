@@ -1,11 +1,15 @@
+image: python:3.6
+
 before_script:
   - git config user.email "krisfjen@stud.ntnu.no"
   - git config user.name "Kristian Flatheim Jensen"
-  - apt-get update -qq
-  - apt-get install -y python3.5-dev python-pip
-  - pip install Django
+#  - apt-get update -qq
+#  - apt-get install -y python3.5-dev python-pip
+#  - pip install Django
+
 run_tests:
   script:
+    - python -V
     - python manage.py test
   
 deploy_to_heroku:
