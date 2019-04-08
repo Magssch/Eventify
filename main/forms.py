@@ -57,15 +57,13 @@ class RegistrationForm(UserCreationForm):
     ]
 
     # Clean input for username and check database for duplicate names
-    def clean_username(self):
+    """def clean_username(self):
         username = self.cleaned_data['username']
         if self.instance.id:
-            if User.objects.filter(username=username).exclude(id=self.instance.id):
+            if User.objects.filter(username=username).exclude(id=self.instance.id).exists():
                 raise forms.ValidationError('Username {} is already taken'.format(username))
             else:
-                if User.objects.filter(username=username):
-                    raise forms.ValidationError('Username {} is already taken.'.format(username))
-                return username
+                return username"""
 
     # Save user to database
     def save(self, commit=True):

@@ -56,8 +56,8 @@ class SignUp(generic.CreateView):
 def SignUp(request):
     ''' A view for anonymous users to sign up to Eventify. '''
     if request.method == 'POST':
-        form = RegistrationForm(request.POST)
-        sub_form = SubscribeNewsletterForm(request.POST)
+        form = RegistrationForm(request.POST, prefix="reg")
+        sub_form = SubscribeNewsletterForm(request.POST, prefix="new")
         if form.is_valid():
             user = form.save()
             if sub_form.is_valid():
@@ -68,19 +68,23 @@ def SignUp(request):
                     sub.save()
                 except Newsletter.DoesNotExist:
                     messages.error(request,
-                                   "No newsletter called {}, please contact costumer services."
+                                   "No newsletter named {}, please contact costumer services."
                                    .format(SITE_NEWSLETTER))
-                finally:
-                    messages.success(request, "User successfully created!")
-                    return redirect('login')
-    else:
-        form = RegistrationForm()
-        sub_form = SubscribeNewsletterForm()
-        context = {
-            'form': form,
-            'sub_form': sub_form
-        }
-        return render(request, 'registration/signup.html', context)
+                messages.success(request, "User successfully created!")
+                return redirect('login')
+            else:
+                messages.error(request, "Error in newsletter-form")
+        else:
+            messages.error(request, "Error in signup-form")
+            print(form.errors)
+
+    form = RegistrationForm(prefix="reg")
+    sub_form = SubscribeNewsletterForm(prefix="new")
+    context = {
+        'form': form,
+        'sub_form': sub_form
+    }
+    return render(request=request, template_name='registration/signup.html', context=context)
 
 
 def profile(request):
@@ -106,12 +110,13 @@ def terms(request):
 
 def edit_profile(request):
     ''' Check if the user is subscribed and pass that instance into the subscription form. '''
+
     try:
         newsletter = Newsletter.objects.get(title=SITE_NEWSLETTER)
         subscription = Subscription.objects.get(newsletter=newsletter, user=request.user)
     except (Newsletter.DoesNotExist):
         messages.error(request, "NewsletterError")
-        subscription = False
+        subscription = None
 
     if request.method == 'POST':
         form = EditUserForm(request.POST or None, instance=request.user)
@@ -129,6 +134,7 @@ def edit_profile(request):
                     return redirect('profile')
             messages.success(request, f"Successfully edited profile")
             return redirect(reverse('profile'))
+
     else:
         form = EditUserForm(instance=request.user)
         sub_form = SubscribeNewsletterForm(instance=subscription)
@@ -173,15 +179,15 @@ def events(request):
     my_events = request.GET.get('my_events', False)
 
     if organizer is not False:
-        events_list = Event.objects.filter(organizer=request.user)
+        events_list = Event.objects.filter(organizer=request.user).order_by('date')
     elif my_events is not False:
-        events_list = Event.objects.filter(attendee__user=request.user)
+        events_list = Event.objects.filter(attendee__user=request.user).order_by('date')
     elif view_past:
-        events_list = Event.objects.all()
+        events_list = Event.objects.all().order_by('-date')
     else:
         events_list = Event.objects.filter(date__gte=now).order_by('date')
 
-    paginator = Paginator(events_list, 4)  # Show 25 contacts per page
+    paginator = Paginator(events_list, 4)  # Show 4 events per page
     page = request.GET.get('page')
     events = paginator.get_page(page)
     context = {

@@ -8,7 +8,6 @@ from django.utils.six import BytesIO
 from main.forms import *
 from main.views import *
 
-
 # "borrowed" from easy_thumbnails/tests/test_processors.py
 def create_image(storage, filename, size=(100, 100), image_mode='RGB', image_format='JPEG'):
     """
@@ -74,6 +73,13 @@ class HomeViewTestCasualUser(TestCase):
         self.client = Client()
         self.url = reverse('homepage')
         self.user = User.objects.create_user(self.username, 'email@test.com', self.password, is_staff=False)
+        Newsletter.objects.create(title=SITE_NEWSLETTER, email=SITE_EMAIL, sender=SITE_NEWSLETTER,
+                                  slug=SITE_NEWSLETTER.lower())
+        sub = SubscribeNewsletterForm().save(commit=False)
+        sub.subscribed = True
+        sub.user = self.user
+        sub.newsletter = Newsletter.objects.get(title=SITE_NEWSLETTER)
+        sub.save()
         self.login = self.client.login(username=self.username, password=self.password)
         self.user.is_staff = False
         self.user.save()
@@ -102,13 +108,15 @@ class HomeViewTestCasualUser(TestCase):
         # @unittest.skip("WIP")
 
     def test_user_edit_profile_post(self):
-        request = self.factory.get('/edit_profile')
+        request = self.factory.get('/profile/edit')
         from django.contrib.messages.storage.fallback import FallbackStorage
         setattr(request, 'session', 'session')
         messages = FallbackStorage(request)
         setattr(request, '_messages', messages)
         request.user = self.user
         request.method = 'POST'
+        request.POST._mutable = True
+        request.POST['first_name'] = 'TEST2'
         response = edit_profile(request)
         self.assertEqual(response.status_code, 302)
 
@@ -156,6 +164,9 @@ class HomeViewTestStaffUser(TestCase):
         request.POST['location'] = 'Trondheim'
         request.POST['price'] = '1'
         request.POST['description'] = 'Desc'
+
+        request.POST['capacity'] = 100
+
         request.POST['date'] = timezone.now()
         request.POST['registration_starts'] = timezone.now()  # FiX
         request.FILES['image'] = image_file
@@ -184,6 +195,7 @@ class HomeViewTestStaffUser(TestCase):
         request.POST['location'] = 'Trondheim'
         request.POST['price'] = '1'
         request.POST['description'] = 'Desc'
+        request.POST['capacity'] = 100
         request.POST['date'] = timezone.now()
         request.POST['registration_starts'] = timezone.now()  # FiX
         request.FILES['image'] = image_file
@@ -193,7 +205,7 @@ class HomeViewTestStaffUser(TestCase):
         self.assertEqual(response.status_code, 302)
 
         # Getting the event
-        events_list = Event.objects.all()
+        events_list = Event.objects.all().order_by('date')
         paginator = Paginator(events_list, 4)
         page = request.GET.get('page')
         events = paginator.get_page(page)
@@ -213,6 +225,7 @@ class HomeViewTestStaffUser(TestCase):
         request.POST['name'] = 'Test'
         request.POST['location'] = 'Trondheim'
         request.POST['price'] = '1'
+        request.POST['capacity'] = 100
         request.POST['description'] = 'Desc'
         request.POST['date'] = timezone.now()
         request.POST['registration_starts'] = timezone.now()  # FiX
@@ -255,16 +268,18 @@ class HomeViewTestStaffUser(TestCase):
         request.POST['location'] = 'Trondheim'
         request.POST['price'] = '1'
         request.POST['description'] = 'Desc'
+        request.POST['capacity'] = 100
         request.POST['date'] = timezone.now()
         request.POST['registration_starts'] = timezone.now()  # FiX
         request.FILES['image'] = image_file
         form = EventForm(request.POST or None, request.FILES or None)
+        print(form.errors)
         self.assertTrue(form.is_valid())
         response = create_event(request)
         self.assertEqual(response.status_code, 302)
 
         # Getting the event
-        events_list = Event.objects.all()
+        events_list = Event.objects.all().order_by('date')
         paginator = Paginator(events_list, 4)
         page = request.GET.get('page')
         events = paginator.get_page(page)
@@ -333,6 +348,7 @@ class HomeViewTestEventRelated(TestCase):
         request.POST['name'] = 'Test'
         request.POST['location'] = 'Trondheim'
         request.POST['price'] = '1'
+        request.POST['capacity'] = 100
         request.POST['description'] = 'Desc'
         request.POST['date'] = timezone.now()
         request.POST['registration_starts'] = timezone.now()  # FiX
@@ -344,7 +360,7 @@ class HomeViewTestEventRelated(TestCase):
         self.assertEqual(response.status_code, 302)
 
         # Getting the event
-        events_list = Event.objects.all()
+        events_list = Event.objects.all().order_by('date')
         paginator = Paginator(events_list, 4)
         page = request.GET.get('page')
         events = paginator.get_page(page)
