@@ -1,11 +1,15 @@
 image: python:latest
 
+services:
+    - postgres:latest
+
 before_script:
   - git config user.email "krisfjen@stud.ntnu.no"
   - git config user.name "Kristian Flatheim Jensen"
 
 run_tests:
   script:  
+    - export DATABASE_URL=postgres://postgres:@postgres:5432/
     - pip install -r requirements.txt
     - python manage.py test
   
