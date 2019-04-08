@@ -35,7 +35,7 @@ SITE_EMAIL = 'eventify.site@gmail.com'
 # Create your views here.
 def homepage(request):
     try:
-        newsletter = Newsletter.objects.get(title=SITE_NEWSLETTER)
+        '''newsletter = Newsletter.objects.get(title=SITE_NEWSLETTER)'''
     except Newsletter.DoesNotExist:
         Newsletter.objects.create(title=SITE_NEWSLETTER, email=SITE_EMAIL, sender=SITE_NEWSLETTER,
                                   slug=SITE_NEWSLETTER.lower())
@@ -245,7 +245,7 @@ def event_info(request, my_id):
                 subscription.delete()
                 messages.success(request, "Successfully unsubscribed to newsletter.")
                 return redirect('event_info', my_id)
-        except IntegrityError as e:
+        except IntegrityError:
             messages.error(request, "You have already signed up for this event")
             return redirect('event_info', my_id)
 

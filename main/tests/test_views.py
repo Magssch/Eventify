@@ -96,7 +96,7 @@ class HomeViewTestCasualUser(TestCase):
     def test_valid_user_can_edit_profile(self):
         url = reverse('edit_profile')
         response = self.client.get(url, follow=True)
-        request = response.wsgi_request
+        '''request = response.wsgi_request'''
         self.assertTemplateUsed(response, 'registration/edit_profile.html')
 
         # @unittest.skip("WIP")

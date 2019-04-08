@@ -85,11 +85,11 @@ WSGI_APPLICATION = 'eventifySite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'djangogirls',
-        'USER': 'name',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '',
+        'NAME': os.environ.get('DATABASE_NAME', 'djangogirls'),
+        'USER': os.environ.get('DATABASE_USER', 'name'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD', ''),
+        'HOST': os.environ.get('DATABASE_HOST', 'localhost'),
+        'PORT': os.environ.get('DATABASE_PORT', ''),
     }
 }
 
@@ -140,7 +140,8 @@ LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
 try:
-    from eventifySite.local_settings import *
+    # Import local_settings for local debugging if present. Suppressess flake8-warning
+    from eventifySite.local_settings import *  # noqa: F401
 except ImportError:
     pass
 
@@ -154,13 +155,5 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'eventify.site@gmail.com'
 EMAIL_HOST_PASSWORD = 'programvareutvikling'
-EMAIL_USE_TLS = True   
+EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
-
-
-
-
-
-
-
-
