@@ -2,7 +2,9 @@
 branch = True
 omit = */python3.7/*
         *.virtualenvs/*
+        */venv/*
         */test*.py
         */migrations/*
         */urls.py
         */manage.py
+        */wsgi.py

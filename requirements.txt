@@ -10,5 +10,7 @@ pytz==2018.9
 psycopg2==2.7.2
 gunicorn==19.9.0
 django-newsletter==0.8b1
+coverage==4.5.3
+coverage-badge==1.0.1
 git+git://github.com/dokterbob/django-newsletter.git
 
