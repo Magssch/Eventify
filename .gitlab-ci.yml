@@ -1,17 +1,18 @@
+
+before_script:
+  - git config user.email "krisfjen@stud.ntnu.no"
+  - git config user.name "Kristian Flatheim Jensen"
+  
 stages:
-  - before_script
   - run_tests
   - deploy_to_heroku
 
 run_tests:
-  - apt-get update -qy
-  - apt-get install -y python-dev python-pip
-  - pip install Django
-  - python manage.py test
-  
-before_script:
-  - git config user.email "krisfjen@stud.ntnu.no"
-  - git config user.name "Kristian Flatheim Jensen"
+  script:
+    - apt-get update -qy
+    - apt-get install -y python-dev python-pip
+    - pip install Django
+    - python manage.py test
   
 deploy_to_heroku:
   type: deploy
