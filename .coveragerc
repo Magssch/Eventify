@@ -8,3 +8,5 @@ omit = */python3.7/*
         */urls.py
         */manage.py
         */wsgi.py
+	*/newsletter/*
+	*/Python/*
