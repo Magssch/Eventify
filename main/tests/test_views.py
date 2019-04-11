@@ -1,5 +1,6 @@
 from PIL import Image
 from django.contrib.sessions.middleware import SessionMiddleware
+from django.contrib.auth.models import AnonymousUser
 from django.core.files.base import ContentFile
 from django.test import Client
 from django.test import TestCase, RequestFactory
@@ -63,6 +64,31 @@ class HomeViewTestCaseNotAUser(TestCase):
         url = reverse('terms')
         response = self.client.get(url)
         self.assertTemplateUsed(response, 'main/terms.html')
+    
+    def test_anonymous_user_can_see_sign_up(self):
+        url = reverse('signup')
+        response = self.client.get(url)
+        self.assertTemplateUsed(response, 'registration/signup.html')
+
+    def test_anonymous_user_can_actually_sign_up(self):
+        # Setting up request
+        request = self.factory.get('/signup')
+        from django.contrib.messages.storage.fallback import FallbackStorage
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        request.method = 'POST'
+        request.POST._mutable = True
+        request.POST['username'] = "mycoolusrname"
+        request.POST['first_name'] = 'first_name'
+        request.POST['last_name'] = 'last_name'
+        request.POST['email'] = 'myemail@gmail.com'
+        request.POST['password1'] = 'bestpasswordever12345!'
+        request.POST['password2'] = 'bestpasswordever12345!'
+        request.POST['check'] = True
+        response = SignUp(request)
+        self.assertEqual(response.status_code, 302)
+
 
 
 class HomeViewTestCasualUser(TestCase):
@@ -226,7 +252,7 @@ class HomeViewTestStaffUser(TestCase):
         request.POST['name'] = 'Test'
         request.POST['location'] = 'Trondheim'
         request.POST['price'] = '1'
-        request.POST['capacity'] = 100
+        request.POST['capacity'] = 1
         request.POST['description'] = 'Desc'
         request.POST['date'] = timezone.now()
         request.POST['registration_starts'] = timezone.now()  # FiX
@@ -250,6 +276,118 @@ class HomeViewTestStaffUser(TestCase):
         request.user = self.user
         response = event_update(request, id)
         self.assertEqual(response.status_code, 302)
+
+
+        ###NEWEST
+        request = self.factory.get('events/')
+        from django.contrib.messages.storage.fallback import FallbackStorage
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        request.method = 'POST'
+        request.POST._mutable = True
+
+        #Anonymous user must sign in before attending
+        request.user = AnonymousUser()
+        response = event_info(request, id)
+        self.assertEqual(response.status_code, 302)
+
+        # Can attend own event
+        request.user = self.user
+        request.POST['attend'] = 'Attend'
+        response = event_info(request, id)
+        self.assertEqual(response.status_code, 302)
+
+        # User cannot attend full event
+        request.user = User.objects.create_user("RANDOMUSERNAME", 'email@test2.com', "EVENMORERANDOMPASSWORD", is_staff=False)
+        request.POST['attend'] = 'Attend'
+        response = event_info(request, id)
+        self.assertEqual(response.status_code, 302)
+
+        # Cannot attend own event twice
+        request.POST['unattend'] = 'Unattend'
+        request.user = self.user
+        response = event_info(request, id)
+        self.assertEqual(response.status_code, 302)
+
+        #Check that we can subscribe
+        request.POST['unattend'] = 'Nope'
+        request.POST['attend'] = 'Nope'
+        request.POST['subscribe'] = 'Subscribe'
+        request.user = self.user
+        response = event_info(request, id)
+        self.assertEqual(response.status_code, 302)
+
+        #Check that we can unsubscribe
+        request.POST['subscribe'] = 'Nope'
+        request.POST['unsubscribe'] = 'Unsubscribe'
+        request.user = self.user
+        response = event_info(request, id)
+        self.assertEqual(response.status_code, 302)
+
+        #Check that we can send newsletter
+        request = self.factory.get('events/')
+        from django.contrib.messages.storage.fallback import FallbackStorage
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        request.method = 'POST'
+        request.POST._mutable = True
+
+        #Anonymous user cannot send newsletter
+        request.user = AnonymousUser()
+        response = event_newsletter(request, id)
+        self.assertEqual(response.status_code, 302)
+
+        #Superuser can send valid
+        Newsletter.objects.create(title=SITE_NEWSLETTER, email=SITE_EMAIL, sender=SITE_NEWSLETTER, slug=SITE_NEWSLETTER.lower())
+        request.user = self.user
+        request.user.is_superuser = True
+
+        #Superuser cannot send invalid
+        response = event_newsletter(request, id)
+        self.assertEqual(response.status_code, 200)
+        
+        request.POST['title'] = SITE_NEWSLETTER
+        request.POST['text'] = 'text me here please'
+        response = event_newsletter(request, id)
+        self.assertEqual(response.status_code, 302)
+
+
+    def test_we_can_send_site_newsletter(self):
+        request = self.factory.get('newsletter/')
+        from django.contrib.messages.storage.fallback import FallbackStorage
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        request.method = 'POST'
+        request.POST._mutable = True
+
+        #Anonymous user cannot send newsletter
+        request.user = AnonymousUser()
+        response = site_newsletter(request)
+        self.assertEqual(response.status_code, 302)
+
+        #Superuser can send valid
+        Newsletter.objects.create(title=SITE_NEWSLETTER, email=SITE_EMAIL, sender=SITE_NEWSLETTER, slug=SITE_NEWSLETTER.lower())
+        request.user = self.user
+        request.user.is_superuser = True
+
+        #Superuser cannot send invalid
+        response = site_newsletter(request)
+        self.assertEqual(response.status_code, 200)
+        
+        request.POST['title'] = SITE_NEWSLETTER
+        request.POST['text'] = 'text me here please'
+        response = site_newsletter(request)
+        self.assertEqual(response.status_code, 302)
+
+
+
+
+
+
+
 
     def test_we_can_get_event_info_on_valid_event(self):
         # Creating image

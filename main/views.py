@@ -56,8 +56,8 @@ class SignUp(generic.CreateView):
 def SignUp(request):
     ''' A view for anonymous users to sign up to Eventify. '''
     if request.method == 'POST':
-        form = RegistrationForm(request.POST, prefix="reg")
-        sub_form = SubscribeNewsletterForm(request.POST, prefix="new")
+        form = RegistrationForm(request.POST)
+        sub_form = SubscribeNewsletterForm(request.POST)
         if form.is_valid():
             user = form.save()
             if sub_form.is_valid():
@@ -78,8 +78,8 @@ def SignUp(request):
             messages.error(request, "Error in signup-form")
             print(form.errors)
 
-    form = RegistrationForm(prefix="reg")
-    sub_form = SubscribeNewsletterForm(prefix="new")
+    form = RegistrationForm()
+    sub_form = SubscribeNewsletterForm()
     context = {
         'form': form,
         'sub_form': sub_form
@@ -223,7 +223,7 @@ def event_info(request, my_id):
                 messages.info(request, "Please login or register to attend or subscribe event.")
                 return redirect('event_info', my_id)
             if request.POST.get('attend') == 'Attend' or request.POST.get('unattend') == 'Unattend':
-                if attendees.count() < event.capacity and am_I_attending:
+                if attendees.count() < event.capacity:
                     # attend the event
                     attendee = Attendee.objects.create(user=request.user, event=event)
                     attendee.save()
