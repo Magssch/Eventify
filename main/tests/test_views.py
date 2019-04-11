@@ -338,14 +338,15 @@ class HomeViewTestStaffUser(TestCase):
         self.assertEqual(response.status_code, 302)
 
         # Superuser can send valid
-        Newsletter.objects.create(title=SITE_NEWSLETTER, email=SITE_EMAIL, 
+        Newsletter.objects.create(
+            title=SITE_NEWSLETTER, email=SITE_EMAIL,
             sender=SITE_NEWSLETTER, slug=SITE_NEWSLETTER.lower())
         request.user = self.user
         request.user.is_superuser = True
 
         # Superuser cannot send invalid
         response = event_newsletter(request, id)
-        self.assertEqual(response.status_code, 200) 
+        self.assertEqual(response.status_code, 200)
         request.POST['title'] = SITE_NEWSLETTER
         request.POST['text'] = 'text me here please'
         response = event_newsletter(request, id)
@@ -366,7 +367,8 @@ class HomeViewTestStaffUser(TestCase):
         self.assertEqual(response.status_code, 302)
 
         # Superuser can send valid
-        Newsletter.objects.create(title=SITE_NEWSLETTER, email=SITE_EMAIL, 
+        Newsletter.objects.create(
+            title=SITE_NEWSLETTER, email=SITE_EMAIL,
             sender=SITE_NEWSLETTER, slug=SITE_NEWSLETTER.lower())
         request.user = self.user
         request.user.is_superuser = True
