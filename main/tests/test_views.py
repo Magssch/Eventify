@@ -89,6 +89,7 @@ class HomeViewTestCaseNotAUser(TestCase):
         response = SignUp(request)
         self.assertEqual(response.status_code, 302)
 
+
 class HomeViewTestCasualUser(TestCase):
 
     def setUp(self):
@@ -296,7 +297,7 @@ class HomeViewTestStaffUser(TestCase):
         self.assertEqual(response.status_code, 302)
 
         # User cannot attend full event
-        request.user = User.objects.create_user("RANDOMUSERNAME", 'email@test2.com', "EVENMORERANDOMPASSWORD", is_staff=False)
+        request.user = User.objects.create_user("RANAME", 'email@test2.com', "EVENMORD", is_staff=False)
         request.POST['attend'] = 'Attend'
         response = event_info(request, id)
         self.assertEqual(response.status_code, 302)
@@ -337,13 +338,14 @@ class HomeViewTestStaffUser(TestCase):
         self.assertEqual(response.status_code, 302)
 
         # Superuser can send valid
-        Newsletter.objects.create(title=SITE_NEWSLETTER, email=SITE_EMAIL, sender=SITE_NEWSLETTER, slug=SITE_NEWSLETTER.lower())
+        Newsletter.objects.create(title=SITE_NEWSLETTER, email=SITE_EMAIL, 
+            sender=SITE_NEWSLETTER, slug=SITE_NEWSLETTER.lower())
         request.user = self.user
         request.user.is_superuser = True
 
         # Superuser cannot send invalid
         response = event_newsletter(request, id)
-        self.assertEqual(response.status_code, 200)  
+        self.assertEqual(response.status_code, 200) 
         request.POST['title'] = SITE_NEWSLETTER
         request.POST['text'] = 'text me here please'
         response = event_newsletter(request, id)
@@ -364,14 +366,14 @@ class HomeViewTestStaffUser(TestCase):
         self.assertEqual(response.status_code, 302)
 
         # Superuser can send valid
-        Newsletter.objects.create(title=SITE_NEWSLETTER, email=SITE_EMAIL, sender=SITE_NEWSLETTER, slug=SITE_NEWSLETTER.lower())
+        Newsletter.objects.create(title=SITE_NEWSLETTER, email=SITE_EMAIL, 
+            sender=SITE_NEWSLETTER, slug=SITE_NEWSLETTER.lower())
         request.user = self.user
         request.user.is_superuser = True
 
         # Superuser cannot send invalid
         response = site_newsletter(request)
         self.assertEqual(response.status_code, 200)
-        
         request.POST['title'] = SITE_NEWSLETTER
         request.POST['text'] = 'text me here please'
         response = site_newsletter(request)
@@ -439,6 +441,7 @@ class HomeViewTestStaffUser(TestCase):
         request.GET['organizer'] = True
         response = events(request)
         self.assertEqual(response.status_code, 200)
+
 
 class HomeViewTestEventRelated(TestCase):
 
