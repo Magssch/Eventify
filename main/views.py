@@ -223,7 +223,7 @@ def event_info(request, my_id):
                 messages.info(request, "Please login or register to attend or subscribe event.")
                 return redirect('event_info', my_id)
             if request.POST.get('attend') == 'Attend' or request.POST.get('unattend') == 'Unattend':
-                if attendees.count() < event.capacity:
+                if attendees.count() < event.capacity and not am_I_attending:
                     # attend the event
                     attendee = Attendee.objects.create(user=request.user, event=event)
                     attendee.save()
